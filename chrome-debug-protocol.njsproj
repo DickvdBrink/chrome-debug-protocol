@@ -39,12 +39,14 @@
     <Content Include="protocol.json" />
     <Content Include="README.md" />
     <TypeScriptCompile Include="Scripts\generate-protocol-interfaces.ts" />
+    <TypeScriptCompile Include="Scripts\typings\chrome-debug-protocol\chrome-debug-protocol.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\node\node.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\ws\ws.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Scripts\" />
     <Folder Include="Scripts\typings\" />
+    <Folder Include="Scripts\typings\chrome-debug-protocol\" />
     <Folder Include="Scripts\typings\node\" />
     <Folder Include="Scripts\typings\ws\" />
   </ItemGroup>
