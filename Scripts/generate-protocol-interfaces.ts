@@ -20,6 +20,7 @@ for (var i = 0; i < domains.length; i++) {
 }
 
 function emitInterface(domain: any) {
+    methodParameterInterfaces += `${indent(1)}module ${domain.domain} {\r\n`;
     domainInterfaces += `${indent(1)}interface I${domain.domain} {\r\n`;
     var commands: any[] = domain.commands;
     if (commands && commands.length > 0) {
@@ -27,6 +28,7 @@ function emitInterface(domain: any) {
             emitCommand(domain.domain, commands[i]);
         }
     }
+    methodParameterInterfaces += `${indent(1)}}\r\n`;
     domainInterfaces += indent(1) + "}\r\n";
 }
 
@@ -43,7 +45,7 @@ function emitCommand(domainName: string, command: any) {
         var optional = containsOptionalParameters(parameters);
         var commandName  = command.name.replace(/(.)/,(val) => val.toUpperCase());
         var name = `I${domainName}${commandName}Params`;
-        domainInterfaces += `params${(optional ? "?" : "")}: ${name}`;
+        domainInterfaces += `params${(optional ? "?" : "")}: ${domainName}.${name}`;
 
         emitParameterInterface(name, parameters);
         domainInterfaces += ", ";
@@ -53,17 +55,18 @@ function emitCommand(domainName: string, command: any) {
 }
 
 function emitParameterInterface(name: string, parameters: any[]) {
-    methodParameterInterfaces += `${indent(1)}interface ${name} {\r\n`;
+    methodParameterInterfaces += `${indent(2)}export interface ${name} {\r\n`;
     for (var j = 0; j < parameters.length; j++) {
         var p = parameters[j];
         if (p.description) {
-            methodParameterInterfaces += `${indent(2)} /**\r\n`;
-            methodParameterInterfaces += `${indent(2)} * ${p.description}\r\n`;
-            methodParameterInterfaces += `${indent(2)} */\r\n`;
+            methodParameterInterfaces += `${indent(3)} /**\r\n`;
+            methodParameterInterfaces += `${indent(3)} * ${p.description}\r\n`;
+            methodParameterInterfaces += `${indent(3)} */\r\n`;
         }
-        methodParameterInterfaces += `${indent(2)}${p.name}${(p.optional ? "?" : "")}: ${getTypeScriptType(p.type)};\r\n`;
+
+        methodParameterInterfaces += `${indent(3)}${p.name}${(p.optional ? "?" : "")}: ${getTypeScriptType(p.type)};\r\n`;
     }
-    methodParameterInterfaces += `${indent(1)}}\r\n`;
+    methodParameterInterfaces += `${indent(2)}}\r\n`;
 }
 
 function getTypeScriptType(name: string) {
