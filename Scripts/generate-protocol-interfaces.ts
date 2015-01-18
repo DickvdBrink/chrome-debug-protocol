@@ -86,11 +86,10 @@ for (var i = 0; i < domains.length; i++) {
 var moduleEmitter = new Emitter(1);
 for (var i = 0; i < domains.length; i++) {
     var domain = domains[i];
-
     moduleEmitter.writeline(`module ${domain.domain} {`);
+    moduleEmitter.indent();
     var commands: any[] = domain.commands;
     if (commands && commands.length > 0) {
-        moduleEmitter.indent();
         for (var j = 0; j < commands.length; j++) {
             var command = commands[j];
             var parameters: any[] = command.parameters;
@@ -98,15 +97,48 @@ for (var i = 0; i < domains.length; i++) {
                 var optional = containsOptionalParameters(parameters);
                 var commandName = command.name.replace(/(.)/,(val) => val.toUpperCase());
                 var name = `I${commandName}Params`;
-                emitParameterInterface(name, parameters);
+                emitParameterInterface(name, parameters, domain);
             }
         }
-        moduleEmitter.unindent();
     }
+    if (domain.types) {
+        for (var j = 0; j < domain.types.length; j++) {
+            var type = domain.types[j];
+            if (type.type == "object") {
+                generateDomainCustomTypes(type, domain);
+            }
+        }
+    }
+
+    moduleEmitter.unindent();
     moduleEmitter.writeline("}");
 }
 
-function emitParameterInterface(name: string, parameters: any[]) {
+function generateDomainCustomTypes(type: any, currentDomain: any) {
+    if (type.description) {
+        moduleEmitter.writeStartMultilineComment();
+        moduleEmitter.writeline(type.description);
+        moduleEmitter.writeEndMultilineComment();
+    }
+    moduleEmitter.writeline(`export interface ${type.id} {`);
+    moduleEmitter.indent();
+
+    var properties = type.properties || [];
+    for (var i = 0; i < properties.length; i++) {
+        var p = properties[i];
+        if (p.description) {
+            moduleEmitter.writeStartMultilineComment();
+            moduleEmitter.writeline(p.description);
+            moduleEmitter.writeEndMultilineComment();
+        }
+        moduleEmitter.writeline(`${p.name}${(p.optional ? "?" : "") }: ${getTypeScriptTypeFromParameter(p, currentDomain) };`);
+    }
+
+    moduleEmitter.unindent();
+    moduleEmitter.writeline("}");
+}
+
+function emitParameterInterface(name: string, parameters: any[], currentDomain: any) {
     moduleEmitter.writeline(`export interface ${name} {`);
     moduleEmitter.indent();
     for (var i = 0; i < parameters.length; i++) {
@@ -117,7 +149,7 @@ function emitParameterInterface(name: string, parameters: any[]) {
             moduleEmitter.writeEndMultilineComment();
         }
 
-        moduleEmitter.writeline(`${p.name}${(p.optional ? "?" : "")}: ${getTypeScriptTypeFromParameter(p)};`);
+        moduleEmitter.writeline(`${p.name}${(p.optional ? "?" : "")}: ${getTypeScriptTypeFromParameter(p, currentDomain)};`);
     }
     moduleEmitter.unindent();
     moduleEmitter.writeline("}");
@@ -156,11 +188,36 @@ for (var i = 0; i < domains.length; i++) {
     domainInterfaceEmitter.writeline("}")
 }
 
-function getTypeScriptTypeFromParameter(parameter: any) {
-    switch (parameter.type) {
+function getTypeScriptTypeFromParameter(parameter: any, currentDomain: any) {
+    var paramType: string;
+
+    if (parameter["$ref"]) {
+        var customTypeFullName: string = parameter["$ref"];
+        var splitted = customTypeFullName.split(".");
+
+        var typeDomain = splitted.length == 1
+            ? currentDomain
+            : (<any[]>domains).filter((item) => item.domain == splitted[0])[0];
+
+        var typeName: string = splitted.length == 1
+            ? customTypeFullName
+            : splitted[1];
+
+        var customType = (<any[]>typeDomain.types).filter((item) => item.id == typeName)[0];
+
+        if (customType.type == "object") {
+            return customTypeFullName;
+        } else {
+            paramType = customType.type;
+        }
+    } else {
+        paramType = parameter.type;
+    }
+
+    switch (paramType) {
         case "boolean":
         case "string":
-            return parameter.type;
+            return paramType;
         case "integer":
             return "number";
         case "array":

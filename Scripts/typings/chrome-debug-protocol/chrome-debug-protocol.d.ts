@@ -1138,7 +1138,7 @@ declare module "chrome-debug-protocol" {
             scriptSource: string;
         }
         export interface IRemoveScriptToEvaluateOnLoadParams {
-            identifier: any;
+            identifier: string;
         }
         export interface IReloadParams {
              /**
@@ -1180,7 +1180,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Frame id to get resource for.
              */
-            frameId: any;
+            frameId: string;
              /**
              * URL of the resource to get content for.
              */
@@ -1190,7 +1190,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Frame id for resource to search in.
              */
-            frameId: any;
+            frameId: string;
              /**
              * URL of the resource to search in.
              */
@@ -1212,7 +1212,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Frame id to set HTML for.
              */
-            frameId: any;
+            frameId: string;
              /**
              * HTML content to set.
              */
@@ -1412,6 +1412,249 @@ declare module "chrome-debug-protocol" {
              */
             playbackRate: any;
         }
+         /**
+         * Information about the Frame on the page.
+         */
+        export interface Frame {
+             /**
+             * Frame unique identifier.
+             */
+            id: string;
+             /**
+             * Parent frame identifier.
+             */
+            parentId?: string;
+             /**
+             * Identifier of the loader associated with this frame.
+             */
+            loaderId: string;
+             /**
+             * Frame's name as specified in the tag.
+             */
+            name?: string;
+             /**
+             * Frame document's URL.
+             */
+            url: string;
+             /**
+             * Frame document's security origin.
+             */
+            securityOrigin: string;
+             /**
+             * Frame document's mimeType as determined by the browser.
+             */
+            mimeType: string;
+        }
+         /**
+         * Information about the Frame hierarchy along with their cached resources.
+         */
+        export interface FrameResourceTree {
+             /**
+             * Frame information for this tree item.
+             */
+            frame: Frame;
+             /**
+             * Child frames.
+             */
+            childFrames?: any[];
+             /**
+             * Information about frame resources.
+             */
+            resources: any[];
+        }
+         /**
+         * Search match for resource.
+         */
+        export interface SearchMatch {
+             /**
+             * Line number in resource content.
+             */
+            lineNumber: any;
+             /**
+             * Line with match content.
+             */
+            lineContent: string;
+        }
+         /**
+         * Cookie object
+         */
+        export interface Cookie {
+             /**
+             * Cookie name.
+             */
+            name: string;
+             /**
+             * Cookie value.
+             */
+            value: string;
+             /**
+             * Cookie domain.
+             */
+            domain: string;
+             /**
+             * Cookie path.
+             */
+            path: string;
+             /**
+             * Cookie expires.
+             */
+            expires: any;
+             /**
+             * Cookie size.
+             */
+            size: number;
+             /**
+             * True if cookie is http-only.
+             */
+            httpOnly: boolean;
+             /**
+             * True if cookie is secure.
+             */
+            secure: boolean;
+             /**
+             * True in case of session cookie.
+             */
+            session: boolean;
+        }
+         /**
+         * Navigation history entry.
+         */
+        export interface NavigationEntry {
+             /**
+             * Unique id of the navigation history entry.
+             */
+            id: number;
+             /**
+             * URL of the navigation history entry.
+             */
+            url: string;
+             /**
+             * Title of the navigation history entry.
+             */
+            title: string;
+        }
+         /**
+         * Quota information
+         */
+        export interface Quota {
+             /**
+             * Quota for temporary storage shared among all security origins
+             */
+            temporary: any;
+             /**
+             * Quota for persistent storage for the security origin.
+             */
+            persistent: any;
+        }
+         /**
+         * Usage information
+         */
+        export interface Usage {
+             /**
+             * Temporary storage usage.
+             */
+            temporary: any[];
+             /**
+             * Persistent storage usage.
+             */
+            persistent: any[];
+             /**
+             * Syncable storage.
+             */
+            syncable: any[];
+        }
+         /**
+         * Usage information for a client and storage type
+         */
+        export interface UsageItem {
+             /**
+             * Item id.
+             */
+            id: string;
+             /**
+             * Item usage value.
+             */
+            value: any;
+        }
+         /**
+         * Visible page viewport
+         */
+        export interface Viewport {
+             /**
+             * X scroll offset in CSS pixels.
+             */
+            scrollX: any;
+             /**
+             * Y scroll offset in CSS pixels.
+             */
+            scrollY: any;
+             /**
+             * Contents width in CSS pixels.
+             */
+            contentsWidth: any;
+             /**
+             * Contents height in CSS pixels.
+             */
+            contentsHeight: any;
+             /**
+             * Page scale factor.
+             */
+            pageScaleFactor: any;
+             /**
+             * Minimum page scale factor.
+             */
+            minimumPageScaleFactor: any;
+             /**
+             * Maximum page scale factor.
+             */
+            maximumPageScaleFactor: any;
+        }
+         /**
+         * Screencast frame metadata
+         */
+        export interface ScreencastFrameMetadata {
+             /**
+             * Top offset in DIP.
+             */
+            offsetTop: any;
+             /**
+             * Page scale factor.
+             */
+            pageScaleFactor: any;
+             /**
+             * Device screen width in DIP.
+             */
+            deviceWidth: any;
+             /**
+             * Device screen height in DIP.
+             */
+            deviceHeight: any;
+             /**
+             * Position of horizontal scroll in CSS pixels.
+             */
+            scrollOffsetX: any;
+             /**
+             * Position of vertical scroll in CSS pixels.
+             */
+            scrollOffsetY: any;
+             /**
+             * Frame swap timestamp.
+             */
+            timestamp?: any;
+        }
+         /**
+         * Compressed frame data.
+         */
+        export interface RecordedFrame {
+             /**
+             * Base64-encoded compressed image.
+             */
+            data: string;
+             /**
+             * Frame swap timestamp.
+             */
+            timestamp: any;
+        }
     }
     module Runtime {
         export interface IEvaluateParams {
@@ -1434,7 +1677,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Specifies in which isolated context to perform evaluation. Each content script lives in an isolated context and this parameter may be used to specify one of those contexts. If the parameter is omitted or 0 the evaluation will be performed in the context of the inspected page.
              */
-            contextId?: any;
+            contextId?: number;
              /**
              * Whether the result is expected to be a JSON object that should be sent by value.
              */
@@ -1448,7 +1691,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Identifier of the object to call function on.
              */
-            objectId: any;
+            objectId: string;
              /**
              * Declaration of the function to call.
              */
@@ -1474,7 +1717,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Identifier of the object to return properties for.
              */
-            objectId: any;
+            objectId: string;
              /**
              * If true, returns properties belonging only to the element itself, not to its prototype chain.
              */
@@ -1488,7 +1731,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Identifier of the object to release.
              */
-            objectId: any;
+            objectId: string;
         }
         export interface IReleaseObjectGroupParams {
              /**
@@ -1498,6 +1741,209 @@ declare module "chrome-debug-protocol" {
         }
         export interface ISetCustomObjectFormatterEnabledParams {
             enabled: boolean;
+        }
+         /**
+         * Mirror object referencing original JavaScript object.
+         */
+        export interface RemoteObject {
+             /**
+             * Object type.
+             */
+            type: string;
+             /**
+             * Object subtype hint. Specified for <code>object</code> type values only.
+             */
+            subtype?: string;
+             /**
+             * Object class (constructor) name. Specified for <code>object</code> type values only.
+             */
+            className?: string;
+             /**
+             * Remote object value in case of primitive values or JSON values (if it was requested), or description string if the value can not be JSON-stringified (like NaN, Infinity, -Infinity, -0).
+             */
+            value?: any;
+             /**
+             * String representation of the object.
+             */
+            description?: string;
+             /**
+             * Unique object identifier (for non-primitive values).
+             */
+            objectId?: string;
+             /**
+             * Preview containing abbreviated property values. Specified for <code>object</code> type values only.
+             */
+            preview?: ObjectPreview;
+            customPreview?: CustomPreview;
+        }
+        export interface CustomPreview {
+            header: string;
+            hasBody: boolean;
+        }
+         /**
+         * Object containing abbreviated remote object value.
+         */
+        export interface ObjectPreview {
+             /**
+             * Object type.
+             */
+            type: string;
+             /**
+             * Object subtype hint. Specified for <code>object</code> type values only.
+             */
+            subtype?: string;
+             /**
+             * String representation of the object.
+             */
+            description?: string;
+             /**
+             * Determines whether preview is lossless (contains all information of the original object).
+             */
+            lossless: boolean;
+             /**
+             * True iff some of the properties or entries of the original object did not fit.
+             */
+            overflow: boolean;
+             /**
+             * List of the properties.
+             */
+            properties: any[];
+             /**
+             * List of the entries. Specified for <code>map</code> and <code>set</code> subtype values only.
+             */
+            entries?: any[];
+        }
+        export interface PropertyPreview {
+             /**
+             * Property name.
+             */
+            name: string;
+             /**
+             * Object type. Accessor means that the property itself is an accessor property.
+             */
+            type: string;
+             /**
+             * User-friendly property value string.
+             */
+            value?: string;
+             /**
+             * Nested value preview.
+             */
+            valuePreview?: ObjectPreview;
+             /**
+             * Object subtype hint. Specified for <code>object</code> type values only.
+             */
+            subtype?: string;
+        }
+        export interface EntryPreview {
+             /**
+             * Preview of the key. Specified for map-like collection entries.
+             */
+            key?: ObjectPreview;
+             /**
+             * Preview of the value.
+             */
+            value: ObjectPreview;
+        }
+         /**
+         * Object property descriptor.
+         */
+        export interface PropertyDescriptor {
+             /**
+             * Property name or symbol description.
+             */
+            name: string;
+             /**
+             * The value associated with the property.
+             */
+            value?: RemoteObject;
+             /**
+             * True if the value associated with the property may be changed (data descriptors only).
+             */
+            writable?: boolean;
+             /**
+             * A function which serves as a getter for the property, or <code>undefined</code> if there is no getter (accessor descriptors only).
+             */
+            get?: RemoteObject;
+             /**
+             * A function which serves as a setter for the property, or <code>undefined</code> if there is no setter (accessor descriptors only).
+             */
+            set?: RemoteObject;
+             /**
+             * True if the type of this property descriptor may be changed and if the property may be deleted from the corresponding object.
+             */
+            configurable: boolean;
+             /**
+             * True if this property shows up during enumeration of the properties on the corresponding object.
+             */
+            enumerable: boolean;
+             /**
+             * True if the result was thrown during the evaluation.
+             */
+            wasThrown?: boolean;
+             /**
+             * True if the property is owned for the object.
+             */
+            isOwn?: boolean;
+             /**
+             * Property symbol object, if the property is of the <code>symbol</code> type.
+             */
+            symbol?: RemoteObject;
+        }
+         /**
+         * Object internal property descriptor. This property isn't normally visible in JavaScript code.
+         */
+        export interface InternalPropertyDescriptor {
+             /**
+             * Conventional property name.
+             */
+            name: string;
+             /**
+             * The value associated with the property.
+             */
+            value?: RemoteObject;
+        }
+         /**
+         * Represents function call argument. Either remote object id <code>objectId</code> or primitive <code>value</code> or neither of (for undefined) them should be specified.
+         */
+        export interface CallArgument {
+             /**
+             * Primitive value, or description string if the value can not be JSON-stringified (like NaN, Infinity, -Infinity, -0).
+             */
+            value?: any;
+             /**
+             * Remote object handle.
+             */
+            objectId?: string;
+             /**
+             * Object type.
+             */
+            type?: string;
+        }
+         /**
+         * Description of an isolated world.
+         */
+        export interface ExecutionContextDescription {
+             /**
+             * Unique id of the execution context. It can be used to specify in which execution context script evaluation should be performed.
+             */
+            id: number;
+             /**
+             * True if this is a context where inpspected web page scripts run. False if it is a content script isolated context.
+             */
+            isPageContext: boolean;
+             /**
+             * Execution context origin.
+             */
+            origin: string;
+             /**
+             * Human readable name describing given context.
+             */
+            name: string;
+             /**
+             * Id of the owning frame.
+             */
+            frameId: string;
         }
     }
     module Console {
@@ -1511,7 +1957,7 @@ declare module "chrome-debug-protocol" {
              /**
              * DOM node id to be accessible by means of $x command line API.
              */
-            nodeId: any;
+            nodeId: number;
         }
         export interface IAddInspectedHeapObjectParams {
             heapObjectId: number;
@@ -1520,7 +1966,114 @@ declare module "chrome-debug-protocol" {
              /**
              * Identifier of the object to set as last evaluation result.
              */
-            objectId: any;
+            objectId: string;
+        }
+         /**
+         * Console message.
+         */
+        export interface ConsoleMessage {
+             /**
+             * Message source.
+             */
+            source: string;
+             /**
+             * Message severity.
+             */
+            level: string;
+             /**
+             * Message text.
+             */
+            text: string;
+             /**
+             * Console message type.
+             */
+            type?: string;
+             /**
+             * Script ID of the message origin.
+             */
+            scriptId?: string;
+             /**
+             * URL of the message origin.
+             */
+            url?: string;
+             /**
+             * Line number in the resource that generated this message.
+             */
+            line?: number;
+             /**
+             * Column number in the resource that generated this message.
+             */
+            column?: number;
+             /**
+             * Repeat count for repeated messages.
+             */
+            repeatCount?: number;
+             /**
+             * Message parameters in case of the formatted message.
+             */
+            parameters?: any[];
+             /**
+             * JavaScript stack trace for assertions and error messages.
+             */
+            stackTrace?: any[];
+             /**
+             * Asynchronous JavaScript stack trace that preceded this message, if available.
+             */
+            asyncStackTrace?: AsyncStackTrace;
+             /**
+             * Identifier of the network request associated with this message.
+             */
+            networkRequestId?: string;
+             /**
+             * Timestamp, when this message was fired.
+             */
+            timestamp: any;
+             /**
+             * Identifier of the context where this message was created
+             */
+            executionContextId?: number;
+        }
+         /**
+         * Stack entry for console errors and assertions.
+         */
+        export interface CallFrame {
+             /**
+             * JavaScript function name.
+             */
+            functionName: string;
+             /**
+             * JavaScript script id.
+             */
+            scriptId: string;
+             /**
+             * JavaScript script name or url.
+             */
+            url: string;
+             /**
+             * JavaScript script line number.
+             */
+            lineNumber: number;
+             /**
+             * JavaScript script column number.
+             */
+            columnNumber: number;
+        }
+         /**
+         * Asynchronous JavaScript call stack.
+         */
+        export interface AsyncStackTrace {
+             /**
+             * Call frames of the stack trace.
+             */
+            callFrames: any[];
+             /**
+             * String label of this stack trace. For async traces this may be a name of the function that initiated the async call.
+             */
+            description?: string;
+             /**
+             * Next asynchronous stack trace, if any.
+             */
+            asyncStackTrace?: AsyncStackTrace;
         }
     }
     module Network {
@@ -1534,19 +2087,19 @@ declare module "chrome-debug-protocol" {
              /**
              * Map with extra HTTP headers.
              */
-            headers: any;
+            headers: Headers;
         }
         export interface IGetResponseBodyParams {
              /**
              * Identifier of the network request to get content for.
              */
-            requestId: any;
+            requestId: string;
         }
         export interface IReplayXHRParams {
              /**
              * Identifier of XHR to replay.
              */
-            requestId: any;
+            requestId: string;
         }
         export interface IEmulateNetworkConditionsParams {
              /**
@@ -1576,7 +2129,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Frame to load the resource from.
              */
-            frameId: any;
+            frameId: string;
              /**
              * URL of the resource to load.
              */
@@ -1584,16 +2137,315 @@ declare module "chrome-debug-protocol" {
              /**
              * Request headers.
              */
-            requestHeaders?: any;
+            requestHeaders?: Network.Headers;
+        }
+         /**
+         * Request / response headers as keys / values of JSON object.
+         */
+        export interface Headers {
+        }
+         /**
+         * Timing information for the request.
+         */
+        export interface ResourceTiming {
+             /**
+             * Timing's requestTime is a baseline in seconds, while the other numbers are ticks in milliseconds relatively to this requestTime.
+             */
+            requestTime: any;
+             /**
+             * Started resolving proxy.
+             */
+            proxyStart: any;
+             /**
+             * Finished resolving proxy.
+             */
+            proxyEnd: any;
+             /**
+             * Started DNS address resolve.
+             */
+            dnsStart: any;
+             /**
+             * Finished DNS address resolve.
+             */
+            dnsEnd: any;
+             /**
+             * Started connecting to the remote host.
+             */
+            connectStart: any;
+             /**
+             * Connected to the remote host.
+             */
+            connectEnd: any;
+             /**
+             * Started SSL handshake.
+             */
+            sslStart: any;
+             /**
+             * Finished SSL handshake.
+             */
+            sslEnd: any;
+             /**
+             * Started fetching via ServiceWorker.
+             */
+            serviceWorkerFetchStart: any;
+             /**
+             * Prepared a ServiceWorker.
+             */
+            serviceWorkerFetchReady: any;
+             /**
+             * Finished fetching via ServiceWorker.
+             */
+            serviceWorkerFetchEnd: any;
+             /**
+             * Started sending request.
+             */
+            sendStart: any;
+             /**
+             * Finished sending request.
+             */
+            sendEnd: any;
+             /**
+             * Finished receiving response headers.
+             */
+            receiveHeadersEnd: any;
+        }
+         /**
+         * HTTP request data.
+         */
+        export interface Request {
+             /**
+             * Request URL.
+             */
+            url: string;
+             /**
+             * HTTP request method.
+             */
+            method: string;
+             /**
+             * HTTP request headers.
+             */
+            headers: Headers;
+             /**
+             * HTTP POST request data.
+             */
+            postData?: string;
+        }
+         /**
+         * HTTP response data.
+         */
+        export interface Response {
+             /**
+             * Response URL. This URL can be different from CachedResource.url in case of redirect.
+             */
+            url: string;
+             /**
+             * HTTP response status code.
+             */
+            status: any;
+             /**
+             * HTTP response status text.
+             */
+            statusText: string;
+             /**
+             * HTTP response headers.
+             */
+            headers: Headers;
+             /**
+             * HTTP response headers text.
+             */
+            headersText?: string;
+             /**
+             * Resource mimeType as determined by the browser.
+             */
+            mimeType: string;
+             /**
+             * Refined HTTP request headers that were actually transmitted over the network.
+             */
+            requestHeaders?: Headers;
+             /**
+             * HTTP request headers text.
+             */
+            requestHeadersText?: string;
+             /**
+             * Specifies whether physical connection was actually reused for this request.
+             */
+            connectionReused: boolean;
+             /**
+             * Physical connection id that was actually used for this request.
+             */
+            connectionId: any;
+             /**
+             * Remote IP address.
+             */
+            remoteIPAddress?: string;
+             /**
+             * Remote port.
+             */
+            remotePort?: number;
+             /**
+             * Specifies that the request was served from the disk cache.
+             */
+            fromDiskCache?: boolean;
+             /**
+             * Specifies that the request was served from the ServiceWorker.
+             */
+            fromServiceWorker?: boolean;
+             /**
+             * Total number of bytes received for this request so far.
+             */
+            encodedDataLength: any;
+             /**
+             * Timing information for the given request.
+             */
+            timing?: ResourceTiming;
+             /**
+             * Protocol used to fetch this resquest.
+             */
+            protocol?: string;
+        }
+         /**
+         * WebSocket request data.
+         */
+        export interface WebSocketRequest {
+             /**
+             * HTTP request headers.
+             */
+            headers: Headers;
+        }
+         /**
+         * WebSocket response data.
+         */
+        export interface WebSocketResponse {
+             /**
+             * HTTP response status code.
+             */
+            status: any;
+             /**
+             * HTTP response status text.
+             */
+            statusText: string;
+             /**
+             * HTTP response headers.
+             */
+            headers: Headers;
+             /**
+             * HTTP response headers text.
+             */
+            headersText?: string;
+             /**
+             * HTTP request headers.
+             */
+            requestHeaders?: Headers;
+             /**
+             * HTTP request headers text.
+             */
+            requestHeadersText?: string;
+        }
+         /**
+         * WebSocket frame data.
+         */
+        export interface WebSocketFrame {
+             /**
+             * WebSocket frame opcode.
+             */
+            opcode: any;
+             /**
+             * WebSocke frame mask.
+             */
+            mask: boolean;
+             /**
+             * WebSocke frame payload data.
+             */
+            payloadData: string;
+        }
+         /**
+         * Information about the cached resource.
+         */
+        export interface CachedResource {
+             /**
+             * Resource URL. This is the url of the original network request.
+             */
+            url: string;
+             /**
+             * Type of this resource.
+             */
+            type: string;
+             /**
+             * Cached response data.
+             */
+            response?: Response;
+             /**
+             * Cached response body size.
+             */
+            bodySize: any;
+        }
+         /**
+         * Information about the request initiator.
+         */
+        export interface Initiator {
+             /**
+             * Type of this initiator.
+             */
+            type: string;
+             /**
+             * Initiator JavaScript stack trace, set for Script only.
+             */
+            stackTrace?: any[];
+             /**
+             * Initiator URL, set for Parser type only.
+             */
+            url?: string;
+             /**
+             * Initiator line number, set for Parser type only.
+             */
+            lineNumber?: any;
+             /**
+             * Initiator asynchronous JavaScript stack trace, if available.
+             */
+            asyncStackTrace?: Console.AsyncStackTrace;
         }
     }
     module Database {
         export interface IGetDatabaseTableNamesParams {
-            databaseId: any;
+            databaseId: string;
         }
         export interface IExecuteSQLParams {
-            databaseId: any;
+            databaseId: string;
             query: string;
+        }
+         /**
+         * Database object.
+         */
+        export interface Database {
+             /**
+             * Database ID.
+             */
+            id: string;
+             /**
+             * Database domain.
+             */
+            domain: string;
+             /**
+             * Database name.
+             */
+            name: string;
+             /**
+             * Database version.
+             */
+            version: string;
+        }
+         /**
+         * Database error.
+         */
+        export interface Error {
+             /**
+             * Error message.
+             */
+            message: string;
+             /**
+             * Error code.
+             */
+            code: number;
         }
     }
     module IndexedDB {
@@ -1641,7 +2493,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Key range.
              */
-            keyRange?: any;
+            keyRange?: KeyRange;
         }
         export interface IClearObjectStoreParams {
              /**
@@ -1656,6 +2508,149 @@ declare module "chrome-debug-protocol" {
              * Object store name.
              */
             objectStoreName: string;
+        }
+         /**
+         * Database with an array of object stores.
+         */
+        export interface DatabaseWithObjectStores {
+             /**
+             * Database name.
+             */
+            name: string;
+             /**
+             * Deprecated string database version.
+             */
+            version: string;
+             /**
+             * Integer database version.
+             */
+            intVersion: number;
+             /**
+             * Object stores in this database.
+             */
+            objectStores: any[];
+        }
+         /**
+         * Object store.
+         */
+        export interface ObjectStore {
+             /**
+             * Object store name.
+             */
+            name: string;
+             /**
+             * Object store key path.
+             */
+            keyPath: KeyPath;
+             /**
+             * If true, object store has auto increment flag set.
+             */
+            autoIncrement: boolean;
+             /**
+             * Indexes in this object store.
+             */
+            indexes: any[];
+        }
+         /**
+         * Object store index.
+         */
+        export interface ObjectStoreIndex {
+             /**
+             * Index name.
+             */
+            name: string;
+             /**
+             * Index key path.
+             */
+            keyPath: KeyPath;
+             /**
+             * If true, index is unique.
+             */
+            unique: boolean;
+             /**
+             * If true, index allows multiple entries for a key.
+             */
+            multiEntry: boolean;
+        }
+         /**
+         * Key.
+         */
+        export interface Key {
+             /**
+             * Key type.
+             */
+            type: string;
+             /**
+             * Number value.
+             */
+            number?: any;
+             /**
+             * String value.
+             */
+            string?: string;
+             /**
+             * Date value.
+             */
+            date?: any;
+             /**
+             * Array value.
+             */
+            array?: any[];
+        }
+         /**
+         * Key range.
+         */
+        export interface KeyRange {
+             /**
+             * Lower bound.
+             */
+            lower?: Key;
+             /**
+             * Upper bound.
+             */
+            upper?: Key;
+             /**
+             * If true lower bound is open.
+             */
+            lowerOpen: boolean;
+             /**
+             * If true upper bound is open.
+             */
+            upperOpen: boolean;
+        }
+         /**
+         * Data entry.
+         */
+        export interface DataEntry {
+             /**
+             * JSON-stringified key object.
+             */
+            key: string;
+             /**
+             * JSON-stringified primary key object.
+             */
+            primaryKey: string;
+             /**
+             * JSON-stringified value object.
+             */
+            value: string;
+        }
+         /**
+         * Key path.
+         */
+        export interface KeyPath {
+             /**
+             * Key path type.
+             */
+            type: string;
+             /**
+             * String value.
+             */
+            string?: string;
+             /**
+             * Array value.
+             */
+            array?: any[];
         }
     }
     module ServiceWorkerCache {
@@ -1679,19 +2674,45 @@ declare module "chrome-debug-protocol" {
              */
             cacheName: string;
         }
+         /**
+         * Data entry.
+         */
+        export interface DataEntry {
+             /**
+             * JSON-stringified request object.
+             */
+            request: string;
+             /**
+             * JSON-stringified response object.
+             */
+            response: string;
+        }
     }
     module DOMStorage {
         export interface IGetDOMStorageItemsParams {
-            storageId: any;
+            storageId: StorageId;
         }
         export interface ISetDOMStorageItemParams {
-            storageId: any;
+            storageId: StorageId;
             key: string;
             value: string;
         }
         export interface IRemoveDOMStorageItemParams {
-            storageId: any;
+            storageId: StorageId;
             key: string;
+        }
+         /**
+         * DOM Storage identifier.
+         */
+        export interface StorageId {
+             /**
+             * Security origin for the storage.
+             */
+            securityOrigin: string;
+             /**
+             * Whether the storage is local storage (not session storage).
+             */
+            isLocalStorage: boolean;
         }
     }
     module ApplicationCache {
@@ -1699,13 +2720,72 @@ declare module "chrome-debug-protocol" {
              /**
              * Identifier of the frame containing document whose manifest is retrieved.
              */
-            frameId: any;
+            frameId: string;
         }
         export interface IGetApplicationCacheForFrameParams {
              /**
              * Identifier of the frame containing document whose application cache is retrieved.
              */
-            frameId: any;
+            frameId: string;
+        }
+         /**
+         * Detailed application cache resource information.
+         */
+        export interface ApplicationCacheResource {
+             /**
+             * Resource url.
+             */
+            url: string;
+             /**
+             * Resource size.
+             */
+            size: number;
+             /**
+             * Resource type.
+             */
+            type: string;
+        }
+         /**
+         * Detailed application cache information.
+         */
+        export interface ApplicationCache {
+             /**
+             * Manifest URL.
+             */
+            manifestURL: string;
+             /**
+             * Application cache size.
+             */
+            size: any;
+             /**
+             * Application cache creation time.
+             */
+            creationTime: any;
+             /**
+             * Application cache update time.
+             */
+            updateTime: any;
+             /**
+             * Application cache resources.
+             */
+            resources: any[];
+        }
+         /**
+         * Frame identifier - manifest URL pair.
+         */
+        export interface FrameWithManifest {
+             /**
+             * Frame identifier.
+             */
+            frameId: string;
+             /**
+             * Manifest URL.
+             */
+            manifestURL: string;
+             /**
+             * Application cache status.
+             */
+            status: number;
         }
     }
     module FileSystem {
@@ -1759,13 +2839,55 @@ declare module "chrome-debug-protocol" {
              */
             url: string;
         }
+         /**
+         * Represents a browser side file or directory.
+         */
+        export interface Entry {
+             /**
+             * filesystem: URL for the entry.
+             */
+            url: string;
+             /**
+             * The name of the file or directory.
+             */
+            name: string;
+             /**
+             * True if the entry is a directory.
+             */
+            isDirectory: boolean;
+             /**
+             * MIME type of the entry, available for a file only.
+             */
+            mimeType?: string;
+             /**
+             * ResourceType of the entry, available for a file only.
+             */
+            resourceType?: string;
+             /**
+             * True if the entry is a text file.
+             */
+            isTextFile?: boolean;
+        }
+         /**
+         * Represents metadata of a file or entry.
+         */
+        export interface Metadata {
+             /**
+             * Modification time.
+             */
+            modificationTime: any;
+             /**
+             * File size. This field is always zero for directories.
+             */
+            size: any;
+        }
     }
     module DOM {
         export interface IRequestChildNodesParams {
              /**
              * Id of the node to get children for.
              */
-            nodeId: any;
+            nodeId: number;
              /**
              * The maximum depth at which children should be retrieved, defaults to 1. Use -1 for the entire subtree or provide an integer larger than 0.
              */
@@ -1775,13 +2897,13 @@ declare module "chrome-debug-protocol" {
              /**
              * Id of the node to get distributed nodes for.
              */
-            nodeId: any;
+            nodeId: number;
         }
         export interface IQuerySelectorParams {
              /**
              * Id of the node to query upon.
              */
-            nodeId: any;
+            nodeId: number;
              /**
              * Selector string.
              */
@@ -1791,7 +2913,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Id of the node to query upon.
              */
-            nodeId: any;
+            nodeId: number;
              /**
              * Selector string.
              */
@@ -1801,7 +2923,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Id of the node to set name for.
              */
-            nodeId: any;
+            nodeId: number;
              /**
              * New node's name.
              */
@@ -1811,7 +2933,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Id of the node to set value for.
              */
-            nodeId: any;
+            nodeId: number;
              /**
              * New node's value.
              */
@@ -1821,13 +2943,13 @@ declare module "chrome-debug-protocol" {
              /**
              * Id of the node to remove.
              */
-            nodeId: any;
+            nodeId: number;
         }
         export interface ISetAttributeValueParams {
              /**
              * Id of the element to set attribute for.
              */
-            nodeId: any;
+            nodeId: number;
              /**
              * Attribute name.
              */
@@ -1841,7 +2963,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Id of the element to set attributes for.
              */
-            nodeId: any;
+            nodeId: number;
              /**
              * Text with a number of attributes. Will parse this text using HTML parser.
              */
@@ -1855,7 +2977,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Id of the element to remove attribute from.
              */
-            nodeId: any;
+            nodeId: number;
              /**
              * Name of the attribute to remove.
              */
@@ -1865,7 +2987,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Id of the node to get listeners for.
              */
-            nodeId: any;
+            nodeId: number;
              /**
              * Symbolic group name for handler value. Handler value is not returned without this parameter specified.
              */
@@ -1875,13 +2997,13 @@ declare module "chrome-debug-protocol" {
              /**
              * Id of the node to get markup for.
              */
-            nodeId: any;
+            nodeId: number;
         }
         export interface ISetOuterHTMLParams {
              /**
              * Id of the node to set markup for.
              */
-            nodeId: any;
+            nodeId: number;
              /**
              * Outer HTML markup to set.
              */
@@ -1921,7 +3043,7 @@ declare module "chrome-debug-protocol" {
              /**
              * JavaScript object id to convert into node.
              */
-            objectId: any;
+            objectId: string;
         }
         export interface ISetInspectModeEnabledParams {
              /**
@@ -1935,7 +3057,7 @@ declare module "chrome-debug-protocol" {
              /**
              * A descriptor for the highlight appearance of hovered-over nodes. May be omitted if <code>enabled == false</code>.
              */
-            highlightConfig?: any;
+            highlightConfig?: HighlightConfig;
         }
         export interface IHighlightRectParams {
              /**
@@ -1957,53 +3079,53 @@ declare module "chrome-debug-protocol" {
              /**
              * The highlight fill color (default: transparent).
              */
-            color?: any;
+            color?: RGBA;
              /**
              * The highlight outline color (default: transparent).
              */
-            outlineColor?: any;
+            outlineColor?: RGBA;
         }
         export interface IHighlightQuadParams {
              /**
              * Quad to highlight
              */
-            quad: any;
+            quad: any[];
              /**
              * The highlight fill color (default: transparent).
              */
-            color?: any;
+            color?: RGBA;
              /**
              * The highlight outline color (default: transparent).
              */
-            outlineColor?: any;
+            outlineColor?: RGBA;
         }
         export interface IHighlightNodeParams {
              /**
              * A descriptor for the highlight appearance.
              */
-            highlightConfig: any;
+            highlightConfig: HighlightConfig;
              /**
              * Identifier of the node to highlight.
              */
-            nodeId?: any;
+            nodeId?: number;
              /**
              * JavaScript object id of the node to be highlighted.
              */
-            objectId?: any;
+            objectId?: string;
         }
         export interface IHighlightFrameParams {
              /**
              * Identifier of the frame to highlight.
              */
-            frameId: any;
+            frameId: string;
              /**
              * The content box highlight fill color (default: transparent).
              */
-            contentColor?: any;
+            contentColor?: RGBA;
              /**
              * The content box highlight outline color (default: transparent).
              */
-            contentOutlineColor?: any;
+            contentOutlineColor?: RGBA;
         }
         export interface IPushNodeByPathToFrontendParams {
              /**
@@ -2021,7 +3143,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Id of the node to resolve.
              */
-            nodeId: any;
+            nodeId: number;
              /**
              * Symbolic group name that can be used to release multiple objects.
              */
@@ -2031,47 +3153,47 @@ declare module "chrome-debug-protocol" {
              /**
              * Id of the node to retrieve attibutes for.
              */
-            nodeId: any;
+            nodeId: number;
         }
         export interface ICopyToParams {
              /**
              * Id of the node to copy.
              */
-            nodeId: any;
+            nodeId: number;
              /**
              * Id of the element to drop the copy into.
              */
-            targetNodeId: any;
+            targetNodeId: number;
              /**
              * Drop the copy before this node (if absent, the copy becomes the last child of <code>targetNodeId</code>).
              */
-            insertBeforeNodeId?: any;
+            insertBeforeNodeId?: number;
         }
         export interface IMoveToParams {
              /**
              * Id of the node to move.
              */
-            nodeId: any;
+            nodeId: number;
              /**
              * Id of the element to drop the moved node into.
              */
-            targetNodeId: any;
+            targetNodeId: number;
              /**
              * Drop node before this one (if absent, the moved node becomes the last child of <code>targetNodeId</code>).
              */
-            insertBeforeNodeId?: any;
+            insertBeforeNodeId?: number;
         }
         export interface IFocusParams {
              /**
              * Id of the node to focus.
              */
-            nodeId: any;
+            nodeId: number;
         }
         export interface ISetFileInputFilesParams {
              /**
              * Id of the file input node to set files for.
              */
-            nodeId: any;
+            nodeId: number;
              /**
              * Array of file paths to set.
              */
@@ -2081,7 +3203,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Id of the node to get box model for.
              */
-            nodeId: any;
+            nodeId: number;
         }
         export interface IGetNodeForLocationParams {
              /**
@@ -2097,12 +3219,313 @@ declare module "chrome-debug-protocol" {
              /**
              * Id of the node.
              */
-            nodeId: any;
+            nodeId: number;
+        }
+         /**
+         * DOM interaction is implemented in terms of mirror objects that represent the actual DOM nodes. DOMNode is a base node mirror type.
+         */
+        export interface Node {
+             /**
+             * Node identifier that is passed into the rest of the DOM messages as the <code>nodeId</code>. Backend will only push node with given <code>id</code> once. It is aware of all requested nodes and will only fire DOM events for nodes known to the client.
+             */
+            nodeId: number;
+             /**
+             * <code>Node</code>'s nodeType.
+             */
+            nodeType: number;
+             /**
+             * <code>Node</code>'s nodeName.
+             */
+            nodeName: string;
+             /**
+             * <code>Node</code>'s localName.
+             */
+            localName: string;
+             /**
+             * <code>Node</code>'s nodeValue.
+             */
+            nodeValue: string;
+             /**
+             * Child count for <code>Container</code> nodes.
+             */
+            childNodeCount?: number;
+             /**
+             * Child nodes of this node when requested with children.
+             */
+            children?: any[];
+             /**
+             * Attributes of the <code>Element</code> node in the form of flat array <code>[name1, value1, name2, value2]</code>.
+             */
+            attributes?: any[];
+             /**
+             * Document URL that <code>Document</code> or <code>FrameOwner</code> node points to.
+             */
+            documentURL?: string;
+             /**
+             * Base URL that <code>Document</code> or <code>FrameOwner</code> node uses for URL completion.
+             */
+            baseURL?: string;
+             /**
+             * <code>DocumentType</code>'s publicId.
+             */
+            publicId?: string;
+             /**
+             * <code>DocumentType</code>'s systemId.
+             */
+            systemId?: string;
+             /**
+             * <code>DocumentType</code>'s internalSubset.
+             */
+            internalSubset?: string;
+             /**
+             * <code>Document</code>'s XML version in case of XML documents.
+             */
+            xmlVersion?: string;
+             /**
+             * <code>Attr</code>'s name.
+             */
+            name?: string;
+             /**
+             * <code>Attr</code>'s value.
+             */
+            value?: string;
+             /**
+             * Pseudo element type for this node.
+             */
+            pseudoType?: string;
+             /**
+             * Shadow root type.
+             */
+            shadowRootType?: string;
+             /**
+             * Frame ID for frame owner elements.
+             */
+            frameId?: string;
+             /**
+             * Content document for frame owner elements.
+             */
+            contentDocument?: Node;
+             /**
+             * Shadow root list for given element host.
+             */
+            shadowRoots?: any[];
+             /**
+             * Content document fragment for template elements.
+             */
+            templateContent?: Node;
+             /**
+             * Pseudo elements associated with this node.
+             */
+            pseudoElements?: any[];
+             /**
+             * Import document for the HTMLImport links.
+             */
+            importedDocument?: Node;
+        }
+         /**
+         * DOM interaction is implemented in terms of mirror objects that represent the actual DOM nodes. DOMNode is a base node mirror type.
+         */
+        export interface EventListener {
+             /**
+             * <code>EventListener</code>'s type.
+             */
+            type: string;
+             /**
+             * <code>EventListener</code>'s useCapture.
+             */
+            useCapture: boolean;
+             /**
+             * <code>EventListener</code>'s isAttribute.
+             */
+            isAttribute: boolean;
+             /**
+             * Target <code>DOMNode</code> id.
+             */
+            nodeId: number;
+             /**
+             * Event handler function body.
+             */
+            handlerBody: string;
+             /**
+             * Handler code location.
+             */
+            location: Debugger.Location;
+             /**
+             * Source script URL.
+             */
+            sourceName?: string;
+             /**
+             * Event handler function value.
+             */
+            handler?: Runtime.RemoteObject;
+        }
+         /**
+         * A structure holding an RGBA color.
+         */
+        export interface RGBA {
+             /**
+             * The red component, in the [0-255] range.
+             */
+            r: number;
+             /**
+             * The green component, in the [0-255] range.
+             */
+            g: number;
+             /**
+             * The blue component, in the [0-255] range.
+             */
+            b: number;
+             /**
+             * The alpha component, in the [0-1] range (default: 1).
+             */
+            a?: any;
+        }
+         /**
+         * Box model.
+         */
+        export interface BoxModel {
+             /**
+             * Content box
+             */
+            content: any[];
+             /**
+             * Padding box
+             */
+            padding: any[];
+             /**
+             * Border box
+             */
+            border: any[];
+             /**
+             * Margin box
+             */
+            margin: any[];
+             /**
+             * Node width
+             */
+            width: number;
+             /**
+             * Node height
+             */
+            height: number;
+             /**
+             * Shape outside coordinates
+             */
+            shapeOutside?: ShapeOutsideInfo;
+        }
+         /**
+         * CSS Shape Outside details.
+         */
+        export interface ShapeOutsideInfo {
+             /**
+             * Shape bounds
+             */
+            bounds: any[];
+             /**
+             * Shape coordinate details
+             */
+            shape: any[];
+             /**
+             * Margin shape bounds
+             */
+            marginShape: any[];
+        }
+         /**
+         * Rectangle.
+         */
+        export interface Rect {
+             /**
+             * X coordinate
+             */
+            x: any;
+             /**
+             * Y coordinate
+             */
+            y: any;
+             /**
+             * Rectangle width
+             */
+            width: any;
+             /**
+             * Rectangle height
+             */
+            height: any;
+        }
+         /**
+         * Configuration data for the highlighting of page elements.
+         */
+        export interface HighlightConfig {
+             /**
+             * Whether the node info tooltip should be shown (default: false).
+             */
+            showInfo?: boolean;
+             /**
+             * Whether the rulers should be shown (default: false).
+             */
+            showRulers?: boolean;
+             /**
+             * Whether the extension lines from node to the rulers should be shown (default: false).
+             */
+            showExtensionLines?: boolean;
+             /**
+             * The content box highlight fill color (default: transparent).
+             */
+            contentColor?: RGBA;
+             /**
+             * The padding highlight fill color (default: transparent).
+             */
+            paddingColor?: RGBA;
+             /**
+             * The border highlight fill color (default: transparent).
+             */
+            borderColor?: RGBA;
+             /**
+             * The margin highlight fill color (default: transparent).
+             */
+            marginColor?: RGBA;
+             /**
+             * The event target element highlight fill color (default: transparent).
+             */
+            eventTargetColor?: RGBA;
+             /**
+             * The shape outside fill color (default: transparent).
+             */
+            shapeColor?: RGBA;
+             /**
+             * The shape margin fill color (default: transparent).
+             */
+            shapeMarginColor?: RGBA;
+        }
+         /**
+         * Distributed node detailed information.
+         */
+        export interface DistributedNode {
+             /**
+             * Distributed node id.
+             */
+            nodeId: number;
+             /**
+             * Identifiers of nodes this node was distributed into.
+             */
+            destinationInsertionPointIds?: any[];
+        }
+         /**
+         * Distribution data for insertion point.
+         */
+        export interface InsertionPointDistribution {
+             /**
+             * Insertion point node id.
+             */
+            nodeId: number;
+             /**
+             * A list of distributed node details for this insertion point.
+             */
+            distributedNodes: any[];
         }
     }
     module CSS {
         export interface IGetMatchedStylesForNodeParams {
-            nodeId: any;
+            nodeId: number;
              /**
              * Whether to exclude pseudo styles (default: false).
              */
@@ -2113,50 +3536,50 @@ declare module "chrome-debug-protocol" {
             excludeInherited?: boolean;
         }
         export interface IGetInlineStylesForNodeParams {
-            nodeId: any;
+            nodeId: number;
         }
         export interface IGetComputedStyleForNodeParams {
-            nodeId: any;
+            nodeId: number;
         }
         export interface IGetPlatformFontsForNodeParams {
-            nodeId: any;
+            nodeId: number;
         }
         export interface IGetStyleSheetTextParams {
-            styleSheetId: any;
+            styleSheetId: string;
         }
         export interface ISetStyleSheetTextParams {
-            styleSheetId: any;
+            styleSheetId: string;
             text: string;
         }
         export interface ISetPropertyTextParams {
-            styleSheetId: any;
+            styleSheetId: string;
              /**
              * Either a source range of the property to be edited or an empty range representing a position for the property insertion.
              */
-            range: any;
+            range: SourceRange;
             text: string;
         }
         export interface ISetRuleSelectorParams {
-            styleSheetId: any;
-            range: any;
+            styleSheetId: string;
+            range: SourceRange;
             selector: string;
         }
         export interface ISetMediaTextParams {
-            styleSheetId: any;
-            range: any;
+            styleSheetId: string;
+            range: SourceRange;
             text: string;
         }
         export interface ICreateStyleSheetParams {
              /**
              * Identifier of the frame where "via-inspector" stylesheet should be created.
              */
-            frameId: any;
+            frameId: string;
         }
         export interface IAddRuleParams {
              /**
              * The css style sheet identifier where a new rule should be inserted.
              */
-            styleSheetId: any;
+            styleSheetId: string;
              /**
              * The text of a new rule.
              */
@@ -2164,17 +3587,343 @@ declare module "chrome-debug-protocol" {
              /**
              * Text position of a new rule in the target style sheet.
              */
-            location: any;
+            location: SourceRange;
         }
         export interface IForcePseudoStateParams {
              /**
              * The element id for which to force the pseudo state.
              */
-            nodeId: any;
+            nodeId: number;
              /**
              * Element pseudo classes to force when computing the element's style.
              */
             forcedPseudoClasses: any[];
+        }
+         /**
+         * CSS rule collection for a single pseudo style.
+         */
+        export interface PseudoIdMatches {
+             /**
+             * Pseudo style identifier (see <code>enum PseudoId</code> in <code>RenderStyleConstants.h</code>).
+             */
+            pseudoId: number;
+             /**
+             * Matches of CSS rules applicable to the pseudo style.
+             */
+            matches: any[];
+        }
+         /**
+         * Inherited CSS rule collection from ancestor node.
+         */
+        export interface InheritedStyleEntry {
+             /**
+             * The ancestor node's inline style, if any, in the style inheritance chain.
+             */
+            inlineStyle?: CSSStyle;
+             /**
+             * Matches of CSS rules matching the ancestor node in the style inheritance chain.
+             */
+            matchedCSSRules: any[];
+        }
+         /**
+         * Match data for a CSS rule.
+         */
+        export interface RuleMatch {
+             /**
+             * CSS rule in the match.
+             */
+            rule: CSSRule;
+             /**
+             * Matching selector indices in the rule's selectorList selectors (0-based).
+             */
+            matchingSelectors: any[];
+        }
+         /**
+         * Data for a simple selector (these are delimited by commas in a selector list).
+         */
+        export interface Selector {
+             /**
+             * Selector text.
+             */
+            value: string;
+             /**
+             * Selector range in the underlying resource (if available).
+             */
+            range?: SourceRange;
+        }
+         /**
+         * Selector list data.
+         */
+        export interface SelectorList {
+             /**
+             * Selectors in the list.
+             */
+            selectors: any[];
+             /**
+             * Rule selector text.
+             */
+            text: string;
+        }
+         /**
+         * CSS stylesheet metainformation.
+         */
+        export interface CSSStyleSheetHeader {
+             /**
+             * The stylesheet identifier.
+             */
+            styleSheetId: string;
+             /**
+             * Owner frame identifier.
+             */
+            frameId: string;
+             /**
+             * Stylesheet resource URL.
+             */
+            sourceURL: string;
+             /**
+             * URL of source map associated with the stylesheet (if any).
+             */
+            sourceMapURL?: string;
+             /**
+             * Stylesheet origin.
+             */
+            origin: string;
+             /**
+             * Stylesheet title.
+             */
+            title: string;
+             /**
+             * The backend id for the owner node of the stylesheet.
+             */
+            ownerNode?: number;
+             /**
+             * Denotes whether the stylesheet is disabled.
+             */
+            disabled: boolean;
+             /**
+             * Whether the sourceURL field value comes from the sourceURL comment.
+             */
+            hasSourceURL?: boolean;
+             /**
+             * Whether this stylesheet is created for STYLE tag by parser. This flag is not set for document.written STYLE tags.
+             */
+            isInline: boolean;
+             /**
+             * Line offset of the stylesheet within the resource (zero based).
+             */
+            startLine: any;
+             /**
+             * Column offset of the stylesheet within the resource (zero based).
+             */
+            startColumn: any;
+        }
+         /**
+         * CSS rule representation.
+         */
+        export interface CSSRule {
+             /**
+             * The css style sheet identifier (absent for user agent stylesheet and user-specified stylesheet rules) this rule came from.
+             */
+            styleSheetId?: string;
+             /**
+             * Rule selector data.
+             */
+            selectorList: SelectorList;
+             /**
+             * Parent stylesheet's origin.
+             */
+            origin: string;
+             /**
+             * Associated style declaration.
+             */
+            style: CSSStyle;
+             /**
+             * Media list array (for rules involving media queries). The array enumerates media queries starting with the innermost one, going outwards.
+             */
+            media?: any[];
+        }
+         /**
+         * Text range within a resource. All numbers are zero-based.
+         */
+        export interface SourceRange {
+             /**
+             * Start line of range.
+             */
+            startLine: number;
+             /**
+             * Start column of range (inclusive).
+             */
+            startColumn: number;
+             /**
+             * End line of range
+             */
+            endLine: number;
+             /**
+             * End column of range (exclusive).
+             */
+            endColumn: number;
+        }
+        export interface ShorthandEntry {
+             /**
+             * Shorthand name.
+             */
+            name: string;
+             /**
+             * Shorthand value.
+             */
+            value: string;
+        }
+        export interface CSSComputedStyleProperty {
+             /**
+             * Computed style property name.
+             */
+            name: string;
+             /**
+             * Computed style property value.
+             */
+            value: string;
+        }
+         /**
+         * CSS style representation.
+         */
+        export interface CSSStyle {
+             /**
+             * The css style sheet identifier (absent for user agent stylesheet and user-specified stylesheet rules) this rule came from.
+             */
+            styleSheetId?: string;
+             /**
+             * CSS properties in the style.
+             */
+            cssProperties: any[];
+             /**
+             * Computed values for all shorthands found in the style.
+             */
+            shorthandEntries: any[];
+             /**
+             * Style declaration text (if available).
+             */
+            cssText?: string;
+             /**
+             * Style declaration range in the enclosing stylesheet (if available).
+             */
+            range?: SourceRange;
+        }
+         /**
+         * CSS property declaration data.
+         */
+        export interface CSSProperty {
+             /**
+             * The property name.
+             */
+            name: string;
+             /**
+             * The property value.
+             */
+            value: string;
+             /**
+             * Whether the property has "!important" annotation (implies <code>false</code> if absent).
+             */
+            important?: boolean;
+             /**
+             * Whether the property is implicit (implies <code>false</code> if absent).
+             */
+            implicit?: boolean;
+             /**
+             * The full property text as specified in the style.
+             */
+            text?: string;
+             /**
+             * Whether the property is understood by the browser (implies <code>true</code> if absent).
+             */
+            parsedOk?: boolean;
+             /**
+             * Whether the property is disabled by the user (present for source-based properties only).
+             */
+            disabled?: boolean;
+             /**
+             * The entire property range in the enclosing style declaration (if available).
+             */
+            range?: SourceRange;
+        }
+         /**
+         * CSS media rule descriptor.
+         */
+        export interface CSSMedia {
+             /**
+             * Media query text.
+             */
+            text: string;
+             /**
+             * Source of the media query: "mediaRule" if specified by a @media rule, "importRule" if specified by an @import rule, "linkedSheet" if specified by a "media" attribute in a linked stylesheet's LINK tag, "inlineSheet" if specified by a "media" attribute in an inline stylesheet's STYLE tag.
+             */
+            source: string;
+             /**
+             * URL of the document containing the media query description.
+             */
+            sourceURL?: string;
+             /**
+             * The associated rule (@media or @import) header range in the enclosing stylesheet (if available).
+             */
+            range?: SourceRange;
+             /**
+             * Identifier of the stylesheet containing this object (if exists).
+             */
+            parentStyleSheetId?: string;
+             /**
+             * Array of media queries.
+             */
+            mediaList?: any[];
+        }
+         /**
+         * Media query descriptor.
+         */
+        export interface MediaQuery {
+             /**
+             * Array of media query expressions.
+             */
+            expressions: any[];
+             /**
+             * Whether the media query condition is satisfied.
+             */
+            active: boolean;
+        }
+         /**
+         * Media query expression descriptor.
+         */
+        export interface MediaQueryExpression {
+             /**
+             * Media query expression value.
+             */
+            value: any;
+             /**
+             * Media query expression units.
+             */
+            unit: string;
+             /**
+             * Media query expression feature.
+             */
+            feature: string;
+             /**
+             * The associated range of the value text in the enclosing stylesheet (if available).
+             */
+            valueRange?: SourceRange;
+             /**
+             * Computed length of media query expression (if applicable).
+             */
+            computedLength?: any;
+        }
+         /**
+         * Information about amount of glyphs that were rendered with given font.
+         */
+        export interface PlatformFontUsage {
+             /**
+             * Font's family name reported by platform.
+             */
+            familyName: string;
+             /**
+             * Amount of glyphs that were rendered with this font.
+             */
+            glyphCount: any;
         }
     }
     module Timeline {
@@ -2199,6 +3948,63 @@ declare module "chrome-debug-protocol" {
              * Whether events from GPU process should be collected.
              */
             includeGPUEvents?: boolean;
+        }
+         /**
+         * Current values of counters.
+         */
+        export interface Counters {
+            documents?: number;
+            nodes?: number;
+            jsEventListeners?: number;
+             /**
+             * Currently used size of JS heap.
+             */
+            jsHeapSizeUsed?: any;
+             /**
+             * Current GPU memory usage in kilobytes.
+             */
+            gpuMemoryUsedKB?: any;
+             /**
+             * Current GPU memory limit in kilobytes.
+             */
+            gpuMemoryLimitKB?: any;
+        }
+         /**
+         * Timeline record contains information about the recorded activity.
+         */
+        export interface TimelineEvent {
+             /**
+             * Event type.
+             */
+            type: string;
+             /**
+             * Event data.
+             */
+            data: any;
+             /**
+             * Start time.
+             */
+            startTime: any;
+             /**
+             * End time.
+             */
+            endTime?: any;
+             /**
+             * Nested records.
+             */
+            children?: any[];
+             /**
+             * If present, identifies the thread that produced the event.
+             */
+            thread?: string;
+             /**
+             * Stack trace.
+             */
+            stackTrace?: any[];
+             /**
+             * Unique identifier of the frame within the page that the event relates to.
+             */
+            frameId?: string;
         }
     }
     module Debugger {
@@ -2244,20 +4050,20 @@ declare module "chrome-debug-protocol" {
              /**
              * Location to set breakpoint in.
              */
-            location: any;
+            location: Location;
              /**
              * Expression to use as a breakpoint condition. When specified, debugger will only stop on the breakpoint if this expression evaluates to true.
              */
             condition?: string;
         }
         export interface IRemoveBreakpointParams {
-            breakpointId: any;
+            breakpointId: string;
         }
         export interface IContinueToLocationParams {
              /**
              * Location to continue to.
              */
-            location: any;
+            location: Location;
              /**
              * Allows breakpoints at the intemediate positions inside statements.
              */
@@ -2267,7 +4073,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Id of the script to search in.
              */
-            scriptId: any;
+            scriptId: string;
              /**
              * String to search for.
              */
@@ -2285,7 +4091,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Id of the script to edit.
              */
-            scriptId: any;
+            scriptId: string;
              /**
              * New content of the script.
              */
@@ -2299,31 +4105,31 @@ declare module "chrome-debug-protocol" {
              /**
              * Call frame identifier to evaluate on.
              */
-            callFrameId: any;
+            callFrameId: string;
         }
         export interface IGetScriptSourceParams {
              /**
              * Id of the script to get source for.
              */
-            scriptId: any;
+            scriptId: string;
         }
         export interface IGetFunctionDetailsParams {
              /**
              * Id of the function to get details for.
              */
-            functionId: any;
+            functionId: string;
         }
         export interface IGetGeneratorObjectDetailsParams {
              /**
              * Id of the generator object to get details for.
              */
-            objectId: any;
+            objectId: string;
         }
         export interface IGetCollectionEntriesParams {
              /**
              * Id of the collection to get entries for.
              */
-            objectId: any;
+            objectId: string;
         }
         export interface ISetPauseOnExceptionsParams {
              /**
@@ -2335,7 +4141,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Call frame identifier to evaluate on.
              */
-            callFrameId: any;
+            callFrameId: string;
              /**
              * Expression to evaluate.
              */
@@ -2373,17 +4179,17 @@ declare module "chrome-debug-protocol" {
              /**
              * Specifies in which isolated context to perform script run. Each content script lives in an isolated context and this parameter may be used to specify one of those contexts. If the parameter is omitted or 0 the evaluation will be performed in the context of the inspected page.
              */
-            executionContextId?: any;
+            executionContextId?: number;
         }
         export interface IRunScriptParams {
              /**
              * Id of the script to run.
              */
-            scriptId: any;
+            scriptId: string;
              /**
              * Specifies in which isolated context to perform script run. Each content script lives in an isolated context and this parameter may be used to specify one of those contexts. If the parameter is omitted or 0 the evaluation will be performed in the context of the inspected page.
              */
-            executionContextId?: any;
+            executionContextId?: number;
              /**
              * Symbolic group name that can be used to release multiple objects.
              */
@@ -2405,21 +4211,21 @@ declare module "chrome-debug-protocol" {
              /**
              * New variable value.
              */
-            newValue: any;
+            newValue: Runtime.CallArgument;
              /**
              * Id of callframe that holds variable.
              */
-            callFrameId?: any;
+            callFrameId?: string;
              /**
              * Object id of closure (function) that holds variable.
              */
-            functionObjectId?: any;
+            functionObjectId?: string;
         }
         export interface IGetStepInPositionsParams {
              /**
              * Id of a call frame where the current statement should be analized
              */
-            callFrameId: any;
+            callFrameId: string;
         }
         export interface ISkipStackFramesParams {
              /**
@@ -2450,27 +4256,238 @@ declare module "chrome-debug-protocol" {
              */
             objectGroup?: string;
         }
+         /**
+         * Location in the source code.
+         */
+        export interface Location {
+             /**
+             * Script identifier as reported in the <code>Debugger.scriptParsed</code>.
+             */
+            scriptId: string;
+             /**
+             * Line number in the script (0-based).
+             */
+            lineNumber: number;
+             /**
+             * Column number in the script (0-based).
+             */
+            columnNumber?: number;
+        }
+         /**
+         * Information about the function.
+         */
+        export interface FunctionDetails {
+             /**
+             * Location of the function.
+             */
+            location: Location;
+             /**
+             * Name of the function.
+             */
+            functionName: string;
+             /**
+             * Whether this is a generator function.
+             */
+            isGenerator: boolean;
+             /**
+             * Scope chain for this closure.
+             */
+            scopeChain?: any[];
+        }
+         /**
+         * Information about the generator object.
+         */
+        export interface GeneratorObjectDetails {
+             /**
+             * Generator function.
+             */
+            function: Runtime.RemoteObject;
+             /**
+             * Name of the generator function.
+             */
+            functionName: string;
+             /**
+             * Current generator object status.
+             */
+            status: string;
+             /**
+             * If suspended, location where generator function was suspended (e.g. location of the last 'yield'). Otherwise, location of the generator function.
+             */
+            location?: Location;
+        }
+         /**
+         * Collection entry.
+         */
+        export interface CollectionEntry {
+             /**
+             * Entry key of a map-like collection, otherwise not provided.
+             */
+            key?: Runtime.RemoteObject;
+             /**
+             * Entry value.
+             */
+            value: Runtime.RemoteObject;
+        }
+         /**
+         * JavaScript call frame. Array of call frames form the call stack.
+         */
+        export interface CallFrame {
+             /**
+             * Call frame identifier. This identifier is only valid while the virtual machine is paused.
+             */
+            callFrameId: string;
+             /**
+             * Name of the JavaScript function called on this call frame.
+             */
+            functionName: string;
+             /**
+             * Location in the source code.
+             */
+            location: Location;
+             /**
+             * Scope chain for this call frame.
+             */
+            scopeChain: any[];
+             /**
+             * <code>this</code> object for this call frame.
+             */
+            this: Runtime.RemoteObject;
+             /**
+             * The value being returned, if the function is at return point.
+             */
+            returnValue?: Runtime.RemoteObject;
+        }
+         /**
+         * JavaScript call stack, including async stack traces.
+         */
+        export interface StackTrace {
+             /**
+             * Call frames of the stack trace.
+             */
+            callFrames: any[];
+             /**
+             * String label of this stack trace. For async traces this may be a name of the function that initiated the async call.
+             */
+            description?: string;
+             /**
+             * Async stack trace, if any.
+             */
+            asyncStackTrace?: StackTrace;
+        }
+         /**
+         * Scope description.
+         */
+        export interface Scope {
+             /**
+             * Scope type.
+             */
+            type: string;
+             /**
+             * Object representing the scope. For <code>global</code> and <code>with</code> scopes it represents the actual object; for the rest of the scopes, it is artificial transient object enumerating scope variables as its properties.
+             */
+            object: Runtime.RemoteObject;
+        }
+         /**
+         * Detailed information on exception (or error) that was thrown during script compilation or execution.
+         */
+        export interface ExceptionDetails {
+             /**
+             * Exception text.
+             */
+            text: string;
+             /**
+             * URL of the message origin.
+             */
+            url?: string;
+             /**
+             * Script ID of the message origin.
+             */
+            scriptId?: string;
+             /**
+             * Line number in the resource that generated this message.
+             */
+            line?: number;
+             /**
+             * Column number in the resource that generated this message.
+             */
+            column?: number;
+             /**
+             * JavaScript stack trace for assertions and error messages.
+             */
+            stackTrace?: any[];
+        }
+         /**
+         * Error data for setScriptSource command. compileError is a case type for uncompilable script source error.
+         */
+        export interface SetScriptSourceError {
+            compileError?: any;
+        }
+         /**
+         * Information about the promise.
+         */
+        export interface PromiseDetails {
+             /**
+             * Unique id of the promise.
+             */
+            id: number;
+             /**
+             * Status of the promise.
+             */
+            status: string;
+             /**
+             * Id of the parent promise.
+             */
+            parentId?: number;
+             /**
+             * Top call frame on promise creation.
+             */
+            callFrame?: Console.CallFrame;
+             /**
+             * Creation time of the promise.
+             */
+            creationTime?: any;
+             /**
+             * Settlement time of the promise.
+             */
+            settlementTime?: any;
+             /**
+             * JavaScript stack trace on promise creation.
+             */
+            creationStack?: any[];
+             /**
+             * JavaScript asynchronous stack trace on promise creation, if available.
+             */
+            asyncCreationStack?: Console.AsyncStackTrace;
+             /**
+             * JavaScript stack trace on promise settlement.
+             */
+            settlementStack?: any[];
+             /**
+             * JavaScript asynchronous stack trace on promise settlement, if available.
+             */
+            asyncSettlementStack?: Console.AsyncStackTrace;
+        }
     }
     module DOMDebugger {
         export interface ISetDOMBreakpointParams {
              /**
              * Identifier of the node to set breakpoint on.
              */
-            nodeId: any;
+            nodeId: number;
              /**
              * Type of the operation to stop upon.
              */
-            type: any;
+            type: string;
         }
         export interface IRemoveDOMBreakpointParams {
              /**
              * Identifier of the node to remove breakpoint from.
              */
-            nodeId: any;
+            nodeId: number;
              /**
              * Type of the breakpoint to remove.
              */
-            type: any;
+            type: string;
         }
         export interface ISetEventListenerBreakpointParams {
              /**
@@ -2524,6 +4541,90 @@ declare module "chrome-debug-protocol" {
              */
             interval: number;
         }
+         /**
+         * CPU Profile node. Holds callsite information, execution statistics and child nodes.
+         */
+        export interface CPUProfileNode {
+             /**
+             * Function name.
+             */
+            functionName: string;
+             /**
+             * Script identifier.
+             */
+            scriptId: string;
+             /**
+             * URL.
+             */
+            url: string;
+             /**
+             * 1-based line number of the function start position.
+             */
+            lineNumber: number;
+             /**
+             * 1-based column number of the function start position.
+             */
+            columnNumber: number;
+             /**
+             * Number of samples where this node was on top of the call stack.
+             */
+            hitCount: number;
+             /**
+             * Call UID.
+             */
+            callUID: any;
+             /**
+             * Child nodes.
+             */
+            children: any[];
+             /**
+             * The reason of being not optimized. The function may be deoptimized or marked as don't optimize.
+             */
+            deoptReason: string;
+             /**
+             * Unique id of the node.
+             */
+            id: number;
+             /**
+             * An array of source position ticks.
+             */
+            positionTicks: any[];
+        }
+         /**
+         * Profile.
+         */
+        export interface CPUProfile {
+            head: CPUProfileNode;
+             /**
+             * Profiling start time in seconds.
+             */
+            startTime: any;
+             /**
+             * Profiling end time in seconds.
+             */
+            endTime: any;
+             /**
+             * Ids of samples top nodes.
+             */
+            samples?: any[];
+             /**
+             * Timestamps of the samples in microseconds.
+             */
+            timestamps?: any[];
+        }
+         /**
+         * Specifies a number of samples attributed to a certain source position.
+         */
+        export interface PositionTickInfo {
+             /**
+             * Source line number (1-based).
+             */
+            line: number;
+             /**
+             * Number of samples attributed to the source line.
+             */
+            ticks: number;
+        }
     }
     module HeapProfiler {
         export interface IStartTrackingHeapObjectsParams {
@@ -2542,7 +4643,7 @@ declare module "chrome-debug-protocol" {
             reportProgress?: boolean;
         }
         export interface IGetObjectByHeapObjectIdParams {
-            objectId: any;
+            objectId: string;
              /**
              * Symbolic group name that can be used to release multiple objects.
              */
@@ -2552,7 +4653,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Identifier of the object to get heap object id for.
              */
-            objectId: any;
+            objectId: string;
         }
     }
     module Worker {
@@ -2572,41 +4673,41 @@ declare module "chrome-debug-protocol" {
     }
     module Canvas {
         export interface IDropTraceLogParams {
-            traceLogId: any;
+            traceLogId: string;
         }
         export interface ICaptureFrameParams {
              /**
              * Identifier of the frame containing document whose canvases are to be captured. If omitted, main frame is assumed.
              */
-            frameId?: any;
+            frameId?: string;
         }
         export interface IStartCapturingParams {
              /**
              * Identifier of the frame containing document whose canvases are to be captured. If omitted, main frame is assumed.
              */
-            frameId?: any;
+            frameId?: string;
         }
         export interface IStopCapturingParams {
-            traceLogId: any;
+            traceLogId: string;
         }
         export interface IGetTraceLogParams {
-            traceLogId: any;
+            traceLogId: string;
             startOffset?: number;
             maxLength?: number;
         }
         export interface IReplayTraceLogParams {
-            traceLogId: any;
+            traceLogId: string;
              /**
              * Last call index in the trace log to replay (zero based).
              */
             stepNo: number;
         }
         export interface IGetResourceStateParams {
-            traceLogId: any;
-            resourceId: any;
+            traceLogId: string;
+            resourceId: string;
         }
         export interface IEvaluateTraceLogCallArgumentParams {
-            traceLogId: any;
+            traceLogId: string;
              /**
              * Index of the call to evaluate on (zero based).
              */
@@ -2619,6 +4720,93 @@ declare module "chrome-debug-protocol" {
              * String object group name to put result into (allows rapid releasing resulting object handles using <code>Runtime.releaseObjectGroup</code>).
              */
             objectGroup?: string;
+        }
+         /**
+         * Resource state descriptor.
+         */
+        export interface ResourceStateDescriptor {
+             /**
+             * State name.
+             */
+            name: string;
+             /**
+             * String representation of the enum value, if <code>name</code> stands for an enum.
+             */
+            enumValueForName?: string;
+             /**
+             * The value associated with the particular state.
+             */
+            value?: CallArgument;
+             /**
+             * Array of values associated with the particular state. Either <code>value</code> or <code>values</code> will be specified.
+             */
+            values?: any[];
+             /**
+             * True iff the given <code>values</code> items stand for an array rather than a list of grouped states.
+             */
+            isArray?: boolean;
+        }
+         /**
+         * Resource state.
+         */
+        export interface ResourceState {
+            id: string;
+            traceLogId: string;
+             /**
+             * Describes current <code>Resource</code> state.
+             */
+            descriptors?: any[];
+             /**
+             * Screenshot image data URL.
+             */
+            imageURL?: string;
+        }
+        export interface CallArgument {
+             /**
+             * String representation of the object.
+             */
+            description: string;
+             /**
+             * Enum name, if any, that stands for the value (for example, a WebGL enum name).
+             */
+            enumName?: string;
+             /**
+             * Resource identifier. Specified for <code>Resource</code> objects only.
+             */
+            resourceId?: string;
+             /**
+             * Object type. Specified for non <code>Resource</code> objects only.
+             */
+            type?: string;
+             /**
+             * Object subtype hint. Specified for <code>object</code> type values only.
+             */
+            subtype?: string;
+             /**
+             * The <code>RemoteObject</code>, if requested.
+             */
+            remoteObject?: Runtime.RemoteObject;
+        }
+        export interface Call {
+            contextId: string;
+            functionName?: string;
+            arguments?: any[];
+            result?: CallArgument;
+            isDrawingCall?: boolean;
+            isFrameEndCall?: boolean;
+            property?: string;
+            value?: CallArgument;
+            sourceURL?: string;
+            lineNumber?: number;
+            columnNumber?: number;
+        }
+        export interface TraceLog {
+            id: string;
+            calls: any[];
+            contexts: any[];
+            startOffset: number;
+            alive: boolean;
+            totalAvailableCalls: any;
         }
     }
     module Input {
@@ -2754,19 +4942,53 @@ declare module "chrome-debug-protocol" {
              */
             clickCount?: number;
         }
+        export interface TouchPoint {
+             /**
+             * State of the touch point.
+             */
+            state: string;
+             /**
+             * X coordinate of the event relative to the main frame's viewport.
+             */
+            x: number;
+             /**
+             * Y coordinate of the event relative to the main frame's viewport. 0 refers to the top of the viewport and Y increases as it proceeds towards the bottom of the viewport.
+             */
+            y: number;
+             /**
+             * X radius of the touch area (default: 1).
+             */
+            radiusX?: number;
+             /**
+             * Y radius of the touch area (default: 1).
+             */
+            radiusY?: number;
+             /**
+             * Rotation angle (default: 0.0).
+             */
+            rotationAngle?: any;
+             /**
+             * Force (default: 1.0).
+             */
+            force?: any;
+             /**
+             * Identifier used to track touch sources between events, must be unique within an event.
+             */
+            id?: any;
+        }
     }
     module LayerTree {
         export interface ICompositingReasonsParams {
              /**
              * The id of the layer for which we want to get the reasons it was composited.
              */
-            layerId: any;
+            layerId: string;
         }
         export interface IMakeSnapshotParams {
              /**
              * The id of the layer.
              */
-            layerId: any;
+            layerId: string;
         }
         export interface ILoadSnapshotParams {
              /**
@@ -2778,13 +5000,13 @@ declare module "chrome-debug-protocol" {
              /**
              * The id of the layer snapshot.
              */
-            snapshotId: any;
+            snapshotId: string;
         }
         export interface IProfileSnapshotParams {
              /**
              * The id of the layer snapshot.
              */
-            snapshotId: any;
+            snapshotId: string;
              /**
              * The maximum number of times to replay the snapshot (1, if not specified).
              */
@@ -2796,13 +5018,13 @@ declare module "chrome-debug-protocol" {
              /**
              * The clip rectangle to apply when replaying the snapshot.
              */
-            clipRect?: any;
+            clipRect?: DOM.Rect;
         }
         export interface IReplaySnapshotParams {
              /**
              * The id of the layer snapshot.
              */
-            snapshotId: any;
+            snapshotId: string;
              /**
              * The first step to replay from (replay from the very start if not specified).
              */
@@ -2820,7 +5042,98 @@ declare module "chrome-debug-protocol" {
              /**
              * The id of the layer snapshot.
              */
-            snapshotId: any;
+            snapshotId: string;
+        }
+         /**
+         * Rectangle where scrolling happens on the main thread.
+         */
+        export interface ScrollRect {
+             /**
+             * Rectangle itself.
+             */
+            rect: DOM.Rect;
+             /**
+             * Reason for rectangle to force scrolling on the main thread
+             */
+            type: string;
+        }
+         /**
+         * Serialized fragment of layer picture along with its offset within the layer.
+         */
+        export interface PictureTile {
+             /**
+             * Offset from owning layer left boundary
+             */
+            x: any;
+             /**
+             * Offset from owning layer top boundary
+             */
+            y: any;
+             /**
+             * Base64-encoded snapshot data.
+             */
+            picture: string;
+        }
+         /**
+         * Information about a compositing layer.
+         */
+        export interface Layer {
+             /**
+             * The unique id for this layer.
+             */
+            layerId: string;
+             /**
+             * The id of parent (not present for root).
+             */
+            parentLayerId?: string;
+             /**
+             * The backend id for the node associated with this layer.
+             */
+            backendNodeId?: number;
+             /**
+             * Offset from parent layer, X coordinate.
+             */
+            offsetX: any;
+             /**
+             * Offset from parent layer, Y coordinate.
+             */
+            offsetY: any;
+             /**
+             * Layer width.
+             */
+            width: any;
+             /**
+             * Layer height.
+             */
+            height: any;
+             /**
+             * Transformation matrix for layer, default is identity matrix
+             */
+            transform?: any[];
+             /**
+             * Transform anchor point X, absent if no transform specified
+             */
+            anchorX?: any;
+             /**
+             * Transform anchor point Y, absent if no transform specified
+             */
+            anchorY?: any;
+             /**
+             * Transform anchor point Z, absent if no transform specified
+             */
+            anchorZ?: any;
+             /**
+             * Indicates how many time this layer has painted.
+             */
+            paintCount: number;
+             /**
+             * Set if layer is not visible.
+             */
+            invisible?: boolean;
+             /**
+             * Rectangles scrolling on main thread only.
+             */
+            scrollRects?: any[];
         }
     }
     module DeviceOrientation {
@@ -2856,13 +5169,30 @@ declare module "chrome-debug-protocol" {
         }
     }
     module Power {
+         /**
+         * PowerEvent item
+         */
+        export interface PowerEvent {
+             /**
+             * Power Event Type.
+             */
+            type: string;
+             /**
+             * Power Event Time, in milliseconds.
+             */
+            timestamp: any;
+             /**
+             * Power Event Value.
+             */
+            value: any;
+        }
     }
     module Animation {
         export interface IGetAnimationPlayersForNodeParams {
              /**
              * Id of the node to get animation players for.
              */
-            nodeId: any;
+            nodeId: number;
              /**
              * Include animations from elements subtree.
              */
@@ -2900,11 +5230,115 @@ declare module "chrome-debug-protocol" {
              /**
              * Id of the node to record on.
              */
-            nodeId: any;
+            nodeId: number;
              /**
              * Include animations from elements subtree.
              */
             includeSubtreeAnimations: boolean;
+        }
+         /**
+         * AnimationPlayer instance.
+         */
+        export interface AnimationPlayer {
+             /**
+             * <code>AnimationPlayer</code>'s id.
+             */
+            id: string;
+             /**
+             * <code>AnimationPlayer</code>'s internal paused state.
+             */
+            pausedState: boolean;
+             /**
+             * <code>AnimationPlayer</code>'s play state.
+             */
+            playState: string;
+             /**
+             * <code>AnimationPlayer</code>'s playback rate.
+             */
+            playbackRate: any;
+             /**
+             * <code>AnimationPlayer</code>'s start time.
+             */
+            startTime: any;
+             /**
+             * <code>AnimationPlayer</code>'s current time.
+             */
+            currentTime: any;
+             /**
+             * <code>AnimationPlayer</code>'s source animation node.
+             */
+            source: AnimationNode;
+        }
+         /**
+         * AnimationNode instance
+         */
+        export interface AnimationNode {
+             /**
+             * <code>AnimationNode</code>'s delay.
+             */
+            delay: any;
+             /**
+             * <code>AnimationNode</code>'s playbackRate.
+             */
+            playbackRate: any;
+             /**
+             * <code>AnimationNode</code>'s iteration start.
+             */
+            iterationStart: any;
+             /**
+             * <code>AnimationNode</code>'s iterations.
+             */
+            iterations: any;
+             /**
+             * <code>AnimationNode</code>'s iteration duration.
+             */
+            duration: any;
+             /**
+             * <code>AnimationNode</code>'s playback direction.
+             */
+            direction: string;
+             /**
+             * <code>AnimationNode</code>'s fill mode.
+             */
+            fill: string;
+             /**
+             * <code>AnimationNode</code>'s name.
+             */
+            name: string;
+             /**
+             * <code>AnimationNode</code>'s target node.
+             */
+            backendNodeId: number;
+             /**
+             * <code>AnimationNode</code>'s keyframes.
+             */
+            keyframesRule?: KeyframesRule;
+        }
+         /**
+         * Keyframes Rule
+         */
+        export interface KeyframesRule {
+             /**
+             * CSS keyframed animation's name.
+             */
+            name?: string;
+             /**
+             * List of animation keyframes.
+             */
+            keyframes: any[];
+        }
+         /**
+         * Keyframe Style
+         */
+        export interface KeyframeStyle {
+             /**
+             * Keyframe's time offset.
+             */
+            offset: string;
+             /**
+             * Keyframe's associated CSS style declaration.
+             */
+            style: CSS.CSSStyle;
         }
     }
 
