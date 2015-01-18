@@ -180,7 +180,7 @@ for (var i = 0; i < domains.length; i++) {
                 domainInterfaceEmitter.write(`params${(optional ? "?" : "")}: ${domain.domain}.${name}`);
                 domainInterfaceEmitter.write(", ");
             }
-            domainInterfaceEmitter.write("cb?: Function);");
+            domainInterfaceEmitter.write("cb?: ChromeCallBack<any>);");
             domainInterfaceEmitter.writenewline();
         }
     }

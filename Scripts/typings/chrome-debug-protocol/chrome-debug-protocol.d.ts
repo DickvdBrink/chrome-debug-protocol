@@ -99,1042 +99,1042 @@ declare module "chrome-debug-protocol" {
          /**
          * Enables inspector domain notifications.
          */
-        enable(cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
          /**
          * Disables inspector domain notifications.
          */
-        disable(cb?: Function);
+        disable(cb?: ChromeCallBack<any>);
          /**
          * Resets all domains.
          */
-        reset(cb?: Function);
+        reset(cb?: ChromeCallBack<any>);
     }
     interface IMemory {
-        getDOMCounters(cb?: Function);
+        getDOMCounters(cb?: ChromeCallBack<any>);
     }
     interface IPage {
          /**
          * Enables page domain notifications.
          */
-        enable(cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
          /**
          * Disables page domain notifications.
          */
-        disable(cb?: Function);
-        addScriptToEvaluateOnLoad(params: Page.IAddScriptToEvaluateOnLoadParams, cb?: Function);
-        removeScriptToEvaluateOnLoad(params: Page.IRemoveScriptToEvaluateOnLoadParams, cb?: Function);
+        disable(cb?: ChromeCallBack<any>);
+        addScriptToEvaluateOnLoad(params: Page.IAddScriptToEvaluateOnLoadParams, cb?: ChromeCallBack<any>);
+        removeScriptToEvaluateOnLoad(params: Page.IRemoveScriptToEvaluateOnLoadParams, cb?: ChromeCallBack<any>);
          /**
          * Reloads given page optionally ignoring the cache.
          */
-        reload(params?: Page.IReloadParams, cb?: Function);
+        reload(params?: Page.IReloadParams, cb?: ChromeCallBack<any>);
          /**
          * Navigates current page to the given URL.
          */
-        navigate(params: Page.INavigateParams, cb?: Function);
+        navigate(params: Page.INavigateParams, cb?: ChromeCallBack<any>);
          /**
          * Returns navigation history for the current page.
          */
-        getNavigationHistory(cb?: Function);
+        getNavigationHistory(cb?: ChromeCallBack<any>);
          /**
          * Navigates current page to the given history entry.
          */
-        navigateToHistoryEntry(params: Page.INavigateToHistoryEntryParams, cb?: Function);
+        navigateToHistoryEntry(params: Page.INavigateToHistoryEntryParams, cb?: ChromeCallBack<any>);
          /**
          * Returns all browser cookies. Depending on the backend support, will return detailed cookie information in the <code>cookies</code> field.
          */
-        getCookies(cb?: Function);
+        getCookies(cb?: ChromeCallBack<any>);
          /**
          * Deletes browser cookie with given name, domain and path.
          */
-        deleteCookie(params: Page.IDeleteCookieParams, cb?: Function);
+        deleteCookie(params: Page.IDeleteCookieParams, cb?: ChromeCallBack<any>);
          /**
          * Returns present frame / resource tree structure.
          */
-        getResourceTree(cb?: Function);
+        getResourceTree(cb?: ChromeCallBack<any>);
          /**
          * Returns content of the given resource.
          */
-        getResourceContent(params: Page.IGetResourceContentParams, cb?: Function);
+        getResourceContent(params: Page.IGetResourceContentParams, cb?: ChromeCallBack<any>);
          /**
          * Searches for given string in resource content.
          */
-        searchInResource(params?: Page.ISearchInResourceParams, cb?: Function);
+        searchInResource(params?: Page.ISearchInResourceParams, cb?: ChromeCallBack<any>);
          /**
          * Sets given markup as the document's HTML.
          */
-        setDocumentContent(params: Page.ISetDocumentContentParams, cb?: Function);
+        setDocumentContent(params: Page.ISetDocumentContentParams, cb?: ChromeCallBack<any>);
          /**
          * Overrides the values of device screen dimensions (window.screen.width, window.screen.height, window.innerWidth, window.innerHeight, and "device-width"/"device-height"-related CSS media query results).
          */
-        setDeviceMetricsOverride(params?: Page.ISetDeviceMetricsOverrideParams, cb?: Function);
+        setDeviceMetricsOverride(params?: Page.ISetDeviceMetricsOverrideParams, cb?: ChromeCallBack<any>);
          /**
          * Clears the overriden device metrics.
          */
-        clearDeviceMetricsOverride(cb?: Function);
+        clearDeviceMetricsOverride(cb?: ChromeCallBack<any>);
          /**
          * Requests that scroll offsets and page scale factor are reset to initial values.
          */
-        resetScrollAndPageScaleFactor(cb?: Function);
+        resetScrollAndPageScaleFactor(cb?: ChromeCallBack<any>);
          /**
          * Sets a specified page scale factor.
          */
-        setPageScaleFactor(params: Page.ISetPageScaleFactorParams, cb?: Function);
+        setPageScaleFactor(params: Page.ISetPageScaleFactorParams, cb?: ChromeCallBack<any>);
          /**
          * Requests that backend shows paint rectangles
          */
-        setShowPaintRects(params: Page.ISetShowPaintRectsParams, cb?: Function);
+        setShowPaintRects(params: Page.ISetShowPaintRectsParams, cb?: ChromeCallBack<any>);
          /**
          * Requests that backend shows debug borders on layers
          */
-        setShowDebugBorders(params: Page.ISetShowDebugBordersParams, cb?: Function);
+        setShowDebugBorders(params: Page.ISetShowDebugBordersParams, cb?: ChromeCallBack<any>);
          /**
          * Requests that backend shows the FPS counter
          */
-        setShowFPSCounter(params: Page.ISetShowFPSCounterParams, cb?: Function);
+        setShowFPSCounter(params: Page.ISetShowFPSCounterParams, cb?: ChromeCallBack<any>);
          /**
          * Requests that backend enables continuous painting
          */
-        setContinuousPaintingEnabled(params: Page.ISetContinuousPaintingEnabledParams, cb?: Function);
+        setContinuousPaintingEnabled(params: Page.ISetContinuousPaintingEnabledParams, cb?: ChromeCallBack<any>);
          /**
          * Requests that backend shows scroll bottleneck rects
          */
-        setShowScrollBottleneckRects(params: Page.ISetShowScrollBottleneckRectsParams, cb?: Function);
+        setShowScrollBottleneckRects(params: Page.ISetShowScrollBottleneckRectsParams, cb?: ChromeCallBack<any>);
          /**
          * Determines if scripts can be executed in the page.
          */
-        getScriptExecutionStatus(cb?: Function);
+        getScriptExecutionStatus(cb?: ChromeCallBack<any>);
          /**
          * Switches script execution in the page.
          */
-        setScriptExecutionDisabled(params: Page.ISetScriptExecutionDisabledParams, cb?: Function);
+        setScriptExecutionDisabled(params: Page.ISetScriptExecutionDisabledParams, cb?: ChromeCallBack<any>);
          /**
          * Overrides the Geolocation Position or Error. Omitting any of the parameters emulates position unavailable.
          */
-        setGeolocationOverride(params?: Page.ISetGeolocationOverrideParams, cb?: Function);
+        setGeolocationOverride(params?: Page.ISetGeolocationOverrideParams, cb?: ChromeCallBack<any>);
          /**
          * Clears the overriden Geolocation Position and Error.
          */
-        clearGeolocationOverride(cb?: Function);
+        clearGeolocationOverride(cb?: ChromeCallBack<any>);
          /**
          * Overrides the Device Orientation.
          */
-        setDeviceOrientationOverride(params: Page.ISetDeviceOrientationOverrideParams, cb?: Function);
+        setDeviceOrientationOverride(params: Page.ISetDeviceOrientationOverrideParams, cb?: ChromeCallBack<any>);
          /**
          * Clears the overridden Device Orientation.
          */
-        clearDeviceOrientationOverride(cb?: Function);
+        clearDeviceOrientationOverride(cb?: ChromeCallBack<any>);
          /**
          * Toggles mouse event-based touch event emulation.
          */
-        setTouchEmulationEnabled(params?: Page.ISetTouchEmulationEnabledParams, cb?: Function);
+        setTouchEmulationEnabled(params?: Page.ISetTouchEmulationEnabledParams, cb?: ChromeCallBack<any>);
          /**
          * Emulates the given media for CSS media queries.
          */
-        setEmulatedMedia(params: Page.ISetEmulatedMediaParams, cb?: Function);
+        setEmulatedMedia(params: Page.ISetEmulatedMediaParams, cb?: ChromeCallBack<any>);
          /**
          * Capture page screenshot.
          */
-        captureScreenshot(cb?: Function);
+        captureScreenshot(cb?: ChromeCallBack<any>);
          /**
          * Tells whether screencast is supported.
          */
-        canScreencast(cb?: Function);
+        canScreencast(cb?: ChromeCallBack<any>);
          /**
          * Tells whether emulation is supported.
          */
-        canEmulate(cb?: Function);
+        canEmulate(cb?: ChromeCallBack<any>);
          /**
          * Starts sending each frame using the <code>screencastFrame</code> event.
          */
-        startScreencast(params?: Page.IStartScreencastParams, cb?: Function);
+        startScreencast(params?: Page.IStartScreencastParams, cb?: ChromeCallBack<any>);
          /**
          * Stops sending each frame in the <code>screencastFrame</code>.
          */
-        stopScreencast(cb?: Function);
+        stopScreencast(cb?: ChromeCallBack<any>);
          /**
          * Acknowledges that a screencast frame has been received by the frontend.
          */
-        screencastFrameAck(params: Page.IScreencastFrameAckParams, cb?: Function);
+        screencastFrameAck(params: Page.IScreencastFrameAckParams, cb?: ChromeCallBack<any>);
          /**
          * Starts recording each frame to the buffer.
          */
-        startRecordingFrames(params: Page.IStartRecordingFramesParams, cb?: Function);
+        startRecordingFrames(params: Page.IStartRecordingFramesParams, cb?: ChromeCallBack<any>);
          /**
          * Stops recording, encodes and returns images.
          */
-        stopRecordingFrames(cb?: Function);
+        stopRecordingFrames(cb?: ChromeCallBack<any>);
          /**
          * Accepts or dismisses a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload).
          */
-        handleJavaScriptDialog(params?: Page.IHandleJavaScriptDialogParams, cb?: Function);
+        handleJavaScriptDialog(params?: Page.IHandleJavaScriptDialogParams, cb?: ChromeCallBack<any>);
          /**
          * Paints viewport size upon main frame resize.
          */
-        setShowViewportSizeOnResize(params?: Page.ISetShowViewportSizeOnResizeParams, cb?: Function);
+        setShowViewportSizeOnResize(params?: Page.ISetShowViewportSizeOnResizeParams, cb?: ChromeCallBack<any>);
          /**
          * Queries more detailed quota and usage data than Storage API provides.
          */
-        queryUsageAndQuota(params: Page.IQueryUsageAndQuotaParams, cb?: Function);
+        queryUsageAndQuota(params: Page.IQueryUsageAndQuotaParams, cb?: ChromeCallBack<any>);
          /**
          * Shows / hides color picker
          */
-        setColorPickerEnabled(params: Page.ISetColorPickerEnabledParams, cb?: Function);
+        setColorPickerEnabled(params: Page.ISetColorPickerEnabledParams, cb?: ChromeCallBack<any>);
          /**
          * Sets overlay message.
          */
-        setOverlayMessage(params?: Page.ISetOverlayMessageParams, cb?: Function);
+        setOverlayMessage(params?: Page.ISetOverlayMessageParams, cb?: ChromeCallBack<any>);
          /**
          * Gets the playback rate of the document timeline.
          */
-        animationsPlaybackRate(cb?: Function);
+        animationsPlaybackRate(cb?: ChromeCallBack<any>);
          /**
          * Sets the playback rate of the document timeline.
          */
-        setAnimationsPlaybackRate(params: Page.ISetAnimationsPlaybackRateParams, cb?: Function);
+        setAnimationsPlaybackRate(params: Page.ISetAnimationsPlaybackRateParams, cb?: ChromeCallBack<any>);
     }
     interface IRuntime {
          /**
          * Evaluates expression on global object.
          */
-        evaluate(params?: Runtime.IEvaluateParams, cb?: Function);
+        evaluate(params?: Runtime.IEvaluateParams, cb?: ChromeCallBack<any>);
          /**
          * Calls function with given declaration on the given object. Object group of the result is inherited from the target object.
          */
-        callFunctionOn(params?: Runtime.ICallFunctionOnParams, cb?: Function);
+        callFunctionOn(params?: Runtime.ICallFunctionOnParams, cb?: ChromeCallBack<any>);
          /**
          * Returns properties of a given object. Object group of the result is inherited from the target object.
          */
-        getProperties(params?: Runtime.IGetPropertiesParams, cb?: Function);
+        getProperties(params?: Runtime.IGetPropertiesParams, cb?: ChromeCallBack<any>);
          /**
          * Releases remote object with given id.
          */
-        releaseObject(params: Runtime.IReleaseObjectParams, cb?: Function);
+        releaseObject(params: Runtime.IReleaseObjectParams, cb?: ChromeCallBack<any>);
          /**
          * Releases all remote objects that belong to a given group.
          */
-        releaseObjectGroup(params: Runtime.IReleaseObjectGroupParams, cb?: Function);
+        releaseObjectGroup(params: Runtime.IReleaseObjectGroupParams, cb?: ChromeCallBack<any>);
          /**
          * Tells inspected instance(worker or page) that it can run in case it was started paused.
          */
-        run(cb?: Function);
+        run(cb?: ChromeCallBack<any>);
          /**
          * Enables reporting of execution contexts creation by means of <code>executionContextCreated</code> event. When the reporting gets enabled the event will be sent immediately for each existing execution context.
          */
-        enable(cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
          /**
          * Disables reporting of execution contexts creation.
          */
-        disable(cb?: Function);
-        isRunRequired(cb?: Function);
-        setCustomObjectFormatterEnabled(params: Runtime.ISetCustomObjectFormatterEnabledParams, cb?: Function);
+        disable(cb?: ChromeCallBack<any>);
+        isRunRequired(cb?: ChromeCallBack<any>);
+        setCustomObjectFormatterEnabled(params: Runtime.ISetCustomObjectFormatterEnabledParams, cb?: ChromeCallBack<any>);
     }
     interface IConsole {
          /**
          * Enables console domain, sends the messages collected so far to the client by means of the <code>messageAdded</code> notification.
          */
-        enable(cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
          /**
          * Disables console domain, prevents further console messages from being reported to the client.
          */
-        disable(cb?: Function);
+        disable(cb?: ChromeCallBack<any>);
          /**
          * Clears console messages collected in the browser.
          */
-        clearMessages(cb?: Function);
+        clearMessages(cb?: ChromeCallBack<any>);
          /**
          * Toggles monitoring of XMLHttpRequest. If <code>true</code>, console will receive messages upon each XHR issued.
          */
-        setMonitoringXHREnabled(params: Console.ISetMonitoringXHREnabledParams, cb?: Function);
+        setMonitoringXHREnabled(params: Console.ISetMonitoringXHREnabledParams, cb?: ChromeCallBack<any>);
          /**
          * Enables console to refer to the node with given id via $x (see Command Line API for more details $x functions).
          */
-        addInspectedNode(params: Console.IAddInspectedNodeParams, cb?: Function);
-        addInspectedHeapObject(params: Console.IAddInspectedHeapObjectParams, cb?: Function);
+        addInspectedNode(params: Console.IAddInspectedNodeParams, cb?: ChromeCallBack<any>);
+        addInspectedHeapObject(params: Console.IAddInspectedHeapObjectParams, cb?: ChromeCallBack<any>);
          /**
          * Sets last evaluation result in console. Can be accessed via <code>$_</code> command line API.
          */
-        setLastEvaluationResult(params: Console.ISetLastEvaluationResultParams, cb?: Function);
+        setLastEvaluationResult(params: Console.ISetLastEvaluationResultParams, cb?: ChromeCallBack<any>);
     }
     interface INetwork {
          /**
          * Enables network tracking, network events will now be delivered to the client.
          */
-        enable(cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
          /**
          * Disables network tracking, prevents network events from being sent to the client.
          */
-        disable(cb?: Function);
+        disable(cb?: ChromeCallBack<any>);
          /**
          * Allows overriding user agent with the given string.
          */
-        setUserAgentOverride(params: Network.ISetUserAgentOverrideParams, cb?: Function);
+        setUserAgentOverride(params: Network.ISetUserAgentOverrideParams, cb?: ChromeCallBack<any>);
          /**
          * Specifies whether to always send extra HTTP headers with the requests from this page.
          */
-        setExtraHTTPHeaders(params: Network.ISetExtraHTTPHeadersParams, cb?: Function);
+        setExtraHTTPHeaders(params: Network.ISetExtraHTTPHeadersParams, cb?: ChromeCallBack<any>);
          /**
          * Returns content served for the given request.
          */
-        getResponseBody(params: Network.IGetResponseBodyParams, cb?: Function);
+        getResponseBody(params: Network.IGetResponseBodyParams, cb?: ChromeCallBack<any>);
          /**
          * This method sends a new XMLHttpRequest which is identical to the original one. The following parameters should be identical: method, url, async, request body, extra headers, withCredentials attribute, user, password.
          */
-        replayXHR(params: Network.IReplayXHRParams, cb?: Function);
+        replayXHR(params: Network.IReplayXHRParams, cb?: ChromeCallBack<any>);
          /**
          * Tells whether clearing browser cache is supported.
          */
-        canClearBrowserCache(cb?: Function);
+        canClearBrowserCache(cb?: ChromeCallBack<any>);
          /**
          * Clears browser cache.
          */
-        clearBrowserCache(cb?: Function);
+        clearBrowserCache(cb?: ChromeCallBack<any>);
          /**
          * Tells whether clearing browser cookies is supported.
          */
-        canClearBrowserCookies(cb?: Function);
+        canClearBrowserCookies(cb?: ChromeCallBack<any>);
          /**
          * Clears browser cookies.
          */
-        clearBrowserCookies(cb?: Function);
+        clearBrowserCookies(cb?: ChromeCallBack<any>);
          /**
          * Tells whether emulation of network conditions is supported.
          */
-        canEmulateNetworkConditions(cb?: Function);
+        canEmulateNetworkConditions(cb?: ChromeCallBack<any>);
          /**
          * Activates emulation of network conditions.
          */
-        emulateNetworkConditions(params: Network.IEmulateNetworkConditionsParams, cb?: Function);
+        emulateNetworkConditions(params: Network.IEmulateNetworkConditionsParams, cb?: ChromeCallBack<any>);
          /**
          * Toggles ignoring cache for each request. If <code>true</code>, cache will not be used.
          */
-        setCacheDisabled(params: Network.ISetCacheDisabledParams, cb?: Function);
+        setCacheDisabled(params: Network.ISetCacheDisabledParams, cb?: ChromeCallBack<any>);
          /**
          * Loads a resource in the context of a frame on the inspected page without cross origin checks.
          */
-        loadResourceForFrontend(params?: Network.ILoadResourceForFrontendParams, cb?: Function);
+        loadResourceForFrontend(params?: Network.ILoadResourceForFrontendParams, cb?: ChromeCallBack<any>);
     }
     interface IDatabase {
          /**
          * Enables database tracking, database events will now be delivered to the client.
          */
-        enable(cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
          /**
          * Disables database tracking, prevents database events from being sent to the client.
          */
-        disable(cb?: Function);
-        getDatabaseTableNames(params: Database.IGetDatabaseTableNamesParams, cb?: Function);
-        executeSQL(params: Database.IExecuteSQLParams, cb?: Function);
+        disable(cb?: ChromeCallBack<any>);
+        getDatabaseTableNames(params: Database.IGetDatabaseTableNamesParams, cb?: ChromeCallBack<any>);
+        executeSQL(params: Database.IExecuteSQLParams, cb?: ChromeCallBack<any>);
     }
     interface IIndexedDB {
          /**
          * Enables events from backend.
          */
-        enable(cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
          /**
          * Disables events from backend.
          */
-        disable(cb?: Function);
+        disable(cb?: ChromeCallBack<any>);
          /**
          * Requests database names for given security origin.
          */
-        requestDatabaseNames(params: IndexedDB.IRequestDatabaseNamesParams, cb?: Function);
+        requestDatabaseNames(params: IndexedDB.IRequestDatabaseNamesParams, cb?: ChromeCallBack<any>);
          /**
          * Requests database with given name in given frame.
          */
-        requestDatabase(params: IndexedDB.IRequestDatabaseParams, cb?: Function);
+        requestDatabase(params: IndexedDB.IRequestDatabaseParams, cb?: ChromeCallBack<any>);
          /**
          * Requests data from object store or index.
          */
-        requestData(params?: IndexedDB.IRequestDataParams, cb?: Function);
+        requestData(params?: IndexedDB.IRequestDataParams, cb?: ChromeCallBack<any>);
          /**
          * Clears all entries from an object store.
          */
-        clearObjectStore(params: IndexedDB.IClearObjectStoreParams, cb?: Function);
+        clearObjectStore(params: IndexedDB.IClearObjectStoreParams, cb?: ChromeCallBack<any>);
     }
     interface IServiceWorkerCache {
          /**
          * Requests cache names.
          */
-        requestCacheNames(cb?: Function);
+        requestCacheNames(cb?: ChromeCallBack<any>);
          /**
          * Requests data from cache.
          */
-        requestEntries(params: ServiceWorkerCache.IRequestEntriesParams, cb?: Function);
+        requestEntries(params: ServiceWorkerCache.IRequestEntriesParams, cb?: ChromeCallBack<any>);
          /**
          * Deletes a cache.
          */
-        deleteCache(params: ServiceWorkerCache.IDeleteCacheParams, cb?: Function);
+        deleteCache(params: ServiceWorkerCache.IDeleteCacheParams, cb?: ChromeCallBack<any>);
     }
     interface IDOMStorage {
          /**
          * Enables storage tracking, storage events will now be delivered to the client.
          */
-        enable(cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
          /**
          * Disables storage tracking, prevents storage events from being sent to the client.
          */
-        disable(cb?: Function);
-        getDOMStorageItems(params: DOMStorage.IGetDOMStorageItemsParams, cb?: Function);
-        setDOMStorageItem(params: DOMStorage.ISetDOMStorageItemParams, cb?: Function);
-        removeDOMStorageItem(params: DOMStorage.IRemoveDOMStorageItemParams, cb?: Function);
+        disable(cb?: ChromeCallBack<any>);
+        getDOMStorageItems(params: DOMStorage.IGetDOMStorageItemsParams, cb?: ChromeCallBack<any>);
+        setDOMStorageItem(params: DOMStorage.ISetDOMStorageItemParams, cb?: ChromeCallBack<any>);
+        removeDOMStorageItem(params: DOMStorage.IRemoveDOMStorageItemParams, cb?: ChromeCallBack<any>);
     }
     interface IApplicationCache {
          /**
          * Returns array of frame identifiers with manifest urls for each frame containing a document associated with some application cache.
          */
-        getFramesWithManifests(cb?: Function);
+        getFramesWithManifests(cb?: ChromeCallBack<any>);
          /**
          * Enables application cache domain notifications.
          */
-        enable(cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
          /**
          * Returns manifest URL for document in the given frame.
          */
-        getManifestForFrame(params: ApplicationCache.IGetManifestForFrameParams, cb?: Function);
+        getManifestForFrame(params: ApplicationCache.IGetManifestForFrameParams, cb?: ChromeCallBack<any>);
          /**
          * Returns relevant application cache data for the document in given frame.
          */
-        getApplicationCacheForFrame(params: ApplicationCache.IGetApplicationCacheForFrameParams, cb?: Function);
+        getApplicationCacheForFrame(params: ApplicationCache.IGetApplicationCacheForFrameParams, cb?: ChromeCallBack<any>);
     }
     interface IFileSystem {
          /**
          * Enables events from backend.
          */
-        enable(cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
          /**
          * Disables events from backend.
          */
-        disable(cb?: Function);
+        disable(cb?: ChromeCallBack<any>);
          /**
          * Returns root directory of the FileSystem, if exists.
          */
-        requestFileSystemRoot(params: FileSystem.IRequestFileSystemRootParams, cb?: Function);
+        requestFileSystemRoot(params: FileSystem.IRequestFileSystemRootParams, cb?: ChromeCallBack<any>);
          /**
          * Returns content of the directory.
          */
-        requestDirectoryContent(params: FileSystem.IRequestDirectoryContentParams, cb?: Function);
+        requestDirectoryContent(params: FileSystem.IRequestDirectoryContentParams, cb?: ChromeCallBack<any>);
          /**
          * Returns metadata of the entry.
          */
-        requestMetadata(params: FileSystem.IRequestMetadataParams, cb?: Function);
+        requestMetadata(params: FileSystem.IRequestMetadataParams, cb?: ChromeCallBack<any>);
          /**
          * Returns content of the file. Result should be sliced into [start, end).
          */
-        requestFileContent(params?: FileSystem.IRequestFileContentParams, cb?: Function);
+        requestFileContent(params?: FileSystem.IRequestFileContentParams, cb?: ChromeCallBack<any>);
          /**
          * Deletes specified entry. If the entry is a directory, the agent deletes children recursively.
          */
-        deleteEntry(params: FileSystem.IDeleteEntryParams, cb?: Function);
+        deleteEntry(params: FileSystem.IDeleteEntryParams, cb?: ChromeCallBack<any>);
     }
     interface IDOM {
          /**
          * Enables DOM agent for the given page.
          */
-        enable(cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
          /**
          * Disables DOM agent for the given page.
          */
-        disable(cb?: Function);
+        disable(cb?: ChromeCallBack<any>);
          /**
          * Returns the root DOM node to the caller.
          */
-        getDocument(cb?: Function);
+        getDocument(cb?: ChromeCallBack<any>);
          /**
          * Requests that children of the node with given id are returned to the caller in form of <code>setChildNodes</code> events where not only immediate children are retrieved, but all children down to the specified depth.
          */
-        requestChildNodes(params?: DOM.IRequestChildNodesParams, cb?: Function);
+        requestChildNodes(params?: DOM.IRequestChildNodesParams, cb?: ChromeCallBack<any>);
          /**
          * Returns distribution data for all insertion points in shadow tree of the given node.
          */
-        requestShadowHostDistributedNodes(params: DOM.IRequestShadowHostDistributedNodesParams, cb?: Function);
+        requestShadowHostDistributedNodes(params: DOM.IRequestShadowHostDistributedNodesParams, cb?: ChromeCallBack<any>);
          /**
          * Executes <code>querySelector</code> on a given node.
          */
-        querySelector(params: DOM.IQuerySelectorParams, cb?: Function);
+        querySelector(params: DOM.IQuerySelectorParams, cb?: ChromeCallBack<any>);
          /**
          * Executes <code>querySelectorAll</code> on a given node.
          */
-        querySelectorAll(params: DOM.IQuerySelectorAllParams, cb?: Function);
+        querySelectorAll(params: DOM.IQuerySelectorAllParams, cb?: ChromeCallBack<any>);
          /**
          * Sets node name for a node with given id.
          */
-        setNodeName(params: DOM.ISetNodeNameParams, cb?: Function);
+        setNodeName(params: DOM.ISetNodeNameParams, cb?: ChromeCallBack<any>);
          /**
          * Sets node value for a node with given id.
          */
-        setNodeValue(params: DOM.ISetNodeValueParams, cb?: Function);
+        setNodeValue(params: DOM.ISetNodeValueParams, cb?: ChromeCallBack<any>);
          /**
          * Removes node with given id.
          */
-        removeNode(params: DOM.IRemoveNodeParams, cb?: Function);
+        removeNode(params: DOM.IRemoveNodeParams, cb?: ChromeCallBack<any>);
          /**
          * Sets attribute for an element with given id.
          */
-        setAttributeValue(params: DOM.ISetAttributeValueParams, cb?: Function);
+        setAttributeValue(params: DOM.ISetAttributeValueParams, cb?: ChromeCallBack<any>);
          /**
          * Sets attributes on element with given id. This method is useful when user edits some existing attribute value and types in several attribute name/value pairs.
          */
-        setAttributesAsText(params?: DOM.ISetAttributesAsTextParams, cb?: Function);
+        setAttributesAsText(params?: DOM.ISetAttributesAsTextParams, cb?: ChromeCallBack<any>);
          /**
          * Removes attribute with given name from an element with given id.
          */
-        removeAttribute(params: DOM.IRemoveAttributeParams, cb?: Function);
+        removeAttribute(params: DOM.IRemoveAttributeParams, cb?: ChromeCallBack<any>);
          /**
          * Returns event listeners relevant to the node.
          */
-        getEventListenersForNode(params?: DOM.IGetEventListenersForNodeParams, cb?: Function);
+        getEventListenersForNode(params?: DOM.IGetEventListenersForNodeParams, cb?: ChromeCallBack<any>);
          /**
          * Returns node's HTML markup.
          */
-        getOuterHTML(params: DOM.IGetOuterHTMLParams, cb?: Function);
+        getOuterHTML(params: DOM.IGetOuterHTMLParams, cb?: ChromeCallBack<any>);
          /**
          * Sets node HTML markup, returns new node id.
          */
-        setOuterHTML(params: DOM.ISetOuterHTMLParams, cb?: Function);
+        setOuterHTML(params: DOM.ISetOuterHTMLParams, cb?: ChromeCallBack<any>);
          /**
          * Searches for a given string in the DOM tree. Use <code>getSearchResults</code> to access search results or <code>cancelSearch</code> to end this search session.
          */
-        performSearch(params?: DOM.IPerformSearchParams, cb?: Function);
+        performSearch(params?: DOM.IPerformSearchParams, cb?: ChromeCallBack<any>);
          /**
          * Returns search results from given <code>fromIndex</code> to given <code>toIndex</code> from the sarch with the given identifier.
          */
-        getSearchResults(params: DOM.IGetSearchResultsParams, cb?: Function);
+        getSearchResults(params: DOM.IGetSearchResultsParams, cb?: ChromeCallBack<any>);
          /**
          * Discards search results from the session with the given id. <code>getSearchResults</code> should no longer be called for that search.
          */
-        discardSearchResults(params: DOM.IDiscardSearchResultsParams, cb?: Function);
+        discardSearchResults(params: DOM.IDiscardSearchResultsParams, cb?: ChromeCallBack<any>);
          /**
          * Requests that the node is sent to the caller given the JavaScript node object reference. All nodes that form the path from the node to the root are also sent to the client as a series of <code>setChildNodes</code> notifications.
          */
-        requestNode(params: DOM.IRequestNodeParams, cb?: Function);
+        requestNode(params: DOM.IRequestNodeParams, cb?: ChromeCallBack<any>);
          /**
          * Enters the 'inspect' mode. In this mode, elements that user is hovering over are highlighted. Backend then generates 'inspectNodeRequested' event upon element selection.
          */
-        setInspectModeEnabled(params?: DOM.ISetInspectModeEnabledParams, cb?: Function);
+        setInspectModeEnabled(params?: DOM.ISetInspectModeEnabledParams, cb?: ChromeCallBack<any>);
          /**
          * Highlights given rectangle. Coordinates are absolute with respect to the main frame viewport.
          */
-        highlightRect(params?: DOM.IHighlightRectParams, cb?: Function);
+        highlightRect(params?: DOM.IHighlightRectParams, cb?: ChromeCallBack<any>);
          /**
          * Highlights given quad. Coordinates are absolute with respect to the main frame viewport.
          */
-        highlightQuad(params?: DOM.IHighlightQuadParams, cb?: Function);
+        highlightQuad(params?: DOM.IHighlightQuadParams, cb?: ChromeCallBack<any>);
          /**
          * Highlights DOM node with given id or with the given JavaScript object wrapper. Either nodeId or objectId must be specified.
          */
-        highlightNode(params?: DOM.IHighlightNodeParams, cb?: Function);
+        highlightNode(params?: DOM.IHighlightNodeParams, cb?: ChromeCallBack<any>);
          /**
          * Hides DOM node highlight.
          */
-        hideHighlight(cb?: Function);
+        hideHighlight(cb?: ChromeCallBack<any>);
          /**
          * Highlights owner element of the frame with given id.
          */
-        highlightFrame(params?: DOM.IHighlightFrameParams, cb?: Function);
+        highlightFrame(params?: DOM.IHighlightFrameParams, cb?: ChromeCallBack<any>);
          /**
          * Requests that the node is sent to the caller given its path. // FIXME, use XPath
          */
-        pushNodeByPathToFrontend(params: DOM.IPushNodeByPathToFrontendParams, cb?: Function);
+        pushNodeByPathToFrontend(params: DOM.IPushNodeByPathToFrontendParams, cb?: ChromeCallBack<any>);
          /**
          * Requests that a batch of nodes is sent to the caller given their backend node ids.
          */
-        pushNodesByBackendIdsToFrontend(params: DOM.IPushNodesByBackendIdsToFrontendParams, cb?: Function);
+        pushNodesByBackendIdsToFrontend(params: DOM.IPushNodesByBackendIdsToFrontendParams, cb?: ChromeCallBack<any>);
          /**
          * Resolves JavaScript node object for given node id.
          */
-        resolveNode(params?: DOM.IResolveNodeParams, cb?: Function);
+        resolveNode(params?: DOM.IResolveNodeParams, cb?: ChromeCallBack<any>);
          /**
          * Returns attributes for the specified node.
          */
-        getAttributes(params: DOM.IGetAttributesParams, cb?: Function);
+        getAttributes(params: DOM.IGetAttributesParams, cb?: ChromeCallBack<any>);
          /**
          * Creates a deep copy of the specified node and places it into the target container before the given anchor.
          */
-        copyTo(params?: DOM.ICopyToParams, cb?: Function);
+        copyTo(params?: DOM.ICopyToParams, cb?: ChromeCallBack<any>);
          /**
          * Moves node into the new container, places it before the given anchor.
          */
-        moveTo(params?: DOM.IMoveToParams, cb?: Function);
+        moveTo(params?: DOM.IMoveToParams, cb?: ChromeCallBack<any>);
          /**
          * Undoes the last performed action.
          */
-        undo(cb?: Function);
+        undo(cb?: ChromeCallBack<any>);
          /**
          * Re-does the last undone action.
          */
-        redo(cb?: Function);
+        redo(cb?: ChromeCallBack<any>);
          /**
          * Marks last undoable state.
          */
-        markUndoableState(cb?: Function);
+        markUndoableState(cb?: ChromeCallBack<any>);
          /**
          * Focuses the given element.
          */
-        focus(params: DOM.IFocusParams, cb?: Function);
+        focus(params: DOM.IFocusParams, cb?: ChromeCallBack<any>);
          /**
          * Sets files for the given file input element.
          */
-        setFileInputFiles(params: DOM.ISetFileInputFilesParams, cb?: Function);
+        setFileInputFiles(params: DOM.ISetFileInputFilesParams, cb?: ChromeCallBack<any>);
          /**
          * Returns boxes for the currently selected nodes.
          */
-        getBoxModel(params: DOM.IGetBoxModelParams, cb?: Function);
+        getBoxModel(params: DOM.IGetBoxModelParams, cb?: ChromeCallBack<any>);
          /**
          * Returns node id at given location.
          */
-        getNodeForLocation(params: DOM.IGetNodeForLocationParams, cb?: Function);
+        getNodeForLocation(params: DOM.IGetNodeForLocationParams, cb?: ChromeCallBack<any>);
          /**
          * Returns the id of the nearest ancestor that is a relayout boundary.
          */
-        getRelayoutBoundary(params: DOM.IGetRelayoutBoundaryParams, cb?: Function);
+        getRelayoutBoundary(params: DOM.IGetRelayoutBoundaryParams, cb?: ChromeCallBack<any>);
     }
     interface ICSS {
          /**
          * Enables the CSS agent for the given page. Clients should not assume that the CSS agent has been enabled until the result of this command is received.
          */
-        enable(cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
          /**
          * Disables the CSS agent for the given page.
          */
-        disable(cb?: Function);
+        disable(cb?: ChromeCallBack<any>);
          /**
          * Returns requested styles for a DOM node identified by <code>nodeId</code>.
          */
-        getMatchedStylesForNode(params?: CSS.IGetMatchedStylesForNodeParams, cb?: Function);
+        getMatchedStylesForNode(params?: CSS.IGetMatchedStylesForNodeParams, cb?: ChromeCallBack<any>);
          /**
          * Returns the styles defined inline (explicitly in the "style" attribute and implicitly, using DOM attributes) for a DOM node identified by <code>nodeId</code>.
          */
-        getInlineStylesForNode(params: CSS.IGetInlineStylesForNodeParams, cb?: Function);
+        getInlineStylesForNode(params: CSS.IGetInlineStylesForNodeParams, cb?: ChromeCallBack<any>);
          /**
          * Returns the computed style for a DOM node identified by <code>nodeId</code>.
          */
-        getComputedStyleForNode(params: CSS.IGetComputedStyleForNodeParams, cb?: Function);
+        getComputedStyleForNode(params: CSS.IGetComputedStyleForNodeParams, cb?: ChromeCallBack<any>);
          /**
          * Requests information about platform fonts which we used to render child TextNodes in the given node.
          */
-        getPlatformFontsForNode(params: CSS.IGetPlatformFontsForNodeParams, cb?: Function);
+        getPlatformFontsForNode(params: CSS.IGetPlatformFontsForNodeParams, cb?: ChromeCallBack<any>);
          /**
          * Returns the current textual content and the URL for a stylesheet.
          */
-        getStyleSheetText(params: CSS.IGetStyleSheetTextParams, cb?: Function);
+        getStyleSheetText(params: CSS.IGetStyleSheetTextParams, cb?: ChromeCallBack<any>);
          /**
          * Sets the new stylesheet text.
          */
-        setStyleSheetText(params: CSS.ISetStyleSheetTextParams, cb?: Function);
+        setStyleSheetText(params: CSS.ISetStyleSheetTextParams, cb?: ChromeCallBack<any>);
          /**
          * Either replaces a property identified by <code>styleSheetId</code> and <code>range</code> with <code>text</code> or inserts a new property <code>text</code> at the position identified by an empty <code>range</code>.
          */
-        setPropertyText(params: CSS.ISetPropertyTextParams, cb?: Function);
+        setPropertyText(params: CSS.ISetPropertyTextParams, cb?: ChromeCallBack<any>);
          /**
          * Modifies the rule selector.
          */
-        setRuleSelector(params: CSS.ISetRuleSelectorParams, cb?: Function);
+        setRuleSelector(params: CSS.ISetRuleSelectorParams, cb?: ChromeCallBack<any>);
          /**
          * Modifies the rule selector.
          */
-        setMediaText(params: CSS.ISetMediaTextParams, cb?: Function);
+        setMediaText(params: CSS.ISetMediaTextParams, cb?: ChromeCallBack<any>);
          /**
          * Creates a new special "via-inspector" stylesheet in the frame with given <code>frameId</code>.
          */
-        createStyleSheet(params: CSS.ICreateStyleSheetParams, cb?: Function);
+        createStyleSheet(params: CSS.ICreateStyleSheetParams, cb?: ChromeCallBack<any>);
          /**
          * Inserts a new rule with the given <code>ruleText</code> in a stylesheet with given <code>styleSheetId</code>, at the position specified by <code>location</code>.
          */
-        addRule(params: CSS.IAddRuleParams, cb?: Function);
+        addRule(params: CSS.IAddRuleParams, cb?: ChromeCallBack<any>);
          /**
          * Ensures that the given node will have specified pseudo-classes whenever its style is computed by the browser.
          */
-        forcePseudoState(params: CSS.IForcePseudoStateParams, cb?: Function);
+        forcePseudoState(params: CSS.IForcePseudoStateParams, cb?: ChromeCallBack<any>);
          /**
          * Returns all media queries parsed by the rendering engine.
          */
-        getMediaQueries(cb?: Function);
+        getMediaQueries(cb?: ChromeCallBack<any>);
     }
     interface ITimeline {
          /**
          * Enables timeline. After this call, timeline can be started from within the page (for example upon console.timeline).
          */
-        enable(cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
          /**
          * Disables timeline.
          */
-        disable(cb?: Function);
+        disable(cb?: ChromeCallBack<any>);
          /**
          * Starts capturing instrumentation events.
          */
-        start(params?: Timeline.IStartParams, cb?: Function);
+        start(params?: Timeline.IStartParams, cb?: ChromeCallBack<any>);
          /**
          * Stops capturing instrumentation events.
          */
-        stop(cb?: Function);
+        stop(cb?: ChromeCallBack<any>);
     }
     interface IDebugger {
          /**
          * Enables debugger for the given page. Clients should not assume that the debugging has been enabled until the result for this command is received.
          */
-        enable(cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
          /**
          * Disables debugger for given page.
          */
-        disable(cb?: Function);
+        disable(cb?: ChromeCallBack<any>);
          /**
          * Activates / deactivates all breakpoints on the page.
          */
-        setBreakpointsActive(params: Debugger.ISetBreakpointsActiveParams, cb?: Function);
+        setBreakpointsActive(params: Debugger.ISetBreakpointsActiveParams, cb?: ChromeCallBack<any>);
          /**
          * Makes page not interrupt on any pauses (breakpoint, exception, dom exception etc).
          */
-        setSkipAllPauses(params?: Debugger.ISetSkipAllPausesParams, cb?: Function);
+        setSkipAllPauses(params?: Debugger.ISetSkipAllPausesParams, cb?: ChromeCallBack<any>);
          /**
          * Sets JavaScript breakpoint at given location specified either by URL or URL regex. Once this command is issued, all existing parsed scripts will have breakpoints resolved and returned in <code>locations</code> property. Further matching script parsing will result in subsequent <code>breakpointResolved</code> events issued. This logical breakpoint will survive page reloads.
          */
-        setBreakpointByUrl(params?: Debugger.ISetBreakpointByUrlParams, cb?: Function);
+        setBreakpointByUrl(params?: Debugger.ISetBreakpointByUrlParams, cb?: ChromeCallBack<any>);
          /**
          * Sets JavaScript breakpoint at a given location.
          */
-        setBreakpoint(params?: Debugger.ISetBreakpointParams, cb?: Function);
+        setBreakpoint(params?: Debugger.ISetBreakpointParams, cb?: ChromeCallBack<any>);
          /**
          * Removes JavaScript breakpoint.
          */
-        removeBreakpoint(params: Debugger.IRemoveBreakpointParams, cb?: Function);
+        removeBreakpoint(params: Debugger.IRemoveBreakpointParams, cb?: ChromeCallBack<any>);
          /**
          * Continues execution until specific location is reached.
          */
-        continueToLocation(params?: Debugger.IContinueToLocationParams, cb?: Function);
+        continueToLocation(params?: Debugger.IContinueToLocationParams, cb?: ChromeCallBack<any>);
          /**
          * Steps over the statement.
          */
-        stepOver(cb?: Function);
+        stepOver(cb?: ChromeCallBack<any>);
          /**
          * Steps into the function call.
          */
-        stepInto(cb?: Function);
+        stepInto(cb?: ChromeCallBack<any>);
          /**
          * Steps out of the function call.
          */
-        stepOut(cb?: Function);
+        stepOut(cb?: ChromeCallBack<any>);
          /**
          * Stops on the next JavaScript statement.
          */
-        pause(cb?: Function);
+        pause(cb?: ChromeCallBack<any>);
          /**
          * Resumes JavaScript execution.
          */
-        resume(cb?: Function);
+        resume(cb?: ChromeCallBack<any>);
          /**
          * Steps into the first async operation handler that was scheduled by or after the current statement.
          */
-        stepIntoAsync(cb?: Function);
+        stepIntoAsync(cb?: ChromeCallBack<any>);
          /**
          * Searches for given string in script content.
          */
-        searchInContent(params?: Debugger.ISearchInContentParams, cb?: Function);
+        searchInContent(params?: Debugger.ISearchInContentParams, cb?: ChromeCallBack<any>);
          /**
          * Always returns true.
          */
-        canSetScriptSource(cb?: Function);
+        canSetScriptSource(cb?: ChromeCallBack<any>);
          /**
          * Edits JavaScript source live.
          */
-        setScriptSource(params?: Debugger.ISetScriptSourceParams, cb?: Function);
+        setScriptSource(params?: Debugger.ISetScriptSourceParams, cb?: ChromeCallBack<any>);
          /**
          * Restarts particular call frame from the beginning.
          */
-        restartFrame(params: Debugger.IRestartFrameParams, cb?: Function);
+        restartFrame(params: Debugger.IRestartFrameParams, cb?: ChromeCallBack<any>);
          /**
          * Returns source for the script with given id.
          */
-        getScriptSource(params: Debugger.IGetScriptSourceParams, cb?: Function);
+        getScriptSource(params: Debugger.IGetScriptSourceParams, cb?: ChromeCallBack<any>);
          /**
          * Returns detailed information on given function.
          */
-        getFunctionDetails(params: Debugger.IGetFunctionDetailsParams, cb?: Function);
+        getFunctionDetails(params: Debugger.IGetFunctionDetailsParams, cb?: ChromeCallBack<any>);
          /**
          * Returns detailed information on given generator object.
          */
-        getGeneratorObjectDetails(params: Debugger.IGetGeneratorObjectDetailsParams, cb?: Function);
+        getGeneratorObjectDetails(params: Debugger.IGetGeneratorObjectDetailsParams, cb?: ChromeCallBack<any>);
          /**
          * Returns entries of given collection.
          */
-        getCollectionEntries(params: Debugger.IGetCollectionEntriesParams, cb?: Function);
+        getCollectionEntries(params: Debugger.IGetCollectionEntriesParams, cb?: ChromeCallBack<any>);
          /**
          * Defines pause on exceptions state. Can be set to stop on all exceptions, uncaught exceptions or no exceptions. Initial pause on exceptions state is <code>none</code>.
          */
-        setPauseOnExceptions(params: Debugger.ISetPauseOnExceptionsParams, cb?: Function);
+        setPauseOnExceptions(params: Debugger.ISetPauseOnExceptionsParams, cb?: ChromeCallBack<any>);
          /**
          * Evaluates expression on a given call frame.
          */
-        evaluateOnCallFrame(params?: Debugger.IEvaluateOnCallFrameParams, cb?: Function);
+        evaluateOnCallFrame(params?: Debugger.IEvaluateOnCallFrameParams, cb?: ChromeCallBack<any>);
          /**
          * Compiles expression.
          */
-        compileScript(params?: Debugger.ICompileScriptParams, cb?: Function);
+        compileScript(params?: Debugger.ICompileScriptParams, cb?: ChromeCallBack<any>);
          /**
          * Runs script with given id in a given context.
          */
-        runScript(params?: Debugger.IRunScriptParams, cb?: Function);
+        runScript(params?: Debugger.IRunScriptParams, cb?: ChromeCallBack<any>);
          /**
          * Changes value of variable in a callframe or a closure. Either callframe or function must be specified. Object-based scopes are not supported and must be mutated manually.
          */
-        setVariableValue(params?: Debugger.ISetVariableValueParams, cb?: Function);
+        setVariableValue(params?: Debugger.ISetVariableValueParams, cb?: ChromeCallBack<any>);
          /**
          * Lists all positions where step-in is possible for a current statement in a specified call frame
          */
-        getStepInPositions(params: Debugger.IGetStepInPositionsParams, cb?: Function);
+        getStepInPositions(params: Debugger.IGetStepInPositionsParams, cb?: ChromeCallBack<any>);
          /**
          * Returns call stack including variables changed since VM was paused. VM must be paused.
          */
-        getBacktrace(cb?: Function);
+        getBacktrace(cb?: ChromeCallBack<any>);
          /**
          * Makes backend skip steps in the sources with names matching given pattern. VM will try leave blacklisted scripts by performing 'step in' several times, finally resorting to 'step out' if unsuccessful.
          */
-        skipStackFrames(params?: Debugger.ISkipStackFramesParams, cb?: Function);
+        skipStackFrames(params?: Debugger.ISkipStackFramesParams, cb?: ChromeCallBack<any>);
          /**
          * Enables or disables async call stacks tracking.
          */
-        setAsyncCallStackDepth(params: Debugger.ISetAsyncCallStackDepthParams, cb?: Function);
+        setAsyncCallStackDepth(params: Debugger.ISetAsyncCallStackDepthParams, cb?: ChromeCallBack<any>);
          /**
          * Enables promise tracking, information about <code>Promise</code>s created or updated will now be stored on the backend.
          */
-        enablePromiseTracker(params?: Debugger.IEnablePromiseTrackerParams, cb?: Function);
+        enablePromiseTracker(params?: Debugger.IEnablePromiseTrackerParams, cb?: ChromeCallBack<any>);
          /**
          * Disables promise tracking.
          */
-        disablePromiseTracker(cb?: Function);
+        disablePromiseTracker(cb?: ChromeCallBack<any>);
          /**
          * Returns detailed information about all <code>Promise</code>s that were created or updated after the <code>enablePromiseTracker</code> command, and have not been garbage collected yet.
          */
-        getPromises(cb?: Function);
+        getPromises(cb?: ChromeCallBack<any>);
          /**
          * Returns <code>Promise</code> with specified ID.
          */
-        getPromiseById(params?: Debugger.IGetPromiseByIdParams, cb?: Function);
+        getPromiseById(params?: Debugger.IGetPromiseByIdParams, cb?: ChromeCallBack<any>);
     }
     interface IDOMDebugger {
          /**
          * Sets breakpoint on particular operation with DOM.
          */
-        setDOMBreakpoint(params: DOMDebugger.ISetDOMBreakpointParams, cb?: Function);
+        setDOMBreakpoint(params: DOMDebugger.ISetDOMBreakpointParams, cb?: ChromeCallBack<any>);
          /**
          * Removes DOM breakpoint that was set using <code>setDOMBreakpoint</code>.
          */
-        removeDOMBreakpoint(params: DOMDebugger.IRemoveDOMBreakpointParams, cb?: Function);
+        removeDOMBreakpoint(params: DOMDebugger.IRemoveDOMBreakpointParams, cb?: ChromeCallBack<any>);
          /**
          * Sets breakpoint on particular DOM event.
          */
-        setEventListenerBreakpoint(params?: DOMDebugger.ISetEventListenerBreakpointParams, cb?: Function);
+        setEventListenerBreakpoint(params?: DOMDebugger.ISetEventListenerBreakpointParams, cb?: ChromeCallBack<any>);
          /**
          * Removes breakpoint on particular DOM event.
          */
-        removeEventListenerBreakpoint(params?: DOMDebugger.IRemoveEventListenerBreakpointParams, cb?: Function);
+        removeEventListenerBreakpoint(params?: DOMDebugger.IRemoveEventListenerBreakpointParams, cb?: ChromeCallBack<any>);
          /**
          * Sets breakpoint on particular native event.
          */
-        setInstrumentationBreakpoint(params: DOMDebugger.ISetInstrumentationBreakpointParams, cb?: Function);
+        setInstrumentationBreakpoint(params: DOMDebugger.ISetInstrumentationBreakpointParams, cb?: ChromeCallBack<any>);
          /**
          * Removes breakpoint on particular native event.
          */
-        removeInstrumentationBreakpoint(params: DOMDebugger.IRemoveInstrumentationBreakpointParams, cb?: Function);
+        removeInstrumentationBreakpoint(params: DOMDebugger.IRemoveInstrumentationBreakpointParams, cb?: ChromeCallBack<any>);
          /**
          * Sets breakpoint on XMLHttpRequest.
          */
-        setXHRBreakpoint(params: DOMDebugger.ISetXHRBreakpointParams, cb?: Function);
+        setXHRBreakpoint(params: DOMDebugger.ISetXHRBreakpointParams, cb?: ChromeCallBack<any>);
          /**
          * Removes breakpoint from XMLHttpRequest.
          */
-        removeXHRBreakpoint(params: DOMDebugger.IRemoveXHRBreakpointParams, cb?: Function);
+        removeXHRBreakpoint(params: DOMDebugger.IRemoveXHRBreakpointParams, cb?: ChromeCallBack<any>);
     }
     interface IProfiler {
-        enable(cb?: Function);
-        disable(cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
+        disable(cb?: ChromeCallBack<any>);
          /**
          * Changes CPU profiler sampling interval. Must be called before CPU profiles recording started.
          */
-        setSamplingInterval(params: Profiler.ISetSamplingIntervalParams, cb?: Function);
-        start(cb?: Function);
-        stop(cb?: Function);
+        setSamplingInterval(params: Profiler.ISetSamplingIntervalParams, cb?: ChromeCallBack<any>);
+        start(cb?: ChromeCallBack<any>);
+        stop(cb?: ChromeCallBack<any>);
     }
     interface IHeapProfiler {
-        enable(cb?: Function);
-        disable(cb?: Function);
-        startTrackingHeapObjects(params?: HeapProfiler.IStartTrackingHeapObjectsParams, cb?: Function);
-        stopTrackingHeapObjects(params?: HeapProfiler.IStopTrackingHeapObjectsParams, cb?: Function);
-        takeHeapSnapshot(params?: HeapProfiler.ITakeHeapSnapshotParams, cb?: Function);
-        collectGarbage(cb?: Function);
-        getObjectByHeapObjectId(params?: HeapProfiler.IGetObjectByHeapObjectIdParams, cb?: Function);
-        getHeapObjectId(params: HeapProfiler.IGetHeapObjectIdParams, cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
+        disable(cb?: ChromeCallBack<any>);
+        startTrackingHeapObjects(params?: HeapProfiler.IStartTrackingHeapObjectsParams, cb?: ChromeCallBack<any>);
+        stopTrackingHeapObjects(params?: HeapProfiler.IStopTrackingHeapObjectsParams, cb?: ChromeCallBack<any>);
+        takeHeapSnapshot(params?: HeapProfiler.ITakeHeapSnapshotParams, cb?: ChromeCallBack<any>);
+        collectGarbage(cb?: ChromeCallBack<any>);
+        getObjectByHeapObjectId(params?: HeapProfiler.IGetObjectByHeapObjectIdParams, cb?: ChromeCallBack<any>);
+        getHeapObjectId(params: HeapProfiler.IGetHeapObjectIdParams, cb?: ChromeCallBack<any>);
     }
     interface IWorker {
-        enable(cb?: Function);
-        disable(cb?: Function);
-        sendMessageToWorker(params: Worker.ISendMessageToWorkerParams, cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
+        disable(cb?: ChromeCallBack<any>);
+        sendMessageToWorker(params: Worker.ISendMessageToWorkerParams, cb?: ChromeCallBack<any>);
          /**
          * Tells whether browser supports workers inspection.
          */
-        canInspectWorkers(cb?: Function);
-        connectToWorker(params: Worker.IConnectToWorkerParams, cb?: Function);
-        disconnectFromWorker(params: Worker.IDisconnectFromWorkerParams, cb?: Function);
-        setAutoconnectToWorkers(params: Worker.ISetAutoconnectToWorkersParams, cb?: Function);
+        canInspectWorkers(cb?: ChromeCallBack<any>);
+        connectToWorker(params: Worker.IConnectToWorkerParams, cb?: ChromeCallBack<any>);
+        disconnectFromWorker(params: Worker.IDisconnectFromWorkerParams, cb?: ChromeCallBack<any>);
+        setAutoconnectToWorkers(params: Worker.ISetAutoconnectToWorkersParams, cb?: ChromeCallBack<any>);
     }
     interface ICanvas {
          /**
          * Enables Canvas inspection.
          */
-        enable(cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
          /**
          * Disables Canvas inspection.
          */
-        disable(cb?: Function);
-        dropTraceLog(params: Canvas.IDropTraceLogParams, cb?: Function);
+        disable(cb?: ChromeCallBack<any>);
+        dropTraceLog(params: Canvas.IDropTraceLogParams, cb?: ChromeCallBack<any>);
          /**
          * Checks if there is any uninstrumented canvas in the inspected page.
          */
-        hasUninstrumentedCanvases(cb?: Function);
+        hasUninstrumentedCanvases(cb?: ChromeCallBack<any>);
          /**
          * Starts (or continues) a canvas frame capturing which will be stopped automatically after the next frame is prepared.
          */
-        captureFrame(params?: Canvas.ICaptureFrameParams, cb?: Function);
+        captureFrame(params?: Canvas.ICaptureFrameParams, cb?: ChromeCallBack<any>);
          /**
          * Starts (or continues) consecutive canvas frames capturing. The capturing is stopped by the corresponding stopCapturing command.
          */
-        startCapturing(params?: Canvas.IStartCapturingParams, cb?: Function);
-        stopCapturing(params: Canvas.IStopCapturingParams, cb?: Function);
-        getTraceLog(params?: Canvas.IGetTraceLogParams, cb?: Function);
-        replayTraceLog(params: Canvas.IReplayTraceLogParams, cb?: Function);
-        getResourceState(params: Canvas.IGetResourceStateParams, cb?: Function);
+        startCapturing(params?: Canvas.IStartCapturingParams, cb?: ChromeCallBack<any>);
+        stopCapturing(params: Canvas.IStopCapturingParams, cb?: ChromeCallBack<any>);
+        getTraceLog(params?: Canvas.IGetTraceLogParams, cb?: ChromeCallBack<any>);
+        replayTraceLog(params: Canvas.IReplayTraceLogParams, cb?: ChromeCallBack<any>);
+        getResourceState(params: Canvas.IGetResourceStateParams, cb?: ChromeCallBack<any>);
          /**
          * Evaluates a given trace call argument or its result.
          */
-        evaluateTraceLogCallArgument(params?: Canvas.IEvaluateTraceLogCallArgumentParams, cb?: Function);
+        evaluateTraceLogCallArgument(params?: Canvas.IEvaluateTraceLogCallArgumentParams, cb?: ChromeCallBack<any>);
     }
     interface IInput {
          /**
          * Dispatches a key event to the page.
          */
-        dispatchKeyEvent(params?: Input.IDispatchKeyEventParams, cb?: Function);
+        dispatchKeyEvent(params?: Input.IDispatchKeyEventParams, cb?: ChromeCallBack<any>);
          /**
          * Dispatches a mouse event to the page.
          */
-        dispatchMouseEvent(params?: Input.IDispatchMouseEventParams, cb?: Function);
+        dispatchMouseEvent(params?: Input.IDispatchMouseEventParams, cb?: ChromeCallBack<any>);
          /**
          * Dispatches a touch event to the page.
          */
-        dispatchTouchEvent(params?: Input.IDispatchTouchEventParams, cb?: Function);
+        dispatchTouchEvent(params?: Input.IDispatchTouchEventParams, cb?: ChromeCallBack<any>);
          /**
          * Emulates touch event from the mouse event parameters.
          */
-        emulateTouchFromMouseEvent(params?: Input.IEmulateTouchFromMouseEventParams, cb?: Function);
+        emulateTouchFromMouseEvent(params?: Input.IEmulateTouchFromMouseEventParams, cb?: ChromeCallBack<any>);
     }
     interface ILayerTree {
          /**
          * Enables compositing tree inspection.
          */
-        enable(cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
          /**
          * Disables compositing tree inspection.
          */
-        disable(cb?: Function);
+        disable(cb?: ChromeCallBack<any>);
          /**
          * Provides the reasons why the given layer was composited.
          */
-        compositingReasons(params: LayerTree.ICompositingReasonsParams, cb?: Function);
+        compositingReasons(params: LayerTree.ICompositingReasonsParams, cb?: ChromeCallBack<any>);
          /**
          * Returns the layer snapshot identifier.
          */
-        makeSnapshot(params: LayerTree.IMakeSnapshotParams, cb?: Function);
+        makeSnapshot(params: LayerTree.IMakeSnapshotParams, cb?: ChromeCallBack<any>);
          /**
          * Returns the snapshot identifier.
          */
-        loadSnapshot(params: LayerTree.ILoadSnapshotParams, cb?: Function);
+        loadSnapshot(params: LayerTree.ILoadSnapshotParams, cb?: ChromeCallBack<any>);
          /**
          * Releases layer snapshot captured by the back-end.
          */
-        releaseSnapshot(params: LayerTree.IReleaseSnapshotParams, cb?: Function);
-        profileSnapshot(params?: LayerTree.IProfileSnapshotParams, cb?: Function);
+        releaseSnapshot(params: LayerTree.IReleaseSnapshotParams, cb?: ChromeCallBack<any>);
+        profileSnapshot(params?: LayerTree.IProfileSnapshotParams, cb?: ChromeCallBack<any>);
          /**
          * Replays the layer snapshot and returns the resulting bitmap.
          */
-        replaySnapshot(params?: LayerTree.IReplaySnapshotParams, cb?: Function);
+        replaySnapshot(params?: LayerTree.IReplaySnapshotParams, cb?: ChromeCallBack<any>);
          /**
          * Replays the layer snapshot and returns canvas log.
          */
-        snapshotCommandLog(params: LayerTree.ISnapshotCommandLogParams, cb?: Function);
+        snapshotCommandLog(params: LayerTree.ISnapshotCommandLogParams, cb?: ChromeCallBack<any>);
     }
     interface IDeviceOrientation {
          /**
          * Overrides the Device Orientation.
          */
-        setDeviceOrientationOverride(params: DeviceOrientation.ISetDeviceOrientationOverrideParams, cb?: Function);
+        setDeviceOrientationOverride(params: DeviceOrientation.ISetDeviceOrientationOverrideParams, cb?: ChromeCallBack<any>);
          /**
          * Clears the overridden Device Orientation.
          */
-        clearDeviceOrientationOverride(cb?: Function);
+        clearDeviceOrientationOverride(cb?: ChromeCallBack<any>);
     }
     interface ITracing {
          /**
          * Start trace events collection.
          */
-        start(params?: Tracing.IStartParams, cb?: Function);
+        start(params?: Tracing.IStartParams, cb?: ChromeCallBack<any>);
          /**
          * Stop trace events collection.
          */
-        end(cb?: Function);
+        end(cb?: ChromeCallBack<any>);
          /**
          * Gets supported tracing categories.
          */
-        getCategories(cb?: Function);
+        getCategories(cb?: ChromeCallBack<any>);
     }
     interface IPower {
          /**
          * Start power events collection.
          */
-        start(cb?: Function);
+        start(cb?: ChromeCallBack<any>);
          /**
          * Stop power events collection.
          */
-        end(cb?: Function);
+        end(cb?: ChromeCallBack<any>);
          /**
          * Tells whether power profiling is supported.
          */
-        canProfilePower(cb?: Function);
+        canProfilePower(cb?: ChromeCallBack<any>);
          /**
          * Describes the accuracy level of the data provider.
          */
-        getAccuracyLevel(cb?: Function);
+        getAccuracyLevel(cb?: ChromeCallBack<any>);
     }
     interface IAnimation {
          /**
          * Enables animation domain notifications.
          */
-        enable(cb?: Function);
+        enable(cb?: ChromeCallBack<any>);
          /**
          * Returns animation players relevant to the node.
          */
-        getAnimationPlayersForNode(params: Animation.IGetAnimationPlayersForNodeParams, cb?: Function);
+        getAnimationPlayersForNode(params: Animation.IGetAnimationPlayersForNodeParams, cb?: ChromeCallBack<any>);
          /**
          * Pauses animations relevant to the node.
          */
-        pauseAnimationPlayer(params: Animation.IPauseAnimationPlayerParams, cb?: Function);
+        pauseAnimationPlayer(params: Animation.IPauseAnimationPlayerParams, cb?: ChromeCallBack<any>);
          /**
          * Plays animations relevant to the node.
          */
-        playAnimationPlayer(params: Animation.IPlayAnimationPlayerParams, cb?: Function);
+        playAnimationPlayer(params: Animation.IPlayAnimationPlayerParams, cb?: ChromeCallBack<any>);
          /**
          * Sets the current time on given AnimationPlayer.
          */
-        setAnimationPlayerCurrentTime(params: Animation.ISetAnimationPlayerCurrentTimeParams, cb?: Function);
+        setAnimationPlayerCurrentTime(params: Animation.ISetAnimationPlayerCurrentTimeParams, cb?: ChromeCallBack<any>);
          /**
          * Gets the state of an AnimationPlayer.
          */
-        getAnimationPlayerState(params: Animation.IGetAnimationPlayerStateParams, cb?: Function);
+        getAnimationPlayerState(params: Animation.IGetAnimationPlayerStateParams, cb?: ChromeCallBack<any>);
          /**
          * Sets the parameters of recording for new animations events.
          */
-        startListening(params: Animation.IStartListeningParams, cb?: Function);
+        startListening(params: Animation.IStartListeningParams, cb?: ChromeCallBack<any>);
          /**
          * Stops recording for new animation player events.
          */
-        stopListening(cb?: Function);
+        stopListening(cb?: ChromeCallBack<any>);
     }
     module Inspector {
     }
