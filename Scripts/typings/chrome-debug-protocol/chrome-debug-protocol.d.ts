@@ -1106,182 +1106,443 @@ declare module "chrome-debug-protocol" {
         identifier: any;
     }
     interface IPageReloadParams {
+         /**
+         * If true, browser cache is ignored (as if the user pressed Shift+refresh).
+         */
         ignoreCache?: boolean;
+         /**
+         * If set, the script will be injected into all frames of the inspected page after reload.
+         */
         scriptToEvaluateOnLoad?: string;
+         /**
+         * Script body that should evaluate to function that will preprocess all the scripts before their compilation.
+         */
         scriptPreprocessor?: string;
     }
     interface IPageNavigateParams {
+         /**
+         * URL to navigate the page to.
+         */
         url: string;
     }
     interface IPageNavigateToHistoryEntryParams {
+         /**
+         * Unique id of the entry to navigate to.
+         */
         entryId: number;
     }
     interface IPageDeleteCookieParams {
+         /**
+         * Name of the cookie to remove.
+         */
         cookieName: string;
+         /**
+         * URL to match cooke domain and path.
+         */
         url: string;
     }
     interface IPageGetResourceContentParams {
+         /**
+         * Frame id to get resource for.
+         */
         frameId: any;
+         /**
+         * URL of the resource to get content for.
+         */
         url: string;
     }
     interface IPageSearchInResourceParams {
+         /**
+         * Frame id for resource to search in.
+         */
         frameId: any;
+         /**
+         * URL of the resource to search in.
+         */
         url: string;
+         /**
+         * String to search for.
+         */
         query: string;
+         /**
+         * If true, search is case sensitive.
+         */
         caseSensitive?: boolean;
+         /**
+         * If true, treats string parameter as regex.
+         */
         isRegex?: boolean;
     }
     interface IPageSetDocumentContentParams {
+         /**
+         * Frame id to set HTML for.
+         */
         frameId: any;
+         /**
+         * HTML content to set.
+         */
         html: string;
     }
     interface IPageSetDeviceMetricsOverrideParams {
+         /**
+         * Overriding width value in pixels (minimum 0, maximum 10000000). 0 disables the override.
+         */
         width: number;
+         /**
+         * Overriding height value in pixels (minimum 0, maximum 10000000). 0 disables the override.
+         */
         height: number;
+         /**
+         * Overriding device scale factor value. 0 disables the override.
+         */
         deviceScaleFactor: any;
+         /**
+         * Whether to emulate mobile device. This includes viewport meta tag, overlay scrollbars, text autosizing and more.
+         */
         mobile: boolean;
+         /**
+         * Whether a view that exceeds the available browser window area should be scaled down to fit.
+         */
         fitWindow: boolean;
+         /**
+         * Scale to apply to resulting view image. Ignored in |fitWindow| mode.
+         */
         scale?: any;
+         /**
+         * X offset to shift resulting view image by. Ignored in |fitWindow| mode.
+         */
         offsetX?: any;
+         /**
+         * Y offset to shift resulting view image by. Ignored in |fitWindow| mode.
+         */
         offsetY?: any;
     }
     interface IPageSetPageScaleFactorParams {
+         /**
+         * Page scale factor.
+         */
         pageScaleFactor: any;
     }
     interface IPageSetShowPaintRectsParams {
+         /**
+         * True for showing paint rectangles
+         */
         result: boolean;
     }
     interface IPageSetShowDebugBordersParams {
+         /**
+         * True for showing debug borders
+         */
         show: boolean;
     }
     interface IPageSetShowFPSCounterParams {
+         /**
+         * True for showing the FPS counter
+         */
         show: boolean;
     }
     interface IPageSetContinuousPaintingEnabledParams {
+         /**
+         * True for enabling cointinuous painting
+         */
         enabled: boolean;
     }
     interface IPageSetShowScrollBottleneckRectsParams {
+         /**
+         * True for showing scroll bottleneck rects
+         */
         show: boolean;
     }
     interface IPageSetScriptExecutionDisabledParams {
+         /**
+         * Whether script execution should be disabled in the page.
+         */
         value: boolean;
     }
     interface IPageSetGeolocationOverrideParams {
+         /**
+         * Mock latitude
+         */
         latitude?: any;
+         /**
+         * Mock longitude
+         */
         longitude?: any;
+         /**
+         * Mock accuracy
+         */
         accuracy?: any;
     }
     interface IPageSetDeviceOrientationOverrideParams {
+         /**
+         * Mock alpha
+         */
         alpha: any;
+         /**
+         * Mock beta
+         */
         beta: any;
+         /**
+         * Mock gamma
+         */
         gamma: any;
     }
     interface IPageSetTouchEmulationEnabledParams {
+         /**
+         * Whether the touch event emulation should be enabled.
+         */
         enabled: boolean;
+         /**
+         * Touch/gesture events configuration. Default: current platform.
+         */
         configuration?: string;
     }
     interface IPageSetEmulatedMediaParams {
+         /**
+         * Media type to emulate. Empty string disables the override.
+         */
         media: string;
     }
     interface IPageStartScreencastParams {
+         /**
+         * Image compression format.
+         */
         format?: string;
+         /**
+         * Compression quality from range [0..100].
+         */
         quality?: number;
+         /**
+         * Maximum screenshot width.
+         */
         maxWidth?: number;
+         /**
+         * Maximum screenshot height.
+         */
         maxHeight?: number;
     }
     interface IPageScreencastFrameAckParams {
+         /**
+         * Frame number.
+         */
         frameNumber: number;
     }
     interface IPageStartRecordingFramesParams {
+         /**
+         * Maximal number of frames to record from range. Actual maximum depends on implementation.
+         */
         maxFrameCount: number;
     }
     interface IPageHandleJavaScriptDialogParams {
+         /**
+         * Whether to accept or dismiss the dialog.
+         */
         accept: boolean;
+         /**
+         * The text to enter into the dialog prompt before accepting. Used only if this is a prompt dialog.
+         */
         promptText?: string;
     }
     interface IPageSetShowViewportSizeOnResizeParams {
+         /**
+         * Whether to paint size or not.
+         */
         show: boolean;
+         /**
+         * Whether to paint grid as well.
+         */
         showGrid?: boolean;
     }
     interface IPageQueryUsageAndQuotaParams {
+         /**
+         * Security origin quota and usage requested for
+         */
         securityOrigin: string;
     }
     interface IPageSetColorPickerEnabledParams {
+         /**
+         * Shows / hides color picker
+         */
         enabled: boolean;
     }
     interface IPageSetOverlayMessageParams {
+         /**
+         * Overlay message to display when paused in debugger.
+         */
         message?: string;
     }
     interface IPageSetAnimationsPlaybackRateParams {
+         /**
+         * Playback rate for animations on page
+         */
         playbackRate: any;
     }
     interface IRuntimeEvaluateParams {
+         /**
+         * Expression to evaluate.
+         */
         expression: string;
+         /**
+         * Symbolic group name that can be used to release multiple objects.
+         */
         objectGroup?: string;
+         /**
+         * Determines whether Command Line API should be available during the evaluation.
+         */
         includeCommandLineAPI?: boolean;
+         /**
+         * Specifies whether evaluation should stop on exceptions and mute console. Overrides setPauseOnException state.
+         */
         doNotPauseOnExceptionsAndMuteConsole?: boolean;
+         /**
+         * Specifies in which isolated context to perform evaluation. Each content script lives in an isolated context and this parameter may be used to specify one of those contexts. If the parameter is omitted or 0 the evaluation will be performed in the context of the inspected page.
+         */
         contextId?: any;
+         /**
+         * Whether the result is expected to be a JSON object that should be sent by value.
+         */
         returnByValue?: boolean;
+         /**
+         * Whether preview should be generated for the result.
+         */
         generatePreview?: boolean;
     }
     interface IRuntimeCallFunctionOnParams {
+         /**
+         * Identifier of the object to call function on.
+         */
         objectId: any;
+         /**
+         * Declaration of the function to call.
+         */
         functionDeclaration: string;
+         /**
+         * Call arguments. All call arguments must belong to the same JavaScript world as the target object.
+         */
         arguments?: any[];
+         /**
+         * Specifies whether function call should stop on exceptions and mute console. Overrides setPauseOnException state.
+         */
         doNotPauseOnExceptionsAndMuteConsole?: boolean;
+         /**
+         * Whether the result is expected to be a JSON object which should be sent by value.
+         */
         returnByValue?: boolean;
+         /**
+         * Whether preview should be generated for the result.
+         */
         generatePreview?: boolean;
     }
     interface IRuntimeGetPropertiesParams {
+         /**
+         * Identifier of the object to return properties for.
+         */
         objectId: any;
+         /**
+         * If true, returns properties belonging only to the element itself, not to its prototype chain.
+         */
         ownProperties?: boolean;
+         /**
+         * If true, returns accessor properties (with getter/setter) only; internal properties are not returned either.
+         */
         accessorPropertiesOnly?: boolean;
     }
     interface IRuntimeReleaseObjectParams {
+         /**
+         * Identifier of the object to release.
+         */
         objectId: any;
     }
     interface IRuntimeReleaseObjectGroupParams {
+         /**
+         * Symbolic object group name.
+         */
         objectGroup: string;
     }
     interface IRuntimeSetCustomObjectFormatterEnabledParams {
         enabled: boolean;
     }
     interface IConsoleSetMonitoringXHREnabledParams {
+         /**
+         * Monitoring enabled state.
+         */
         enabled: boolean;
     }
     interface IConsoleAddInspectedNodeParams {
+         /**
+         * DOM node id to be accessible by means of $x command line API.
+         */
         nodeId: any;
     }
     interface IConsoleAddInspectedHeapObjectParams {
         heapObjectId: number;
     }
     interface IConsoleSetLastEvaluationResultParams {
+         /**
+         * Identifier of the object to set as last evaluation result.
+         */
         objectId: any;
     }
     interface INetworkSetUserAgentOverrideParams {
+         /**
+         * User agent to use.
+         */
         userAgent: string;
     }
     interface INetworkSetExtraHTTPHeadersParams {
+         /**
+         * Map with extra HTTP headers.
+         */
         headers: any;
     }
     interface INetworkGetResponseBodyParams {
+         /**
+         * Identifier of the network request to get content for.
+         */
         requestId: any;
     }
     interface INetworkReplayXHRParams {
+         /**
+         * Identifier of XHR to replay.
+         */
         requestId: any;
     }
     interface INetworkEmulateNetworkConditionsParams {
+         /**
+         * True to emulate internet disconnection.
+         */
         offline: boolean;
+         /**
+         * Additional latency (ms).
+         */
         latency: any;
+         /**
+         * Maximal aggregated download throughput.
+         */
         downloadThroughput: any;
+         /**
+         * Maximal aggregated upload throughput.
+         */
         uploadThroughput: any;
     }
     interface INetworkSetCacheDisabledParams {
+         /**
+         * Cache disabled state.
+         */
         cacheDisabled: boolean;
     }
     interface INetworkLoadResourceForFrontendParams {
+         /**
+         * Frame to load the resource from.
+         */
         frameId: any;
+         /**
+         * URL of the resource to load.
+         */
         url: string;
+         /**
+         * Request headers.
+         */
         requestHeaders?: any;
     }
     interface IDatabaseGetDatabaseTableNamesParams {
@@ -1292,32 +1553,83 @@ declare module "chrome-debug-protocol" {
         query: string;
     }
     interface IIndexedDBRequestDatabaseNamesParams {
+         /**
+         * Security origin.
+         */
         securityOrigin: string;
     }
     interface IIndexedDBRequestDatabaseParams {
+         /**
+         * Security origin.
+         */
         securityOrigin: string;
+         /**
+         * Database name.
+         */
         databaseName: string;
     }
     interface IIndexedDBRequestDataParams {
+         /**
+         * Security origin.
+         */
         securityOrigin: string;
+         /**
+         * Database name.
+         */
         databaseName: string;
+         /**
+         * Object store name.
+         */
         objectStoreName: string;
+         /**
+         * Index name, empty string for object store data requests.
+         */
         indexName: string;
+         /**
+         * Number of records to skip.
+         */
         skipCount: number;
+         /**
+         * Number of records to fetch.
+         */
         pageSize: number;
+         /**
+         * Key range.
+         */
         keyRange?: any;
     }
     interface IIndexedDBClearObjectStoreParams {
+         /**
+         * Security origin.
+         */
         securityOrigin: string;
+         /**
+         * Database name.
+         */
         databaseName: string;
+         /**
+         * Object store name.
+         */
         objectStoreName: string;
     }
     interface IServiceWorkerCacheRequestEntriesParams {
+         /**
+         * Cache name.
+         */
         cacheName: string;
+         /**
+         * Number of records to skip.
+         */
         skipCount: number;
+         /**
+         * Number of records to fetch.
+         */
         pageSize: number;
     }
     interface IServiceWorkerCacheDeleteCacheParams {
+         /**
+         * Cache name.
+         */
         cacheName: string;
     }
     interface IDOMStorageGetDOMStorageItemsParams {
@@ -1333,168 +1645,414 @@ declare module "chrome-debug-protocol" {
         key: string;
     }
     interface IApplicationCacheGetManifestForFrameParams {
+         /**
+         * Identifier of the frame containing document whose manifest is retrieved.
+         */
         frameId: any;
     }
     interface IApplicationCacheGetApplicationCacheForFrameParams {
+         /**
+         * Identifier of the frame containing document whose application cache is retrieved.
+         */
         frameId: any;
     }
     interface IFileSystemRequestFileSystemRootParams {
+         /**
+         * Security origin of requesting FileSystem. One of frames in current page needs to have this security origin.
+         */
         origin: string;
+         /**
+         * FileSystem type of requesting FileSystem.
+         */
         type: string;
     }
     interface IFileSystemRequestDirectoryContentParams {
+         /**
+         * URL of the directory that the frontend is requesting to read from.
+         */
         url: string;
     }
     interface IFileSystemRequestMetadataParams {
+         /**
+         * URL of the entry that the frontend is requesting to get metadata from.
+         */
         url: string;
     }
     interface IFileSystemRequestFileContentParams {
+         /**
+         * URL of the file that the frontend is requesting to read from.
+         */
         url: string;
+         /**
+         * True if the content should be read as text, otherwise the result will be returned as base64 encoded text.
+         */
         readAsText: boolean;
+         /**
+         * Specifies the start of range to read.
+         */
         start?: number;
+         /**
+         * Specifies the end of range to read exclusively.
+         */
         end?: number;
+         /**
+         * Overrides charset of the content when content is served as text.
+         */
         charset?: string;
     }
     interface IFileSystemDeleteEntryParams {
+         /**
+         * URL of the entry to delete.
+         */
         url: string;
     }
     interface IDOMRequestChildNodesParams {
+         /**
+         * Id of the node to get children for.
+         */
         nodeId: any;
+         /**
+         * The maximum depth at which children should be retrieved, defaults to 1. Use -1 for the entire subtree or provide an integer larger than 0.
+         */
         depth?: number;
     }
     interface IDOMRequestShadowHostDistributedNodesParams {
+         /**
+         * Id of the node to get distributed nodes for.
+         */
         nodeId: any;
     }
     interface IDOMQuerySelectorParams {
+         /**
+         * Id of the node to query upon.
+         */
         nodeId: any;
+         /**
+         * Selector string.
+         */
         selector: string;
     }
     interface IDOMQuerySelectorAllParams {
+         /**
+         * Id of the node to query upon.
+         */
         nodeId: any;
+         /**
+         * Selector string.
+         */
         selector: string;
     }
     interface IDOMSetNodeNameParams {
+         /**
+         * Id of the node to set name for.
+         */
         nodeId: any;
+         /**
+         * New node's name.
+         */
         name: string;
     }
     interface IDOMSetNodeValueParams {
+         /**
+         * Id of the node to set value for.
+         */
         nodeId: any;
+         /**
+         * New node's value.
+         */
         value: string;
     }
     interface IDOMRemoveNodeParams {
+         /**
+         * Id of the node to remove.
+         */
         nodeId: any;
     }
     interface IDOMSetAttributeValueParams {
+         /**
+         * Id of the element to set attribute for.
+         */
         nodeId: any;
+         /**
+         * Attribute name.
+         */
         name: string;
+         /**
+         * Attribute value.
+         */
         value: string;
     }
     interface IDOMSetAttributesAsTextParams {
+         /**
+         * Id of the element to set attributes for.
+         */
         nodeId: any;
+         /**
+         * Text with a number of attributes. Will parse this text using HTML parser.
+         */
         text: string;
+         /**
+         * Attribute name to replace with new attributes derived from text in case text parsed successfully.
+         */
         name?: string;
     }
     interface IDOMRemoveAttributeParams {
+         /**
+         * Id of the element to remove attribute from.
+         */
         nodeId: any;
+         /**
+         * Name of the attribute to remove.
+         */
         name: string;
     }
     interface IDOMGetEventListenersForNodeParams {
+         /**
+         * Id of the node to get listeners for.
+         */
         nodeId: any;
+         /**
+         * Symbolic group name for handler value. Handler value is not returned without this parameter specified.
+         */
         objectGroup?: string;
     }
     interface IDOMGetOuterHTMLParams {
+         /**
+         * Id of the node to get markup for.
+         */
         nodeId: any;
     }
     interface IDOMSetOuterHTMLParams {
+         /**
+         * Id of the node to set markup for.
+         */
         nodeId: any;
+         /**
+         * Outer HTML markup to set.
+         */
         outerHTML: string;
     }
     interface IDOMPerformSearchParams {
+         /**
+         * Plain text or query selector or XPath search query.
+         */
         query: string;
+         /**
+         * True to search in user agent shadow DOM.
+         */
         includeUserAgentShadowDOM?: boolean;
     }
     interface IDOMGetSearchResultsParams {
+         /**
+         * Unique search session identifier.
+         */
         searchId: string;
+         /**
+         * Start index of the search result to be returned.
+         */
         fromIndex: number;
+         /**
+         * End index of the search result to be returned.
+         */
         toIndex: number;
     }
     interface IDOMDiscardSearchResultsParams {
+         /**
+         * Unique search session identifier.
+         */
         searchId: string;
     }
     interface IDOMRequestNodeParams {
+         /**
+         * JavaScript object id to convert into node.
+         */
         objectId: any;
     }
     interface IDOMSetInspectModeEnabledParams {
+         /**
+         * True to enable inspection mode, false to disable it.
+         */
         enabled: boolean;
+         /**
+         * True to enable inspection mode for user agent shadow DOM.
+         */
         inspectUAShadowDOM?: boolean;
+         /**
+         * A descriptor for the highlight appearance of hovered-over nodes. May be omitted if <code>enabled == false</code>.
+         */
         highlightConfig?: any;
     }
     interface IDOMHighlightRectParams {
+         /**
+         * X coordinate
+         */
         x: number;
+         /**
+         * Y coordinate
+         */
         y: number;
+         /**
+         * Rectangle width
+         */
         width: number;
+         /**
+         * Rectangle height
+         */
         height: number;
+         /**
+         * The highlight fill color (default: transparent).
+         */
         color?: any;
+         /**
+         * The highlight outline color (default: transparent).
+         */
         outlineColor?: any;
     }
     interface IDOMHighlightQuadParams {
+         /**
+         * Quad to highlight
+         */
         quad: any;
+         /**
+         * The highlight fill color (default: transparent).
+         */
         color?: any;
+         /**
+         * The highlight outline color (default: transparent).
+         */
         outlineColor?: any;
     }
     interface IDOMHighlightNodeParams {
+         /**
+         * A descriptor for the highlight appearance.
+         */
         highlightConfig: any;
+         /**
+         * Identifier of the node to highlight.
+         */
         nodeId?: any;
+         /**
+         * JavaScript object id of the node to be highlighted.
+         */
         objectId?: any;
     }
     interface IDOMHighlightFrameParams {
+         /**
+         * Identifier of the frame to highlight.
+         */
         frameId: any;
+         /**
+         * The content box highlight fill color (default: transparent).
+         */
         contentColor?: any;
+         /**
+         * The content box highlight outline color (default: transparent).
+         */
         contentOutlineColor?: any;
     }
     interface IDOMPushNodeByPathToFrontendParams {
+         /**
+         * Path to node in the proprietary format.
+         */
         path: string;
     }
     interface IDOMPushNodesByBackendIdsToFrontendParams {
+         /**
+         * The array of backend node ids.
+         */
         backendNodeIds: any[];
     }
     interface IDOMResolveNodeParams {
+         /**
+         * Id of the node to resolve.
+         */
         nodeId: any;
+         /**
+         * Symbolic group name that can be used to release multiple objects.
+         */
         objectGroup?: string;
     }
     interface IDOMGetAttributesParams {
+         /**
+         * Id of the node to retrieve attibutes for.
+         */
         nodeId: any;
     }
     interface IDOMCopyToParams {
+         /**
+         * Id of the node to copy.
+         */
         nodeId: any;
+         /**
+         * Id of the element to drop the copy into.
+         */
         targetNodeId: any;
+         /**
+         * Drop the copy before this node (if absent, the copy becomes the last child of <code>targetNodeId</code>).
+         */
         insertBeforeNodeId?: any;
     }
     interface IDOMMoveToParams {
+         /**
+         * Id of the node to move.
+         */
         nodeId: any;
+         /**
+         * Id of the element to drop the moved node into.
+         */
         targetNodeId: any;
+         /**
+         * Drop node before this one (if absent, the moved node becomes the last child of <code>targetNodeId</code>).
+         */
         insertBeforeNodeId?: any;
     }
     interface IDOMFocusParams {
+         /**
+         * Id of the node to focus.
+         */
         nodeId: any;
     }
     interface IDOMSetFileInputFilesParams {
+         /**
+         * Id of the file input node to set files for.
+         */
         nodeId: any;
+         /**
+         * Array of file paths to set.
+         */
         files: any[];
     }
     interface IDOMGetBoxModelParams {
+         /**
+         * Id of the node to get box model for.
+         */
         nodeId: any;
     }
     interface IDOMGetNodeForLocationParams {
+         /**
+         * X coordinate.
+         */
         x: number;
+         /**
+         * Y coordinate.
+         */
         y: number;
     }
     interface IDOMGetRelayoutBoundaryParams {
+         /**
+         * Id of the node.
+         */
         nodeId: any;
     }
     interface ICSSGetMatchedStylesForNodeParams {
         nodeId: any;
+         /**
+         * Whether to exclude pseudo styles (default: false).
+         */
         excludePseudo?: boolean;
+         /**
+         * Whether to exclude inherited styles (default: false).
+         */
         excludeInherited?: boolean;
     }
     interface ICSSGetInlineStylesForNodeParams {
@@ -1515,6 +2073,9 @@ declare module "chrome-debug-protocol" {
     }
     interface ICSSSetPropertyTextParams {
         styleSheetId: any;
+         /**
+         * Either a source range of the property to be edited or an empty range representing a position for the property insertion.
+         */
         range: any;
         text: string;
     }
@@ -1529,167 +2090,401 @@ declare module "chrome-debug-protocol" {
         text: string;
     }
     interface ICSSCreateStyleSheetParams {
+         /**
+         * Identifier of the frame where "via-inspector" stylesheet should be created.
+         */
         frameId: any;
     }
     interface ICSSAddRuleParams {
+         /**
+         * The css style sheet identifier where a new rule should be inserted.
+         */
         styleSheetId: any;
+         /**
+         * The text of a new rule.
+         */
         ruleText: string;
+         /**
+         * Text position of a new rule in the target style sheet.
+         */
         location: any;
     }
     interface ICSSForcePseudoStateParams {
+         /**
+         * The element id for which to force the pseudo state.
+         */
         nodeId: any;
+         /**
+         * Element pseudo classes to force when computing the element's style.
+         */
         forcedPseudoClasses: any[];
     }
     interface ITimelineStartParams {
+         /**
+         * Samples JavaScript stack traces up to <code>maxCallStackDepth</code>, defaults to 5.
+         */
         maxCallStackDepth?: number;
+         /**
+         * Whether instrumentation events should be buffered and returned upon <code>stop</code> call.
+         */
         bufferEvents?: boolean;
+         /**
+         * Coma separated event types to issue although bufferEvents is set.
+         */
         liveEvents?: string;
+         /**
+         * Whether counters data should be included into timeline events.
+         */
         includeCounters?: boolean;
+         /**
+         * Whether events from GPU process should be collected.
+         */
         includeGPUEvents?: boolean;
     }
     interface IDebuggerSetBreakpointsActiveParams {
+         /**
+         * New value for breakpoints active state.
+         */
         active: boolean;
     }
     interface IDebuggerSetSkipAllPausesParams {
+         /**
+         * New value for skip pauses state.
+         */
         skipped: boolean;
+         /**
+         * Whether page reload should set skipped to false.
+         */
         untilReload?: boolean;
     }
     interface IDebuggerSetBreakpointByUrlParams {
+         /**
+         * Line number to set breakpoint at.
+         */
         lineNumber: number;
+         /**
+         * URL of the resources to set breakpoint on.
+         */
         url?: string;
+         /**
+         * Regex pattern for the URLs of the resources to set breakpoints on. Either <code>url</code> or <code>urlRegex</code> must be specified.
+         */
         urlRegex?: string;
+         /**
+         * Offset in the line to set breakpoint at.
+         */
         columnNumber?: number;
+         /**
+         * Expression to use as a breakpoint condition. When specified, debugger will only stop on the breakpoint if this expression evaluates to true.
+         */
         condition?: string;
     }
     interface IDebuggerSetBreakpointParams {
+         /**
+         * Location to set breakpoint in.
+         */
         location: any;
+         /**
+         * Expression to use as a breakpoint condition. When specified, debugger will only stop on the breakpoint if this expression evaluates to true.
+         */
         condition?: string;
     }
     interface IDebuggerRemoveBreakpointParams {
         breakpointId: any;
     }
     interface IDebuggerContinueToLocationParams {
+         /**
+         * Location to continue to.
+         */
         location: any;
+         /**
+         * Allows breakpoints at the intemediate positions inside statements.
+         */
         interstatementLocation?: boolean;
     }
     interface IDebuggerSearchInContentParams {
+         /**
+         * Id of the script to search in.
+         */
         scriptId: any;
+         /**
+         * String to search for.
+         */
         query: string;
+         /**
+         * If true, search is case sensitive.
+         */
         caseSensitive?: boolean;
+         /**
+         * If true, treats string parameter as regex.
+         */
         isRegex?: boolean;
     }
     interface IDebuggerSetScriptSourceParams {
+         /**
+         * Id of the script to edit.
+         */
         scriptId: any;
+         /**
+         * New content of the script.
+         */
         scriptSource: string;
+         /**
+         *  If true the change will not actually be applied. Preview mode may be used to get result description without actually modifying the code.
+         */
         preview?: boolean;
     }
     interface IDebuggerRestartFrameParams {
+         /**
+         * Call frame identifier to evaluate on.
+         */
         callFrameId: any;
     }
     interface IDebuggerGetScriptSourceParams {
+         /**
+         * Id of the script to get source for.
+         */
         scriptId: any;
     }
     interface IDebuggerGetFunctionDetailsParams {
+         /**
+         * Id of the function to get details for.
+         */
         functionId: any;
     }
     interface IDebuggerGetGeneratorObjectDetailsParams {
+         /**
+         * Id of the generator object to get details for.
+         */
         objectId: any;
     }
     interface IDebuggerGetCollectionEntriesParams {
+         /**
+         * Id of the collection to get entries for.
+         */
         objectId: any;
     }
     interface IDebuggerSetPauseOnExceptionsParams {
+         /**
+         * Pause on exceptions mode.
+         */
         state: string;
     }
     interface IDebuggerEvaluateOnCallFrameParams {
+         /**
+         * Call frame identifier to evaluate on.
+         */
         callFrameId: any;
+         /**
+         * Expression to evaluate.
+         */
         expression: string;
+         /**
+         * String object group name to put result into (allows rapid releasing resulting object handles using <code>releaseObjectGroup</code>).
+         */
         objectGroup?: string;
+         /**
+         * Specifies whether command line API should be available to the evaluated expression, defaults to false.
+         */
         includeCommandLineAPI?: boolean;
+         /**
+         * Specifies whether evaluation should stop on exceptions and mute console. Overrides setPauseOnException state.
+         */
         doNotPauseOnExceptionsAndMuteConsole?: boolean;
+         /**
+         * Whether the result is expected to be a JSON object that should be sent by value.
+         */
         returnByValue?: boolean;
+         /**
+         * Whether preview should be generated for the result.
+         */
         generatePreview?: boolean;
     }
     interface IDebuggerCompileScriptParams {
+         /**
+         * Expression to compile.
+         */
         expression: string;
+         /**
+         * Source url to be set for the script.
+         */
         sourceURL: string;
+         /**
+         * Specifies in which isolated context to perform script run. Each content script lives in an isolated context and this parameter may be used to specify one of those contexts. If the parameter is omitted or 0 the evaluation will be performed in the context of the inspected page.
+         */
         executionContextId?: any;
     }
     interface IDebuggerRunScriptParams {
+         /**
+         * Id of the script to run.
+         */
         scriptId: any;
+         /**
+         * Specifies in which isolated context to perform script run. Each content script lives in an isolated context and this parameter may be used to specify one of those contexts. If the parameter is omitted or 0 the evaluation will be performed in the context of the inspected page.
+         */
         executionContextId?: any;
+         /**
+         * Symbolic group name that can be used to release multiple objects.
+         */
         objectGroup?: string;
+         /**
+         * Specifies whether script run should stop on exceptions and mute console. Overrides setPauseOnException state.
+         */
         doNotPauseOnExceptionsAndMuteConsole?: boolean;
     }
     interface IDebuggerSetVariableValueParams {
+         /**
+         * 0-based number of scope as was listed in scope chain. Only 'local', 'closure' and 'catch' scope types are allowed. Other scopes could be manipulated manually.
+         */
         scopeNumber: number;
+         /**
+         * Variable name.
+         */
         variableName: string;
+         /**
+         * New variable value.
+         */
         newValue: any;
+         /**
+         * Id of callframe that holds variable.
+         */
         callFrameId?: any;
+         /**
+         * Object id of closure (function) that holds variable.
+         */
         functionObjectId?: any;
     }
     interface IDebuggerGetStepInPositionsParams {
+         /**
+         * Id of a call frame where the current statement should be analized
+         */
         callFrameId: any;
     }
     interface IDebuggerSkipStackFramesParams {
+         /**
+         * Regular expression defining the scripts to ignore while stepping.
+         */
         script?: string;
+         /**
+         * True, if all content scripts should be ignored.
+         */
         skipContentScripts?: boolean;
     }
     interface IDebuggerSetAsyncCallStackDepthParams {
+         /**
+         * Maximum depth of async call stacks. Setting to <code>0</code> will effectively disable collecting async call stacks (default).
+         */
         maxDepth: number;
     }
     interface IDebuggerEnablePromiseTrackerParams {
+         /**
+         * Whether to capture stack traces for promise creation and settlement events (default: false).
+         */
         captureStacks?: boolean;
     }
     interface IDebuggerGetPromiseByIdParams {
         promiseId: number;
+         /**
+         * Symbolic group name that can be used to release multiple objects.
+         */
         objectGroup?: string;
     }
     interface IDOMDebuggerSetDOMBreakpointParams {
+         /**
+         * Identifier of the node to set breakpoint on.
+         */
         nodeId: any;
+         /**
+         * Type of the operation to stop upon.
+         */
         type: any;
     }
     interface IDOMDebuggerRemoveDOMBreakpointParams {
+         /**
+         * Identifier of the node to remove breakpoint from.
+         */
         nodeId: any;
+         /**
+         * Type of the breakpoint to remove.
+         */
         type: any;
     }
     interface IDOMDebuggerSetEventListenerBreakpointParams {
+         /**
+         * DOM Event name to stop on (any DOM event will do).
+         */
         eventName: string;
+         /**
+         * EventTarget interface name to stop on. If equal to <code>"*"</code> or not provided, will stop on any EventTarget.
+         */
         targetName?: string;
     }
     interface IDOMDebuggerRemoveEventListenerBreakpointParams {
+         /**
+         * Event name.
+         */
         eventName: string;
+         /**
+         * EventTarget interface name.
+         */
         targetName?: string;
     }
     interface IDOMDebuggerSetInstrumentationBreakpointParams {
+         /**
+         * Instrumentation name to stop on.
+         */
         eventName: string;
     }
     interface IDOMDebuggerRemoveInstrumentationBreakpointParams {
+         /**
+         * Instrumentation name to stop on.
+         */
         eventName: string;
     }
     interface IDOMDebuggerSetXHRBreakpointParams {
+         /**
+         * Resource URL substring. All XHRs having this substring in the URL will get stopped upon.
+         */
         url: string;
     }
     interface IDOMDebuggerRemoveXHRBreakpointParams {
+         /**
+         * Resource URL substring.
+         */
         url: string;
     }
     interface IProfilerSetSamplingIntervalParams {
+         /**
+         * New sampling interval in microseconds.
+         */
         interval: number;
     }
     interface IHeapProfilerStartTrackingHeapObjectsParams {
         trackAllocations?: boolean;
     }
     interface IHeapProfilerStopTrackingHeapObjectsParams {
+         /**
+         * If true 'reportHeapSnapshotProgress' events will be generated while snapshot is being taken when the tracking is stopped.
+         */
         reportProgress?: boolean;
     }
     interface IHeapProfilerTakeHeapSnapshotParams {
+         /**
+         * If true 'reportHeapSnapshotProgress' events will be generated while snapshot is being taken.
+         */
         reportProgress?: boolean;
     }
     interface IHeapProfilerGetObjectByHeapObjectIdParams {
         objectId: any;
+         /**
+         * Symbolic group name that can be used to release multiple objects.
+         */
         objectGroup?: string;
     }
     interface IHeapProfilerGetHeapObjectIdParams {
+         /**
+         * Identifier of the object to get heap object id for.
+         */
         objectId: any;
     }
     interface IWorkerSendMessageToWorkerParams {
@@ -1709,9 +2504,15 @@ declare module "chrome-debug-protocol" {
         traceLogId: any;
     }
     interface ICanvasCaptureFrameParams {
+         /**
+         * Identifier of the frame containing document whose canvases are to be captured. If omitted, main frame is assumed.
+         */
         frameId?: any;
     }
     interface ICanvasStartCapturingParams {
+         /**
+         * Identifier of the frame containing document whose canvases are to be captured. If omitted, main frame is assumed.
+         */
         frameId?: any;
     }
     interface ICanvasStopCapturingParams {
@@ -1724,6 +2525,9 @@ declare module "chrome-debug-protocol" {
     }
     interface ICanvasReplayTraceLogParams {
         traceLogId: any;
+         /**
+         * Last call index in the trace log to replay (zero based).
+         */
         stepNo: number;
     }
     interface ICanvasGetResourceStateParams {
@@ -1732,105 +2536,291 @@ declare module "chrome-debug-protocol" {
     }
     interface ICanvasEvaluateTraceLogCallArgumentParams {
         traceLogId: any;
+         /**
+         * Index of the call to evaluate on (zero based).
+         */
         callIndex: number;
+         /**
+         * Index of the argument to evaluate (zero based). Provide <code>-1</code> to evaluate call result.
+         */
         argumentIndex: number;
+         /**
+         * String object group name to put result into (allows rapid releasing resulting object handles using <code>Runtime.releaseObjectGroup</code>).
+         */
         objectGroup?: string;
     }
     interface IInputDispatchKeyEventParams {
+         /**
+         * Type of the key event.
+         */
         type: string;
+         /**
+         * Bit field representing pressed modifier keys. Alt=1, Ctrl=2, Meta/Command=4, Shift=8 (default: 0).
+         */
         modifiers?: number;
+         /**
+         * Time at which the event occurred. Measured in UTC time in seconds since January 1, 1970 (default: current time).
+         */
         timestamp?: any;
+         /**
+         * Text as generated by processing a virtual key code with a keyboard layout. Not needed for for <code>keyUp</code> and <code>rawKeyDown</code> events (default: "")
+         */
         text?: string;
+         /**
+         * Text that would have been generated by the keyboard if no modifiers were pressed (except for shift). Useful for shortcut (accelerator) key handling (default: "").
+         */
         unmodifiedText?: string;
+         /**
+         * Unique key identifier (e.g., 'U+0041') (default: "").
+         */
         keyIdentifier?: string;
+         /**
+         * Windows virtual key code (default: 0).
+         */
         windowsVirtualKeyCode?: number;
+         /**
+         * Native virtual key code (default: 0).
+         */
         nativeVirtualKeyCode?: number;
+         /**
+         * Whether the event was generated from auto repeat (default: false).
+         */
         autoRepeat?: boolean;
+         /**
+         * Whether the event was generated from the keypad (default: false).
+         */
         isKeypad?: boolean;
+         /**
+         * Whether the event was a system key event (default: false).
+         */
         isSystemKey?: boolean;
     }
     interface IInputDispatchMouseEventParams {
+         /**
+         * Type of the mouse event.
+         */
         type: string;
+         /**
+         * X coordinate of the event relative to the main frame's viewport.
+         */
         x: number;
+         /**
+         * Y coordinate of the event relative to the main frame's viewport. 0 refers to the top of the viewport and Y increases as it proceeds towards the bottom of the viewport.
+         */
         y: number;
+         /**
+         * Bit field representing pressed modifier keys. Alt=1, Ctrl=2, Meta/Command=4, Shift=8 (default: 0).
+         */
         modifiers?: number;
+         /**
+         * Time at which the event occurred. Measured in UTC time in seconds since January 1, 1970 (default: current time).
+         */
         timestamp?: any;
+         /**
+         * Mouse button (default: "none").
+         */
         button?: string;
+         /**
+         * Number of times the mouse button was clicked (default: 0).
+         */
         clickCount?: number;
     }
     interface IInputDispatchTouchEventParams {
+         /**
+         * Type of the touch event.
+         */
         type: string;
+         /**
+         * Touch points.
+         */
         touchPoints: any[];
+         /**
+         * Bit field representing pressed modifier keys. Alt=1, Ctrl=2, Meta/Command=4, Shift=8 (default: 0).
+         */
         modifiers?: number;
+         /**
+         * Time at which the event occurred. Measured in UTC time in seconds since January 1, 1970 (default: current time).
+         */
         timestamp?: any;
     }
     interface IInputEmulateTouchFromMouseEventParams {
+         /**
+         * Type of the mouse event.
+         */
         type: string;
+         /**
+         * X coordinate of the mouse pointer in DIP.
+         */
         x: number;
+         /**
+         * Y coordinate of the mouse pointer in DIP.
+         */
         y: number;
+         /**
+         * Time at which the event occurred. Measured in UTC time in seconds since January 1, 1970.
+         */
         timestamp: any;
+         /**
+         * Mouse button.
+         */
         button: string;
+         /**
+         * X delta in DIP for mouse wheel event (default: 0).
+         */
         deltaX?: any;
+         /**
+         * Y delta in DIP for mouse wheel event (default: 0).
+         */
         deltaY?: any;
+         /**
+         * Bit field representing pressed modifier keys. Alt=1, Ctrl=2, Meta/Command=4, Shift=8 (default: 0).
+         */
         modifiers?: number;
+         /**
+         * Number of times the mouse button was clicked (default: 0).
+         */
         clickCount?: number;
     }
     interface ILayerTreeCompositingReasonsParams {
+         /**
+         * The id of the layer for which we want to get the reasons it was composited.
+         */
         layerId: any;
     }
     interface ILayerTreeMakeSnapshotParams {
+         /**
+         * The id of the layer.
+         */
         layerId: any;
     }
     interface ILayerTreeLoadSnapshotParams {
+         /**
+         * An array of tiles composing the snapshot.
+         */
         tiles: any[];
     }
     interface ILayerTreeReleaseSnapshotParams {
+         /**
+         * The id of the layer snapshot.
+         */
         snapshotId: any;
     }
     interface ILayerTreeProfileSnapshotParams {
+         /**
+         * The id of the layer snapshot.
+         */
         snapshotId: any;
+         /**
+         * The maximum number of times to replay the snapshot (1, if not specified).
+         */
         minRepeatCount?: number;
+         /**
+         * The minimum duration (in seconds) to replay the snapshot.
+         */
         minDuration?: any;
+         /**
+         * The clip rectangle to apply when replaying the snapshot.
+         */
         clipRect?: any;
     }
     interface ILayerTreeReplaySnapshotParams {
+         /**
+         * The id of the layer snapshot.
+         */
         snapshotId: any;
+         /**
+         * The first step to replay from (replay from the very start if not specified).
+         */
         fromStep?: number;
+         /**
+         * The last step to replay to (replay till the end if not specified).
+         */
         toStep?: number;
+         /**
+         * The scale to apply while replaying (defaults to 1).
+         */
         scale?: any;
     }
     interface ILayerTreeSnapshotCommandLogParams {
+         /**
+         * The id of the layer snapshot.
+         */
         snapshotId: any;
     }
     interface IDeviceOrientationSetDeviceOrientationOverrideParams {
+         /**
+         * Mock alpha
+         */
         alpha: any;
+         /**
+         * Mock beta
+         */
         beta: any;
+         /**
+         * Mock gamma
+         */
         gamma: any;
     }
     interface ITracingStartParams {
+         /**
+         * Category/tag filter
+         */
         categories?: string;
+         /**
+         * Tracing options
+         */
         options?: string;
+         /**
+         * If set, the agent will issue bufferUsage events at this interval, specified in milliseconds
+         */
         bufferUsageReportingInterval?: any;
     }
     interface IAnimationGetAnimationPlayersForNodeParams {
+         /**
+         * Id of the node to get animation players for.
+         */
         nodeId: any;
+         /**
+         * Include animations from elements subtree.
+         */
         includeSubtreeAnimations: boolean;
     }
     interface IAnimationPauseAnimationPlayerParams {
+         /**
+         * Id of the animation player.
+         */
         id: string;
     }
     interface IAnimationPlayAnimationPlayerParams {
+         /**
+         * Id of the animation player.
+         */
         id: string;
     }
     interface IAnimationSetAnimationPlayerCurrentTimeParams {
+         /**
+         * Id of the animation player.
+         */
         id: string;
+         /**
+         * Current time to set animation to
+         */
         currentTime: any;
     }
     interface IAnimationGetAnimationPlayerStateParams {
+         /**
+         * Id of the animation player.
+         */
         id: string;
     }
     interface IAnimationStartListeningParams {
+         /**
+         * Id of the node to record on.
+         */
         nodeId: any;
+         /**
+         * Include animations from elements subtree.
+         */
         includeSubtreeAnimations: boolean;
     }
 

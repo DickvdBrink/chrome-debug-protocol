@@ -56,6 +56,11 @@ function emitParameterInterface(name: string, parameters: any[]) {
     methodParameterInterfaces += `${indent(1)}interface ${name} {\r\n`;
     for (var j = 0; j < parameters.length; j++) {
         var p = parameters[j];
+        if (p.description) {
+            methodParameterInterfaces += `${indent(2)} /**\r\n`;
+            methodParameterInterfaces += `${indent(2)} * ${p.description}\r\n`;
+            methodParameterInterfaces += `${indent(2)} */\r\n`;
+        }
         methodParameterInterfaces += `${indent(2)}${p.name}${(p.optional ? "?" : "")}: ${getTypeScriptType(p.type)};\r\n`;
     }
     methodParameterInterfaces += `${indent(1)}}\r\n`;
