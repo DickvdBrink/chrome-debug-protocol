@@ -131,7 +131,7 @@ function generateDomainCustomTypes(type: any, currentDomain: any) {
             moduleEmitter.writeline(p.description);
             moduleEmitter.writeEndMultilineComment();
         }
-        moduleEmitter.writeline(`${p.name}${(p.optional ? "?" : "") }: ${getTypeScriptTypeFromParameter(p, currentDomain) };`);
+        moduleEmitter.writeline(`${p.name}${(p.optional ? "?" : "") }: ${getTypeScriptTypeFromParameter(p, currentDomain, false)};`);
     }
 
     moduleEmitter.unindent();
@@ -149,7 +149,7 @@ function emitParameterInterface(name: string, parameters: any[], currentDomain: 
             moduleEmitter.writeEndMultilineComment();
         }
 
-        moduleEmitter.writeline(`${p.name}${(p.optional ? "?" : "")}: ${getTypeScriptTypeFromParameter(p, currentDomain)};`);
+        moduleEmitter.writeline(`${p.name}${(p.optional ? "?" : "")}: ${getTypeScriptTypeFromParameter(p, currentDomain, false)};`);
     }
     moduleEmitter.unindent();
     moduleEmitter.writeline("}");
@@ -188,7 +188,7 @@ for (var i = 0; i < domains.length; i++) {
     domainInterfaceEmitter.writeline("}")
 }
 
-function getTypeScriptTypeFromParameter(parameter: any, currentDomain: any) {
+function getTypeScriptTypeFromParameter(parameter: any, currentDomain: any, withModulePrefix: boolean) {
     var paramType: string;
 
     if (parameter["$ref"]) {
@@ -206,6 +206,9 @@ function getTypeScriptTypeFromParameter(parameter: any, currentDomain: any) {
         var customType = (<any[]>typeDomain.types).filter((item) => item.id == typeName)[0];
 
         if (customType.type == "object") {
+            if (splitted.length == 1 && withModulePrefix) {
+                return `${typeDomain.domain}.${customTypeFullName}`;
+            }
             return customTypeFullName;
         } else {
             paramType = customType.type;
@@ -221,6 +224,9 @@ function getTypeScriptTypeFromParameter(parameter: any, currentDomain: any) {
         case "integer":
             return "number";
         case "array":
+            if (parameter.items) {
+                return getTypeScriptTypeFromParameter(parameter.items, domain, withModulePrefix) + "[]";
+            }
             return "any[]";
         default:
             return "any";

@@ -17,6 +17,13 @@ declare module "chrome-debug-protocol" {
         url: string;
         webSocketDebuggerUrl: string;
     }
+    interface ChromeCallBack<T> {
+        (result: T, error: ChromeError): void;
+    }
+    interface ChromeError {
+        code: number;
+        message: string;
+    }
     function createDebugger(tab: string | ChromeTab): ChromeDebugger;
     function getTabs(options: any, callback: (tabs: ChromeTab[]) => void): void;
     class ChromeDebugger extends event.EventEmitter {
@@ -25,8 +32,8 @@ declare module "chrome-debug-protocol" {
         private callbacks;
         constructor(websocketUrl: string);
         close(): void;
-        send(method: string, params: any[], callback: Function): void;
-        private sendInternal(method, params, callback);
+        send<T>(method: string, params: any, callback: ChromeCallBack<T>): void;
+        private sendInternal<T>(method, params, callback);
         private messageRecieved;
         private addProtocol();
         private implementCommand(domain, object, command);
@@ -1456,7 +1463,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Child frames.
              */
-            childFrames?: any[];
+            childFrames?: FrameResourceTree[];
              /**
              * Information about frame resources.
              */
@@ -1553,15 +1560,15 @@ declare module "chrome-debug-protocol" {
              /**
              * Temporary storage usage.
              */
-            temporary: any[];
+            temporary: Page.UsageItem[];
              /**
              * Persistent storage usage.
              */
-            persistent: any[];
+            persistent: Page.UsageItem[];
              /**
              * Syncable storage.
              */
-            syncable: any[];
+            syncable: Page.UsageItem[];
         }
          /**
          * Usage information for a client and storage type
@@ -1699,7 +1706,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Call arguments. All call arguments must belong to the same JavaScript world as the target object.
              */
-            arguments?: any[];
+            arguments?: CallArgument[];
              /**
              * Specifies whether function call should stop on exceptions and mute console. Overrides setPauseOnException state.
              */
@@ -1807,11 +1814,11 @@ declare module "chrome-debug-protocol" {
              /**
              * List of the properties.
              */
-            properties: any[];
+            properties: PropertyPreview[];
              /**
              * List of the entries. Specified for <code>map</code> and <code>set</code> subtype values only.
              */
-            entries?: any[];
+            entries?: EntryPreview[];
         }
         export interface PropertyPreview {
              /**
@@ -2011,7 +2018,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Message parameters in case of the formatted message.
              */
-            parameters?: any[];
+            parameters?: Runtime.RemoteObject[];
              /**
              * JavaScript stack trace for assertions and error messages.
              */
@@ -2065,7 +2072,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Call frames of the stack trace.
              */
-            callFrames: any[];
+            callFrames: CallFrame[];
              /**
              * String label of this stack trace. For async traces this may be a name of the function that initiated the async call.
              */
@@ -2528,7 +2535,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Object stores in this database.
              */
-            objectStores: any[];
+            objectStores: ObjectStore[];
         }
          /**
          * Object store.
@@ -2549,7 +2556,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Indexes in this object store.
              */
-            indexes: any[];
+            indexes: ObjectStoreIndex[];
         }
          /**
          * Object store index.
@@ -2595,7 +2602,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Array value.
              */
-            array?: any[];
+            array?: Key[];
         }
          /**
          * Key range.
@@ -2650,7 +2657,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Array value.
              */
-            array?: any[];
+            array?: string[];
         }
     }
     module ServiceWorkerCache {
@@ -2768,7 +2775,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Application cache resources.
              */
-            resources: any[];
+            resources: ApplicationCacheResource[];
         }
          /**
          * Frame identifier - manifest URL pair.
@@ -3137,7 +3144,7 @@ declare module "chrome-debug-protocol" {
              /**
              * The array of backend node ids.
              */
-            backendNodeIds: any[];
+            backendNodeIds: number[];
         }
         export interface IResolveNodeParams {
              /**
@@ -3197,7 +3204,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Array of file paths to set.
              */
-            files: any[];
+            files: string[];
         }
         export interface IGetBoxModelParams {
              /**
@@ -3252,11 +3259,11 @@ declare module "chrome-debug-protocol" {
              /**
              * Child nodes of this node when requested with children.
              */
-            children?: any[];
+            children?: Node[];
              /**
              * Attributes of the <code>Element</code> node in the form of flat array <code>[name1, value1, name2, value2]</code>.
              */
-            attributes?: any[];
+            attributes?: string[];
              /**
              * Document URL that <code>Document</code> or <code>FrameOwner</code> node points to.
              */
@@ -3308,7 +3315,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Shadow root list for given element host.
              */
-            shadowRoots?: any[];
+            shadowRoots?: Node[];
              /**
              * Content document fragment for template elements.
              */
@@ -3316,7 +3323,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Pseudo elements associated with this node.
              */
-            pseudoElements?: any[];
+            pseudoElements?: Node[];
              /**
              * Import document for the HTMLImport links.
              */
@@ -3507,7 +3514,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Identifiers of nodes this node was distributed into.
              */
-            destinationInsertionPointIds?: any[];
+            destinationInsertionPointIds?: number[];
         }
          /**
          * Distribution data for insertion point.
@@ -3520,7 +3527,7 @@ declare module "chrome-debug-protocol" {
              /**
              * A list of distributed node details for this insertion point.
              */
-            distributedNodes: any[];
+            distributedNodes: DistributedNode[];
         }
     }
     module CSS {
@@ -3597,7 +3604,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Element pseudo classes to force when computing the element's style.
              */
-            forcedPseudoClasses: any[];
+            forcedPseudoClasses: string[];
         }
          /**
          * CSS rule collection for a single pseudo style.
@@ -3610,7 +3617,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Matches of CSS rules applicable to the pseudo style.
              */
-            matches: any[];
+            matches: RuleMatch[];
         }
          /**
          * Inherited CSS rule collection from ancestor node.
@@ -3623,7 +3630,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Matches of CSS rules matching the ancestor node in the style inheritance chain.
              */
-            matchedCSSRules: any[];
+            matchedCSSRules: RuleMatch[];
         }
          /**
          * Match data for a CSS rule.
@@ -3636,7 +3643,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Matching selector indices in the rule's selectorList selectors (0-based).
              */
-            matchingSelectors: any[];
+            matchingSelectors: number[];
         }
          /**
          * Data for a simple selector (these are delimited by commas in a selector list).
@@ -3658,7 +3665,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Selectors in the list.
              */
-            selectors: any[];
+            selectors: Selector[];
              /**
              * Rule selector text.
              */
@@ -3740,7 +3747,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Media list array (for rules involving media queries). The array enumerates media queries starting with the innermost one, going outwards.
              */
-            media?: any[];
+            media?: CSSMedia[];
         }
          /**
          * Text range within a resource. All numbers are zero-based.
@@ -3794,11 +3801,11 @@ declare module "chrome-debug-protocol" {
              /**
              * CSS properties in the style.
              */
-            cssProperties: any[];
+            cssProperties: CSSProperty[];
              /**
              * Computed values for all shorthands found in the style.
              */
-            shorthandEntries: any[];
+            shorthandEntries: ShorthandEntry[];
              /**
              * Style declaration text (if available).
              */
@@ -3872,7 +3879,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Array of media queries.
              */
-            mediaList?: any[];
+            mediaList?: MediaQuery[];
         }
          /**
          * Media query descriptor.
@@ -3881,7 +3888,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Array of media query expressions.
              */
-            expressions: any[];
+            expressions: MediaQueryExpression[];
              /**
              * Whether the media query condition is satisfied.
              */
@@ -3992,7 +3999,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Nested records.
              */
-            children?: any[];
+            children?: TimelineEvent[];
              /**
              * If present, identifies the thread that produced the event.
              */
@@ -4292,7 +4299,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Scope chain for this closure.
              */
-            scopeChain?: any[];
+            scopeChain?: Scope[];
         }
          /**
          * Information about the generator object.
@@ -4347,7 +4354,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Scope chain for this call frame.
              */
-            scopeChain: any[];
+            scopeChain: Scope[];
              /**
              * <code>this</code> object for this call frame.
              */
@@ -4364,7 +4371,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Call frames of the stack trace.
              */
-            callFrames: any[];
+            callFrames: CallFrame[];
              /**
              * String label of this stack trace. For async traces this may be a name of the function that initiated the async call.
              */
@@ -4576,7 +4583,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Child nodes.
              */
-            children: any[];
+            children: CPUProfileNode[];
              /**
              * The reason of being not optimized. The function may be deoptimized or marked as don't optimize.
              */
@@ -4588,7 +4595,7 @@ declare module "chrome-debug-protocol" {
              /**
              * An array of source position ticks.
              */
-            positionTicks: any[];
+            positionTicks: PositionTickInfo[];
         }
          /**
          * Profile.
@@ -4606,7 +4613,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Ids of samples top nodes.
              */
-            samples?: any[];
+            samples?: number[];
              /**
              * Timestamps of the samples in microseconds.
              */
@@ -4740,7 +4747,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Array of values associated with the particular state. Either <code>value</code> or <code>values</code> will be specified.
              */
-            values?: any[];
+            values?: ResourceStateDescriptor[];
              /**
              * True iff the given <code>values</code> items stand for an array rather than a list of grouped states.
              */
@@ -4755,7 +4762,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Describes current <code>Resource</code> state.
              */
-            descriptors?: any[];
+            descriptors?: ResourceStateDescriptor[];
              /**
              * Screenshot image data URL.
              */
@@ -4790,7 +4797,7 @@ declare module "chrome-debug-protocol" {
         export interface Call {
             contextId: string;
             functionName?: string;
-            arguments?: any[];
+            arguments?: CallArgument[];
             result?: CallArgument;
             isDrawingCall?: boolean;
             isFrameEndCall?: boolean;
@@ -4802,8 +4809,8 @@ declare module "chrome-debug-protocol" {
         }
         export interface TraceLog {
             id: string;
-            calls: any[];
-            contexts: any[];
+            calls: Call[];
+            contexts: CallArgument[];
             startOffset: number;
             alive: boolean;
             totalAvailableCalls: any;
@@ -4894,7 +4901,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Touch points.
              */
-            touchPoints: any[];
+            touchPoints: TouchPoint[];
              /**
              * Bit field representing pressed modifier keys. Alt=1, Ctrl=2, Meta/Command=4, Shift=8 (default: 0).
              */
@@ -4994,7 +5001,7 @@ declare module "chrome-debug-protocol" {
              /**
              * An array of tiles composing the snapshot.
              */
-            tiles: any[];
+            tiles: PictureTile[];
         }
         export interface IReleaseSnapshotParams {
              /**
@@ -5133,7 +5140,7 @@ declare module "chrome-debug-protocol" {
              /**
              * Rectangles scrolling on main thread only.
              */
-            scrollRects?: any[];
+            scrollRects?: ScrollRect[];
         }
     }
     module DeviceOrientation {
@@ -5325,7 +5332,7 @@ declare module "chrome-debug-protocol" {
              /**
              * List of animation keyframes.
              */
-            keyframes: any[];
+            keyframes: KeyframeStyle[];
         }
          /**
          * Keyframe Style
