@@ -110,7 +110,7 @@ declare module "chrome-debug-protocol" {
         reset(cb?: ChromeCallBack<any>);
     }
     interface IMemory {
-        getDOMCounters(cb?: ChromeCallBack<any>);
+        getDOMCounters(cb?: ChromeCallBack<{documents: number; nodes: number; jsEventListeners: number;}>);
     }
     interface IPage {
          /**
@@ -121,7 +121,7 @@ declare module "chrome-debug-protocol" {
          * Disables page domain notifications.
          */
         disable(cb?: ChromeCallBack<any>);
-        addScriptToEvaluateOnLoad(params: Page.IAddScriptToEvaluateOnLoadParams, cb?: ChromeCallBack<any>);
+        addScriptToEvaluateOnLoad(params: Page.IAddScriptToEvaluateOnLoadParams, cb?: ChromeCallBack<{identifier: string;}>);
         removeScriptToEvaluateOnLoad(params: Page.IRemoveScriptToEvaluateOnLoadParams, cb?: ChromeCallBack<any>);
          /**
          * Reloads given page optionally ignoring the cache.
@@ -130,11 +130,11 @@ declare module "chrome-debug-protocol" {
          /**
          * Navigates current page to the given URL.
          */
-        navigate(params: Page.INavigateParams, cb?: ChromeCallBack<any>);
+        navigate(params: Page.INavigateParams, cb?: ChromeCallBack<{frameId: string;}>);
          /**
          * Returns navigation history for the current page.
          */
-        getNavigationHistory(cb?: ChromeCallBack<any>);
+        getNavigationHistory(cb?: ChromeCallBack<{currentIndex: number; entries: Page.NavigationEntry[];}>);
          /**
          * Navigates current page to the given history entry.
          */
@@ -142,7 +142,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns all browser cookies. Depending on the backend support, will return detailed cookie information in the <code>cookies</code> field.
          */
-        getCookies(cb?: ChromeCallBack<any>);
+        getCookies(cb?: ChromeCallBack<{cookies: Page.Cookie[];}>);
          /**
          * Deletes browser cookie with given name, domain and path.
          */
@@ -150,15 +150,15 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns present frame / resource tree structure.
          */
-        getResourceTree(cb?: ChromeCallBack<any>);
+        getResourceTree(cb?: ChromeCallBack<{frameTree: Page.FrameResourceTree;}>);
          /**
          * Returns content of the given resource.
          */
-        getResourceContent(params: Page.IGetResourceContentParams, cb?: ChromeCallBack<any>);
+        getResourceContent(params: Page.IGetResourceContentParams, cb?: ChromeCallBack<{content: string; base64Encoded: boolean;}>);
          /**
          * Searches for given string in resource content.
          */
-        searchInResource(params?: Page.ISearchInResourceParams, cb?: ChromeCallBack<any>);
+        searchInResource(params?: Page.ISearchInResourceParams, cb?: ChromeCallBack<{result: Page.SearchMatch[];}>);
          /**
          * Sets given markup as the document's HTML.
          */
@@ -202,7 +202,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Determines if scripts can be executed in the page.
          */
-        getScriptExecutionStatus(cb?: ChromeCallBack<any>);
+        getScriptExecutionStatus(cb?: ChromeCallBack<{result: string;}>);
          /**
          * Switches script execution in the page.
          */
@@ -234,15 +234,15 @@ declare module "chrome-debug-protocol" {
          /**
          * Capture page screenshot.
          */
-        captureScreenshot(cb?: ChromeCallBack<any>);
+        captureScreenshot(cb?: ChromeCallBack<{data: string;}>);
          /**
          * Tells whether screencast is supported.
          */
-        canScreencast(cb?: ChromeCallBack<any>);
+        canScreencast(cb?: ChromeCallBack<{result: boolean;}>);
          /**
          * Tells whether emulation is supported.
          */
-        canEmulate(cb?: ChromeCallBack<any>);
+        canEmulate(cb?: ChromeCallBack<{result: boolean;}>);
          /**
          * Starts sending each frame using the <code>screencastFrame</code> event.
          */
@@ -262,7 +262,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Stops recording, encodes and returns images.
          */
-        stopRecordingFrames(cb?: ChromeCallBack<any>);
+        stopRecordingFrames(cb?: ChromeCallBack<{frames: Page.RecordedFrame[];}>);
          /**
          * Accepts or dismisses a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload).
          */
@@ -274,7 +274,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Queries more detailed quota and usage data than Storage API provides.
          */
-        queryUsageAndQuota(params: Page.IQueryUsageAndQuotaParams, cb?: ChromeCallBack<any>);
+        queryUsageAndQuota(params: Page.IQueryUsageAndQuotaParams, cb?: ChromeCallBack<{quota: Page.Quota; usage: Page.Usage;}>);
          /**
          * Shows / hides color picker
          */
@@ -286,7 +286,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Gets the playback rate of the document timeline.
          */
-        animationsPlaybackRate(cb?: ChromeCallBack<any>);
+        animationsPlaybackRate(cb?: ChromeCallBack<{playbackRate: any;}>);
          /**
          * Sets the playback rate of the document timeline.
          */
@@ -296,15 +296,15 @@ declare module "chrome-debug-protocol" {
          /**
          * Evaluates expression on global object.
          */
-        evaluate(params?: Runtime.IEvaluateParams, cb?: ChromeCallBack<any>);
+        evaluate(params?: Runtime.IEvaluateParams, cb?: ChromeCallBack<{result: Runtime.RemoteObject; wasThrown: boolean; exceptionDetails: Debugger.ExceptionDetails;}>);
          /**
          * Calls function with given declaration on the given object. Object group of the result is inherited from the target object.
          */
-        callFunctionOn(params?: Runtime.ICallFunctionOnParams, cb?: ChromeCallBack<any>);
+        callFunctionOn(params?: Runtime.ICallFunctionOnParams, cb?: ChromeCallBack<{result: Runtime.RemoteObject; wasThrown: boolean;}>);
          /**
          * Returns properties of a given object. Object group of the result is inherited from the target object.
          */
-        getProperties(params?: Runtime.IGetPropertiesParams, cb?: ChromeCallBack<any>);
+        getProperties(params?: Runtime.IGetPropertiesParams, cb?: ChromeCallBack<{result: Runtime.PropertyDescriptor[]; internalProperties: Runtime.InternalPropertyDescriptor[];}>);
          /**
          * Releases remote object with given id.
          */
@@ -325,7 +325,7 @@ declare module "chrome-debug-protocol" {
          * Disables reporting of execution contexts creation.
          */
         disable(cb?: ChromeCallBack<any>);
-        isRunRequired(cb?: ChromeCallBack<any>);
+        isRunRequired(cb?: ChromeCallBack<{result: boolean;}>);
         setCustomObjectFormatterEnabled(params: Runtime.ISetCustomObjectFormatterEnabledParams, cb?: ChromeCallBack<any>);
     }
     interface IConsole {
@@ -375,7 +375,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns content served for the given request.
          */
-        getResponseBody(params: Network.IGetResponseBodyParams, cb?: ChromeCallBack<any>);
+        getResponseBody(params: Network.IGetResponseBodyParams, cb?: ChromeCallBack<{body: string; base64Encoded: boolean;}>);
          /**
          * This method sends a new XMLHttpRequest which is identical to the original one. The following parameters should be identical: method, url, async, request body, extra headers, withCredentials attribute, user, password.
          */
@@ -383,7 +383,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Tells whether clearing browser cache is supported.
          */
-        canClearBrowserCache(cb?: ChromeCallBack<any>);
+        canClearBrowserCache(cb?: ChromeCallBack<{result: boolean;}>);
          /**
          * Clears browser cache.
          */
@@ -391,7 +391,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Tells whether clearing browser cookies is supported.
          */
-        canClearBrowserCookies(cb?: ChromeCallBack<any>);
+        canClearBrowserCookies(cb?: ChromeCallBack<{result: boolean;}>);
          /**
          * Clears browser cookies.
          */
@@ -399,7 +399,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Tells whether emulation of network conditions is supported.
          */
-        canEmulateNetworkConditions(cb?: ChromeCallBack<any>);
+        canEmulateNetworkConditions(cb?: ChromeCallBack<{result: boolean;}>);
          /**
          * Activates emulation of network conditions.
          */
@@ -411,7 +411,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Loads a resource in the context of a frame on the inspected page without cross origin checks.
          */
-        loadResourceForFrontend(params?: Network.ILoadResourceForFrontendParams, cb?: ChromeCallBack<any>);
+        loadResourceForFrontend(params?: Network.ILoadResourceForFrontendParams, cb?: ChromeCallBack<{statusCode: any; responseHeaders: Network.Headers; content: string;}>);
     }
     interface IDatabase {
          /**
@@ -422,8 +422,8 @@ declare module "chrome-debug-protocol" {
          * Disables database tracking, prevents database events from being sent to the client.
          */
         disable(cb?: ChromeCallBack<any>);
-        getDatabaseTableNames(params: Database.IGetDatabaseTableNamesParams, cb?: ChromeCallBack<any>);
-        executeSQL(params: Database.IExecuteSQLParams, cb?: ChromeCallBack<any>);
+        getDatabaseTableNames(params: Database.IGetDatabaseTableNamesParams, cb?: ChromeCallBack<{tableNames: string[];}>);
+        executeSQL(params: Database.IExecuteSQLParams, cb?: ChromeCallBack<{columnNames: string[]; values: any[]; sqlError: Database.Error;}>);
     }
     interface IIndexedDB {
          /**
@@ -437,15 +437,15 @@ declare module "chrome-debug-protocol" {
          /**
          * Requests database names for given security origin.
          */
-        requestDatabaseNames(params: IndexedDB.IRequestDatabaseNamesParams, cb?: ChromeCallBack<any>);
+        requestDatabaseNames(params: IndexedDB.IRequestDatabaseNamesParams, cb?: ChromeCallBack<{databaseNames: string[];}>);
          /**
          * Requests database with given name in given frame.
          */
-        requestDatabase(params: IndexedDB.IRequestDatabaseParams, cb?: ChromeCallBack<any>);
+        requestDatabase(params: IndexedDB.IRequestDatabaseParams, cb?: ChromeCallBack<{databaseWithObjectStores: IndexedDB.DatabaseWithObjectStores;}>);
          /**
          * Requests data from object store or index.
          */
-        requestData(params?: IndexedDB.IRequestDataParams, cb?: ChromeCallBack<any>);
+        requestData(params?: IndexedDB.IRequestDataParams, cb?: ChromeCallBack<{objectStoreDataEntries: IndexedDB.DataEntry[]; hasMore: boolean;}>);
          /**
          * Clears all entries from an object store.
          */
@@ -455,11 +455,11 @@ declare module "chrome-debug-protocol" {
          /**
          * Requests cache names.
          */
-        requestCacheNames(cb?: ChromeCallBack<any>);
+        requestCacheNames(cb?: ChromeCallBack<{cacheNames: string[];}>);
          /**
          * Requests data from cache.
          */
-        requestEntries(params: ServiceWorkerCache.IRequestEntriesParams, cb?: ChromeCallBack<any>);
+        requestEntries(params: ServiceWorkerCache.IRequestEntriesParams, cb?: ChromeCallBack<{cacheDataEntries: ServiceWorkerCache.DataEntry[]; hasMore: boolean;}>);
          /**
          * Deletes a cache.
          */
@@ -474,7 +474,7 @@ declare module "chrome-debug-protocol" {
          * Disables storage tracking, prevents storage events from being sent to the client.
          */
         disable(cb?: ChromeCallBack<any>);
-        getDOMStorageItems(params: DOMStorage.IGetDOMStorageItemsParams, cb?: ChromeCallBack<any>);
+        getDOMStorageItems(params: DOMStorage.IGetDOMStorageItemsParams, cb?: ChromeCallBack<{entries: any[][];}>);
         setDOMStorageItem(params: DOMStorage.ISetDOMStorageItemParams, cb?: ChromeCallBack<any>);
         removeDOMStorageItem(params: DOMStorage.IRemoveDOMStorageItemParams, cb?: ChromeCallBack<any>);
     }
@@ -482,7 +482,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns array of frame identifiers with manifest urls for each frame containing a document associated with some application cache.
          */
-        getFramesWithManifests(cb?: ChromeCallBack<any>);
+        getFramesWithManifests(cb?: ChromeCallBack<{frameIds: ApplicationCache.FrameWithManifest[];}>);
          /**
          * Enables application cache domain notifications.
          */
@@ -490,11 +490,11 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns manifest URL for document in the given frame.
          */
-        getManifestForFrame(params: ApplicationCache.IGetManifestForFrameParams, cb?: ChromeCallBack<any>);
+        getManifestForFrame(params: ApplicationCache.IGetManifestForFrameParams, cb?: ChromeCallBack<{manifestURL: string;}>);
          /**
          * Returns relevant application cache data for the document in given frame.
          */
-        getApplicationCacheForFrame(params: ApplicationCache.IGetApplicationCacheForFrameParams, cb?: ChromeCallBack<any>);
+        getApplicationCacheForFrame(params: ApplicationCache.IGetApplicationCacheForFrameParams, cb?: ChromeCallBack<{applicationCache: ApplicationCache.ApplicationCache;}>);
     }
     interface IFileSystem {
          /**
@@ -508,23 +508,23 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns root directory of the FileSystem, if exists.
          */
-        requestFileSystemRoot(params: FileSystem.IRequestFileSystemRootParams, cb?: ChromeCallBack<any>);
+        requestFileSystemRoot(params: FileSystem.IRequestFileSystemRootParams, cb?: ChromeCallBack<{errorCode: number; root: FileSystem.Entry;}>);
          /**
          * Returns content of the directory.
          */
-        requestDirectoryContent(params: FileSystem.IRequestDirectoryContentParams, cb?: ChromeCallBack<any>);
+        requestDirectoryContent(params: FileSystem.IRequestDirectoryContentParams, cb?: ChromeCallBack<{errorCode: number; entries: FileSystem.Entry[];}>);
          /**
          * Returns metadata of the entry.
          */
-        requestMetadata(params: FileSystem.IRequestMetadataParams, cb?: ChromeCallBack<any>);
+        requestMetadata(params: FileSystem.IRequestMetadataParams, cb?: ChromeCallBack<{errorCode: number; metadata: FileSystem.Metadata;}>);
          /**
          * Returns content of the file. Result should be sliced into [start, end).
          */
-        requestFileContent(params?: FileSystem.IRequestFileContentParams, cb?: ChromeCallBack<any>);
+        requestFileContent(params?: FileSystem.IRequestFileContentParams, cb?: ChromeCallBack<{errorCode: number; content: string; charset: string;}>);
          /**
          * Deletes specified entry. If the entry is a directory, the agent deletes children recursively.
          */
-        deleteEntry(params: FileSystem.IDeleteEntryParams, cb?: ChromeCallBack<any>);
+        deleteEntry(params: FileSystem.IDeleteEntryParams, cb?: ChromeCallBack<{errorCode: number;}>);
     }
     interface IDOM {
          /**
@@ -538,7 +538,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns the root DOM node to the caller.
          */
-        getDocument(cb?: ChromeCallBack<any>);
+        getDocument(cb?: ChromeCallBack<{root: DOM.Node;}>);
          /**
          * Requests that children of the node with given id are returned to the caller in form of <code>setChildNodes</code> events where not only immediate children are retrieved, but all children down to the specified depth.
          */
@@ -546,19 +546,19 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns distribution data for all insertion points in shadow tree of the given node.
          */
-        requestShadowHostDistributedNodes(params: DOM.IRequestShadowHostDistributedNodesParams, cb?: ChromeCallBack<any>);
+        requestShadowHostDistributedNodes(params: DOM.IRequestShadowHostDistributedNodesParams, cb?: ChromeCallBack<{insertionPointDistributions: DOM.InsertionPointDistribution[];}>);
          /**
          * Executes <code>querySelector</code> on a given node.
          */
-        querySelector(params: DOM.IQuerySelectorParams, cb?: ChromeCallBack<any>);
+        querySelector(params: DOM.IQuerySelectorParams, cb?: ChromeCallBack<{nodeId: number;}>);
          /**
          * Executes <code>querySelectorAll</code> on a given node.
          */
-        querySelectorAll(params: DOM.IQuerySelectorAllParams, cb?: ChromeCallBack<any>);
+        querySelectorAll(params: DOM.IQuerySelectorAllParams, cb?: ChromeCallBack<{nodeIds: number[];}>);
          /**
          * Sets node name for a node with given id.
          */
-        setNodeName(params: DOM.ISetNodeNameParams, cb?: ChromeCallBack<any>);
+        setNodeName(params: DOM.ISetNodeNameParams, cb?: ChromeCallBack<{nodeId: number;}>);
          /**
          * Sets node value for a node with given id.
          */
@@ -582,11 +582,11 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns event listeners relevant to the node.
          */
-        getEventListenersForNode(params?: DOM.IGetEventListenersForNodeParams, cb?: ChromeCallBack<any>);
+        getEventListenersForNode(params?: DOM.IGetEventListenersForNodeParams, cb?: ChromeCallBack<{listeners: DOM.EventListener[];}>);
          /**
          * Returns node's HTML markup.
          */
-        getOuterHTML(params: DOM.IGetOuterHTMLParams, cb?: ChromeCallBack<any>);
+        getOuterHTML(params: DOM.IGetOuterHTMLParams, cb?: ChromeCallBack<{outerHTML: string;}>);
          /**
          * Sets node HTML markup, returns new node id.
          */
@@ -594,11 +594,11 @@ declare module "chrome-debug-protocol" {
          /**
          * Searches for a given string in the DOM tree. Use <code>getSearchResults</code> to access search results or <code>cancelSearch</code> to end this search session.
          */
-        performSearch(params?: DOM.IPerformSearchParams, cb?: ChromeCallBack<any>);
+        performSearch(params?: DOM.IPerformSearchParams, cb?: ChromeCallBack<{searchId: string; resultCount: number;}>);
          /**
          * Returns search results from given <code>fromIndex</code> to given <code>toIndex</code> from the sarch with the given identifier.
          */
-        getSearchResults(params: DOM.IGetSearchResultsParams, cb?: ChromeCallBack<any>);
+        getSearchResults(params: DOM.IGetSearchResultsParams, cb?: ChromeCallBack<{nodeIds: number[];}>);
          /**
          * Discards search results from the session with the given id. <code>getSearchResults</code> should no longer be called for that search.
          */
@@ -606,7 +606,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Requests that the node is sent to the caller given the JavaScript node object reference. All nodes that form the path from the node to the root are also sent to the client as a series of <code>setChildNodes</code> notifications.
          */
-        requestNode(params: DOM.IRequestNodeParams, cb?: ChromeCallBack<any>);
+        requestNode(params: DOM.IRequestNodeParams, cb?: ChromeCallBack<{nodeId: number;}>);
          /**
          * Enters the 'inspect' mode. In this mode, elements that user is hovering over are highlighted. Backend then generates 'inspectNodeRequested' event upon element selection.
          */
@@ -634,27 +634,27 @@ declare module "chrome-debug-protocol" {
          /**
          * Requests that the node is sent to the caller given its path. // FIXME, use XPath
          */
-        pushNodeByPathToFrontend(params: DOM.IPushNodeByPathToFrontendParams, cb?: ChromeCallBack<any>);
+        pushNodeByPathToFrontend(params: DOM.IPushNodeByPathToFrontendParams, cb?: ChromeCallBack<{nodeId: number;}>);
          /**
          * Requests that a batch of nodes is sent to the caller given their backend node ids.
          */
-        pushNodesByBackendIdsToFrontend(params: DOM.IPushNodesByBackendIdsToFrontendParams, cb?: ChromeCallBack<any>);
+        pushNodesByBackendIdsToFrontend(params: DOM.IPushNodesByBackendIdsToFrontendParams, cb?: ChromeCallBack<{nodeIds: number[];}>);
          /**
          * Resolves JavaScript node object for given node id.
          */
-        resolveNode(params?: DOM.IResolveNodeParams, cb?: ChromeCallBack<any>);
+        resolveNode(params?: DOM.IResolveNodeParams, cb?: ChromeCallBack<{object: Runtime.RemoteObject;}>);
          /**
          * Returns attributes for the specified node.
          */
-        getAttributes(params: DOM.IGetAttributesParams, cb?: ChromeCallBack<any>);
+        getAttributes(params: DOM.IGetAttributesParams, cb?: ChromeCallBack<{attributes: string[];}>);
          /**
          * Creates a deep copy of the specified node and places it into the target container before the given anchor.
          */
-        copyTo(params?: DOM.ICopyToParams, cb?: ChromeCallBack<any>);
+        copyTo(params?: DOM.ICopyToParams, cb?: ChromeCallBack<{nodeId: number;}>);
          /**
          * Moves node into the new container, places it before the given anchor.
          */
-        moveTo(params?: DOM.IMoveToParams, cb?: ChromeCallBack<any>);
+        moveTo(params?: DOM.IMoveToParams, cb?: ChromeCallBack<{nodeId: number;}>);
          /**
          * Undoes the last performed action.
          */
@@ -678,15 +678,15 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns boxes for the currently selected nodes.
          */
-        getBoxModel(params: DOM.IGetBoxModelParams, cb?: ChromeCallBack<any>);
+        getBoxModel(params: DOM.IGetBoxModelParams, cb?: ChromeCallBack<{model: DOM.BoxModel;}>);
          /**
          * Returns node id at given location.
          */
-        getNodeForLocation(params: DOM.IGetNodeForLocationParams, cb?: ChromeCallBack<any>);
+        getNodeForLocation(params: DOM.IGetNodeForLocationParams, cb?: ChromeCallBack<{nodeId: number;}>);
          /**
          * Returns the id of the nearest ancestor that is a relayout boundary.
          */
-        getRelayoutBoundary(params: DOM.IGetRelayoutBoundaryParams, cb?: ChromeCallBack<any>);
+        getRelayoutBoundary(params: DOM.IGetRelayoutBoundaryParams, cb?: ChromeCallBack<{nodeId: number;}>);
     }
     interface ICSS {
          /**
@@ -700,23 +700,23 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns requested styles for a DOM node identified by <code>nodeId</code>.
          */
-        getMatchedStylesForNode(params?: CSS.IGetMatchedStylesForNodeParams, cb?: ChromeCallBack<any>);
+        getMatchedStylesForNode(params?: CSS.IGetMatchedStylesForNodeParams, cb?: ChromeCallBack<{matchedCSSRules: CSS.RuleMatch[]; pseudoElements: CSS.PseudoIdMatches[]; inherited: CSS.InheritedStyleEntry[];}>);
          /**
          * Returns the styles defined inline (explicitly in the "style" attribute and implicitly, using DOM attributes) for a DOM node identified by <code>nodeId</code>.
          */
-        getInlineStylesForNode(params: CSS.IGetInlineStylesForNodeParams, cb?: ChromeCallBack<any>);
+        getInlineStylesForNode(params: CSS.IGetInlineStylesForNodeParams, cb?: ChromeCallBack<{inlineStyle: CSS.CSSStyle; attributesStyle: CSS.CSSStyle;}>);
          /**
          * Returns the computed style for a DOM node identified by <code>nodeId</code>.
          */
-        getComputedStyleForNode(params: CSS.IGetComputedStyleForNodeParams, cb?: ChromeCallBack<any>);
+        getComputedStyleForNode(params: CSS.IGetComputedStyleForNodeParams, cb?: ChromeCallBack<{computedStyle: CSS.CSSComputedStyleProperty[];}>);
          /**
          * Requests information about platform fonts which we used to render child TextNodes in the given node.
          */
-        getPlatformFontsForNode(params: CSS.IGetPlatformFontsForNodeParams, cb?: ChromeCallBack<any>);
+        getPlatformFontsForNode(params: CSS.IGetPlatformFontsForNodeParams, cb?: ChromeCallBack<{cssFamilyName: string; fonts: CSS.PlatformFontUsage[];}>);
          /**
          * Returns the current textual content and the URL for a stylesheet.
          */
-        getStyleSheetText(params: CSS.IGetStyleSheetTextParams, cb?: ChromeCallBack<any>);
+        getStyleSheetText(params: CSS.IGetStyleSheetTextParams, cb?: ChromeCallBack<{text: string;}>);
          /**
          * Sets the new stylesheet text.
          */
@@ -724,23 +724,23 @@ declare module "chrome-debug-protocol" {
          /**
          * Either replaces a property identified by <code>styleSheetId</code> and <code>range</code> with <code>text</code> or inserts a new property <code>text</code> at the position identified by an empty <code>range</code>.
          */
-        setPropertyText(params: CSS.ISetPropertyTextParams, cb?: ChromeCallBack<any>);
+        setPropertyText(params: CSS.ISetPropertyTextParams, cb?: ChromeCallBack<{style: CSS.CSSStyle;}>);
          /**
          * Modifies the rule selector.
          */
-        setRuleSelector(params: CSS.ISetRuleSelectorParams, cb?: ChromeCallBack<any>);
+        setRuleSelector(params: CSS.ISetRuleSelectorParams, cb?: ChromeCallBack<{rule: CSS.CSSRule;}>);
          /**
          * Modifies the rule selector.
          */
-        setMediaText(params: CSS.ISetMediaTextParams, cb?: ChromeCallBack<any>);
+        setMediaText(params: CSS.ISetMediaTextParams, cb?: ChromeCallBack<{media: CSS.CSSMedia;}>);
          /**
          * Creates a new special "via-inspector" stylesheet in the frame with given <code>frameId</code>.
          */
-        createStyleSheet(params: CSS.ICreateStyleSheetParams, cb?: ChromeCallBack<any>);
+        createStyleSheet(params: CSS.ICreateStyleSheetParams, cb?: ChromeCallBack<{styleSheetId: string;}>);
          /**
          * Inserts a new rule with the given <code>ruleText</code> in a stylesheet with given <code>styleSheetId</code>, at the position specified by <code>location</code>.
          */
-        addRule(params: CSS.IAddRuleParams, cb?: ChromeCallBack<any>);
+        addRule(params: CSS.IAddRuleParams, cb?: ChromeCallBack<{rule: CSS.CSSRule;}>);
          /**
          * Ensures that the given node will have specified pseudo-classes whenever its style is computed by the browser.
          */
@@ -748,7 +748,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns all media queries parsed by the rendering engine.
          */
-        getMediaQueries(cb?: ChromeCallBack<any>);
+        getMediaQueries(cb?: ChromeCallBack<{medias: CSS.CSSMedia[];}>);
     }
     interface ITimeline {
          /**
@@ -788,11 +788,11 @@ declare module "chrome-debug-protocol" {
          /**
          * Sets JavaScript breakpoint at given location specified either by URL or URL regex. Once this command is issued, all existing parsed scripts will have breakpoints resolved and returned in <code>locations</code> property. Further matching script parsing will result in subsequent <code>breakpointResolved</code> events issued. This logical breakpoint will survive page reloads.
          */
-        setBreakpointByUrl(params?: Debugger.ISetBreakpointByUrlParams, cb?: ChromeCallBack<any>);
+        setBreakpointByUrl(params?: Debugger.ISetBreakpointByUrlParams, cb?: ChromeCallBack<{breakpointId: string; locations: Debugger.Location[];}>);
          /**
          * Sets JavaScript breakpoint at a given location.
          */
-        setBreakpoint(params?: Debugger.ISetBreakpointParams, cb?: ChromeCallBack<any>);
+        setBreakpoint(params?: Debugger.ISetBreakpointParams, cb?: ChromeCallBack<{breakpointId: string; actualLocation: Debugger.Location;}>);
          /**
          * Removes JavaScript breakpoint.
          */
@@ -828,35 +828,35 @@ declare module "chrome-debug-protocol" {
          /**
          * Searches for given string in script content.
          */
-        searchInContent(params?: Debugger.ISearchInContentParams, cb?: ChromeCallBack<any>);
+        searchInContent(params?: Debugger.ISearchInContentParams, cb?: ChromeCallBack<{result: Page.SearchMatch[];}>);
          /**
          * Always returns true.
          */
-        canSetScriptSource(cb?: ChromeCallBack<any>);
+        canSetScriptSource(cb?: ChromeCallBack<{result: boolean;}>);
          /**
          * Edits JavaScript source live.
          */
-        setScriptSource(params?: Debugger.ISetScriptSourceParams, cb?: ChromeCallBack<any>);
+        setScriptSource(params?: Debugger.ISetScriptSourceParams, cb?: ChromeCallBack<{callFrames: Debugger.CallFrame[]; result: any; asyncStackTrace: Debugger.StackTrace;}>);
          /**
          * Restarts particular call frame from the beginning.
          */
-        restartFrame(params: Debugger.IRestartFrameParams, cb?: ChromeCallBack<any>);
+        restartFrame(params: Debugger.IRestartFrameParams, cb?: ChromeCallBack<{callFrames: Debugger.CallFrame[]; result: any; asyncStackTrace: Debugger.StackTrace;}>);
          /**
          * Returns source for the script with given id.
          */
-        getScriptSource(params: Debugger.IGetScriptSourceParams, cb?: ChromeCallBack<any>);
+        getScriptSource(params: Debugger.IGetScriptSourceParams, cb?: ChromeCallBack<{scriptSource: string;}>);
          /**
          * Returns detailed information on given function.
          */
-        getFunctionDetails(params: Debugger.IGetFunctionDetailsParams, cb?: ChromeCallBack<any>);
+        getFunctionDetails(params: Debugger.IGetFunctionDetailsParams, cb?: ChromeCallBack<{details: Debugger.FunctionDetails;}>);
          /**
          * Returns detailed information on given generator object.
          */
-        getGeneratorObjectDetails(params: Debugger.IGetGeneratorObjectDetailsParams, cb?: ChromeCallBack<any>);
+        getGeneratorObjectDetails(params: Debugger.IGetGeneratorObjectDetailsParams, cb?: ChromeCallBack<{details: Debugger.GeneratorObjectDetails;}>);
          /**
          * Returns entries of given collection.
          */
-        getCollectionEntries(params: Debugger.IGetCollectionEntriesParams, cb?: ChromeCallBack<any>);
+        getCollectionEntries(params: Debugger.IGetCollectionEntriesParams, cb?: ChromeCallBack<{entries: Debugger.CollectionEntry[];}>);
          /**
          * Defines pause on exceptions state. Can be set to stop on all exceptions, uncaught exceptions or no exceptions. Initial pause on exceptions state is <code>none</code>.
          */
@@ -864,15 +864,15 @@ declare module "chrome-debug-protocol" {
          /**
          * Evaluates expression on a given call frame.
          */
-        evaluateOnCallFrame(params?: Debugger.IEvaluateOnCallFrameParams, cb?: ChromeCallBack<any>);
+        evaluateOnCallFrame(params?: Debugger.IEvaluateOnCallFrameParams, cb?: ChromeCallBack<{result: Runtime.RemoteObject; wasThrown: boolean; exceptionDetails: Debugger.ExceptionDetails;}>);
          /**
          * Compiles expression.
          */
-        compileScript(params?: Debugger.ICompileScriptParams, cb?: ChromeCallBack<any>);
+        compileScript(params?: Debugger.ICompileScriptParams, cb?: ChromeCallBack<{scriptId: string; exceptionDetails: Debugger.ExceptionDetails;}>);
          /**
          * Runs script with given id in a given context.
          */
-        runScript(params?: Debugger.IRunScriptParams, cb?: ChromeCallBack<any>);
+        runScript(params?: Debugger.IRunScriptParams, cb?: ChromeCallBack<{result: Runtime.RemoteObject; exceptionDetails: Debugger.ExceptionDetails;}>);
          /**
          * Changes value of variable in a callframe or a closure. Either callframe or function must be specified. Object-based scopes are not supported and must be mutated manually.
          */
@@ -880,11 +880,11 @@ declare module "chrome-debug-protocol" {
          /**
          * Lists all positions where step-in is possible for a current statement in a specified call frame
          */
-        getStepInPositions(params: Debugger.IGetStepInPositionsParams, cb?: ChromeCallBack<any>);
+        getStepInPositions(params: Debugger.IGetStepInPositionsParams, cb?: ChromeCallBack<{stepInPositions: Debugger.Location[];}>);
          /**
          * Returns call stack including variables changed since VM was paused. VM must be paused.
          */
-        getBacktrace(cb?: ChromeCallBack<any>);
+        getBacktrace(cb?: ChromeCallBack<{callFrames: Debugger.CallFrame[]; asyncStackTrace: Debugger.StackTrace;}>);
          /**
          * Makes backend skip steps in the sources with names matching given pattern. VM will try leave blacklisted scripts by performing 'step in' several times, finally resorting to 'step out' if unsuccessful.
          */
@@ -904,11 +904,11 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns detailed information about all <code>Promise</code>s that were created or updated after the <code>enablePromiseTracker</code> command, and have not been garbage collected yet.
          */
-        getPromises(cb?: ChromeCallBack<any>);
+        getPromises(cb?: ChromeCallBack<{promises: Debugger.PromiseDetails[];}>);
          /**
          * Returns <code>Promise</code> with specified ID.
          */
-        getPromiseById(params?: Debugger.IGetPromiseByIdParams, cb?: ChromeCallBack<any>);
+        getPromiseById(params?: Debugger.IGetPromiseByIdParams, cb?: ChromeCallBack<{promise: Runtime.RemoteObject;}>);
     }
     interface IDOMDebugger {
          /**
@@ -952,7 +952,7 @@ declare module "chrome-debug-protocol" {
          */
         setSamplingInterval(params: Profiler.ISetSamplingIntervalParams, cb?: ChromeCallBack<any>);
         start(cb?: ChromeCallBack<any>);
-        stop(cb?: ChromeCallBack<any>);
+        stop(cb?: ChromeCallBack<{profile: Profiler.CPUProfile;}>);
     }
     interface IHeapProfiler {
         enable(cb?: ChromeCallBack<any>);
@@ -961,8 +961,8 @@ declare module "chrome-debug-protocol" {
         stopTrackingHeapObjects(params?: HeapProfiler.IStopTrackingHeapObjectsParams, cb?: ChromeCallBack<any>);
         takeHeapSnapshot(params?: HeapProfiler.ITakeHeapSnapshotParams, cb?: ChromeCallBack<any>);
         collectGarbage(cb?: ChromeCallBack<any>);
-        getObjectByHeapObjectId(params?: HeapProfiler.IGetObjectByHeapObjectIdParams, cb?: ChromeCallBack<any>);
-        getHeapObjectId(params: HeapProfiler.IGetHeapObjectIdParams, cb?: ChromeCallBack<any>);
+        getObjectByHeapObjectId(params?: HeapProfiler.IGetObjectByHeapObjectIdParams, cb?: ChromeCallBack<{result: Runtime.RemoteObject;}>);
+        getHeapObjectId(params: HeapProfiler.IGetHeapObjectIdParams, cb?: ChromeCallBack<{heapSnapshotObjectId: string;}>);
     }
     interface IWorker {
         enable(cb?: ChromeCallBack<any>);
@@ -971,7 +971,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Tells whether browser supports workers inspection.
          */
-        canInspectWorkers(cb?: ChromeCallBack<any>);
+        canInspectWorkers(cb?: ChromeCallBack<{result: boolean;}>);
         connectToWorker(params: Worker.IConnectToWorkerParams, cb?: ChromeCallBack<any>);
         disconnectFromWorker(params: Worker.IDisconnectFromWorkerParams, cb?: ChromeCallBack<any>);
         setAutoconnectToWorkers(params: Worker.ISetAutoconnectToWorkersParams, cb?: ChromeCallBack<any>);
@@ -989,23 +989,23 @@ declare module "chrome-debug-protocol" {
          /**
          * Checks if there is any uninstrumented canvas in the inspected page.
          */
-        hasUninstrumentedCanvases(cb?: ChromeCallBack<any>);
+        hasUninstrumentedCanvases(cb?: ChromeCallBack<{result: boolean;}>);
          /**
          * Starts (or continues) a canvas frame capturing which will be stopped automatically after the next frame is prepared.
          */
-        captureFrame(params?: Canvas.ICaptureFrameParams, cb?: ChromeCallBack<any>);
+        captureFrame(params?: Canvas.ICaptureFrameParams, cb?: ChromeCallBack<{traceLogId: string;}>);
          /**
          * Starts (or continues) consecutive canvas frames capturing. The capturing is stopped by the corresponding stopCapturing command.
          */
-        startCapturing(params?: Canvas.IStartCapturingParams, cb?: ChromeCallBack<any>);
+        startCapturing(params?: Canvas.IStartCapturingParams, cb?: ChromeCallBack<{traceLogId: string;}>);
         stopCapturing(params: Canvas.IStopCapturingParams, cb?: ChromeCallBack<any>);
-        getTraceLog(params?: Canvas.IGetTraceLogParams, cb?: ChromeCallBack<any>);
-        replayTraceLog(params: Canvas.IReplayTraceLogParams, cb?: ChromeCallBack<any>);
-        getResourceState(params: Canvas.IGetResourceStateParams, cb?: ChromeCallBack<any>);
+        getTraceLog(params?: Canvas.IGetTraceLogParams, cb?: ChromeCallBack<{traceLog: Canvas.TraceLog;}>);
+        replayTraceLog(params: Canvas.IReplayTraceLogParams, cb?: ChromeCallBack<{resourceState: Canvas.ResourceState; replayTime: any;}>);
+        getResourceState(params: Canvas.IGetResourceStateParams, cb?: ChromeCallBack<{resourceState: Canvas.ResourceState;}>);
          /**
          * Evaluates a given trace call argument or its result.
          */
-        evaluateTraceLogCallArgument(params?: Canvas.IEvaluateTraceLogCallArgumentParams, cb?: ChromeCallBack<any>);
+        evaluateTraceLogCallArgument(params?: Canvas.IEvaluateTraceLogCallArgumentParams, cb?: ChromeCallBack<{result: Runtime.RemoteObject; resourceState: Canvas.ResourceState;}>);
     }
     interface IInput {
          /**
@@ -1037,28 +1037,28 @@ declare module "chrome-debug-protocol" {
          /**
          * Provides the reasons why the given layer was composited.
          */
-        compositingReasons(params: LayerTree.ICompositingReasonsParams, cb?: ChromeCallBack<any>);
+        compositingReasons(params: LayerTree.ICompositingReasonsParams, cb?: ChromeCallBack<{compositingReasons: string[];}>);
          /**
          * Returns the layer snapshot identifier.
          */
-        makeSnapshot(params: LayerTree.IMakeSnapshotParams, cb?: ChromeCallBack<any>);
+        makeSnapshot(params: LayerTree.IMakeSnapshotParams, cb?: ChromeCallBack<{snapshotId: string;}>);
          /**
          * Returns the snapshot identifier.
          */
-        loadSnapshot(params: LayerTree.ILoadSnapshotParams, cb?: ChromeCallBack<any>);
+        loadSnapshot(params: LayerTree.ILoadSnapshotParams, cb?: ChromeCallBack<{snapshotId: string;}>);
          /**
          * Releases layer snapshot captured by the back-end.
          */
         releaseSnapshot(params: LayerTree.IReleaseSnapshotParams, cb?: ChromeCallBack<any>);
-        profileSnapshot(params?: LayerTree.IProfileSnapshotParams, cb?: ChromeCallBack<any>);
+        profileSnapshot(params?: LayerTree.IProfileSnapshotParams, cb?: ChromeCallBack<{timings: any[][];}>);
          /**
          * Replays the layer snapshot and returns the resulting bitmap.
          */
-        replaySnapshot(params?: LayerTree.IReplaySnapshotParams, cb?: ChromeCallBack<any>);
+        replaySnapshot(params?: LayerTree.IReplaySnapshotParams, cb?: ChromeCallBack<{dataURL: string;}>);
          /**
          * Replays the layer snapshot and returns canvas log.
          */
-        snapshotCommandLog(params: LayerTree.ISnapshotCommandLogParams, cb?: ChromeCallBack<any>);
+        snapshotCommandLog(params: LayerTree.ISnapshotCommandLogParams, cb?: ChromeCallBack<{commandLog: any[];}>);
     }
     interface IDeviceOrientation {
          /**
@@ -1082,7 +1082,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Gets supported tracing categories.
          */
-        getCategories(cb?: ChromeCallBack<any>);
+        getCategories(cb?: ChromeCallBack<{categories: string[];}>);
     }
     interface IPower {
          /**
@@ -1096,11 +1096,11 @@ declare module "chrome-debug-protocol" {
          /**
          * Tells whether power profiling is supported.
          */
-        canProfilePower(cb?: ChromeCallBack<any>);
+        canProfilePower(cb?: ChromeCallBack<{result: boolean;}>);
          /**
          * Describes the accuracy level of the data provider.
          */
-        getAccuracyLevel(cb?: ChromeCallBack<any>);
+        getAccuracyLevel(cb?: ChromeCallBack<{result: string;}>);
     }
     interface IAnimation {
          /**
@@ -1110,23 +1110,23 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns animation players relevant to the node.
          */
-        getAnimationPlayersForNode(params: Animation.IGetAnimationPlayersForNodeParams, cb?: ChromeCallBack<any>);
+        getAnimationPlayersForNode(params: Animation.IGetAnimationPlayersForNodeParams, cb?: ChromeCallBack<{animationPlayers: Animation.AnimationPlayer[];}>);
          /**
          * Pauses animations relevant to the node.
          */
-        pauseAnimationPlayer(params: Animation.IPauseAnimationPlayerParams, cb?: ChromeCallBack<any>);
+        pauseAnimationPlayer(params: Animation.IPauseAnimationPlayerParams, cb?: ChromeCallBack<{animationPlayer: Animation.AnimationPlayer;}>);
          /**
          * Plays animations relevant to the node.
          */
-        playAnimationPlayer(params: Animation.IPlayAnimationPlayerParams, cb?: ChromeCallBack<any>);
+        playAnimationPlayer(params: Animation.IPlayAnimationPlayerParams, cb?: ChromeCallBack<{animationPlayer: Animation.AnimationPlayer;}>);
          /**
          * Sets the current time on given AnimationPlayer.
          */
-        setAnimationPlayerCurrentTime(params: Animation.ISetAnimationPlayerCurrentTimeParams, cb?: ChromeCallBack<any>);
+        setAnimationPlayerCurrentTime(params: Animation.ISetAnimationPlayerCurrentTimeParams, cb?: ChromeCallBack<{animationPlayer: Animation.AnimationPlayer;}>);
          /**
          * Gets the state of an AnimationPlayer.
          */
-        getAnimationPlayerState(params: Animation.IGetAnimationPlayerStateParams, cb?: ChromeCallBack<any>);
+        getAnimationPlayerState(params: Animation.IGetAnimationPlayerStateParams, cb?: ChromeCallBack<{currentTime: any; isRunning: boolean;}>);
          /**
          * Sets the parameters of recording for new animations events.
          */

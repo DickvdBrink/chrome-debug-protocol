@@ -180,7 +180,20 @@ for (var i = 0; i < domains.length; i++) {
                 domainInterfaceEmitter.write(`params${(optional ? "?" : "")}: ${domain.domain}.${name}`);
                 domainInterfaceEmitter.write(", ");
             }
-            domainInterfaceEmitter.write("cb?: ChromeCallBack<any>);");
+            if (command.returns && command.returns.length > 0) {
+                var returnType: string = "{";
+                for (var k = 0; k < command.returns.length; k++) {
+                    var ret = command.returns[k];
+                    returnType += `${ret.name}: ${getTypeScriptTypeFromParameter(ret, domain, true) };`;
+                    if (k < command.returns.length - 1) {
+                        returnType += " ";
+                    }
+                }
+                returnType += "}";
+                domainInterfaceEmitter.write(`cb?: ChromeCallBack<${returnType}>);`);
+            } else {
+                domainInterfaceEmitter.write("cb?: ChromeCallBack<any>);");
+            }
             domainInterfaceEmitter.writenewline();
         }
     }
