@@ -2,78 +2,165 @@
 import path = require("path");
 var protocol = require("../protocol.json");
 
-function indent(level: number) {
-    return Array((level * 4) + 1).join(" ")
-}
-
 var domains = protocol.domains;
-var chromeDomains = "";
 
-for (var i = 0; i < domains.length; i++) {
-    chromeDomains += `${indent(2)}${domains[i].domain}: I${domains[i].domain};\r\n`;
-}
+class Emitter {
+    private buffer: string[] = [];
+    private level: number = 0;
+    private newline: string;
+    private isInComment: boolean = false;
 
-var domainInterfaces = "";
-var methodParameterInterfaces = "";
-for (var i = 0; i < domains.length; i++) {
-    emitInterface(domains[i]);
-}
+    constructor(startLevel?: number) {
+        this.newline = "\r\n";
+        this.level = startLevel;
+    }
 
-function emitInterface(domain: any) {
-    methodParameterInterfaces += `${indent(1)}module ${domain.domain} {\r\n`;
-    domainInterfaces += `${indent(1)}interface I${domain.domain} {\r\n`;
-    var commands: any[] = domain.commands;
-    if (commands && commands.length > 0) {
-        for (var i = 0; i < commands.length; i++) {
-            emitCommand(domain.domain, commands[i]);
+    public indent() {
+        this.level++;
+    }
+
+    public unindent() {
+        this.level--;
+    }
+
+    public writeIndent() {
+        this.buffer.push(this.createIndentString());
+    }
+
+    public write(str: string) {
+        this.buffer.push(str);
+    }
+
+    public writenewline() {
+        this.buffer.push(this.newline);
+    }
+
+    public writeline(str: string) {
+        if (this.isInComment) {
+            this.buffer.push(`${this.createIndentString()} * ${str}${this.newline}`);
+        } else {
+            this.buffer.push(`${this.createIndentString()}${str}${this.newline}`);
         }
     }
-    methodParameterInterfaces += `${indent(1)}}\r\n`;
-    domainInterfaces += indent(1) + "}\r\n";
+
+    public writeStartMultilineComment() {
+        this.isInComment = true;
+        this.buffer.push(`${this.createIndentString()} /**${this.newline}`);
+    }
+
+    public writeEndMultilineComment() {
+        this.buffer.push(`${this.createIndentString()} */${this.newline}`);
+        this.isInComment = false;
+    }
+
+    public writeJsDocParameter(name: string, description: string) {
+        if (!this.isInComment) {
+            throw new Error("Not in a comment block")
+        }
+        this.buffer.push(` * @param ${name} ${description}`);
+    }
+
+    private createIndentString(level?: number) {
+        level = typeof level === "undefined" ? this.level : level;
+        return Array((level * 4) + 1).join(" ")
+    }
+
+    public toString() {
+        return this.buffer.join("");
+    }
 }
 
-function emitCommand(domainName: string, command: any) {
-    if (command.description) {
-        domainInterfaces += `${indent(2)} /**\r\n`;
-        domainInterfaces += `${indent(2)} * ${command.description}\r\n`;
-        domainInterfaces += `${indent(2)} */\r\n`;
+// Write "domain" properties for the ChromeDebugger class
+var domainEmitter = new Emitter(2);
+for (var i = 0; i < domains.length; i++) {
+    var domain = domains[i];
+    if (domain.description) {
+        domainEmitter.writeStartMultilineComment();
+        domainEmitter.writeline(domain.description);
+        domainEmitter.writeEndMultilineComment();
     }
-    domainInterfaces += indent(2) + command.name;
-    domainInterfaces += "(";
-    var parameters: any[] = command.parameters;
-    if (parameters && parameters.length > 0) {
-        var optional = containsOptionalParameters(parameters);
-        var commandName  = command.name.replace(/(.)/,(val) => val.toUpperCase());
-        var name = `I${domainName}${commandName}Params`;
-        domainInterfaces += `params${(optional ? "?" : "")}: ${domainName}.${name}`;
+    domainEmitter.writeline(`${domain.domain}: I${domain.domain};`);
+}
 
-        emitParameterInterface(name, parameters);
-        domainInterfaces += ", ";
+// Write a module wit the parameter interfaces
+var moduleEmitter = new Emitter(1);
+for (var i = 0; i < domains.length; i++) {
+    var domain = domains[i];
+
+    moduleEmitter.writeline(`module ${domain.domain} {`);
+    var commands: any[] = domain.commands;
+    if (commands && commands.length > 0) {
+        moduleEmitter.indent();
+        for (var j = 0; j < commands.length; j++) {
+            var command = commands[j];
+            var parameters: any[] = command.parameters;
+            if (parameters && parameters.length > 0) {
+                var optional = containsOptionalParameters(parameters);
+                var commandName = command.name.replace(/(.)/,(val) => val.toUpperCase());
+                var name = `I${commandName}Params`;
+                emitParameterInterface(name, parameters);
+            }
+        }
+        moduleEmitter.unindent();
     }
-    domainInterfaces += "cb?: Function";
-    domainInterfaces += ");\r\n";
+    moduleEmitter.writeline("}");
 }
 
 function emitParameterInterface(name: string, parameters: any[]) {
-    methodParameterInterfaces += `${indent(2)}export interface ${name} {\r\n`;
-    for (var j = 0; j < parameters.length; j++) {
-        var p = parameters[j];
+    moduleEmitter.writeline(`export interface ${name} {`);
+    moduleEmitter.indent();
+    for (var i = 0; i < parameters.length; i++) {
+        var p = parameters[i];
         if (p.description) {
-            methodParameterInterfaces += `${indent(3)} /**\r\n`;
-            methodParameterInterfaces += `${indent(3)} * ${p.description}\r\n`;
-            methodParameterInterfaces += `${indent(3)} */\r\n`;
+            moduleEmitter.writeStartMultilineComment();
+            moduleEmitter.writeline(p.description);
+            moduleEmitter.writeEndMultilineComment();
         }
 
-        methodParameterInterfaces += `${indent(3)}${p.name}${(p.optional ? "?" : "")}: ${getTypeScriptType(p.type)};\r\n`;
+        moduleEmitter.writeline(`${p.name}${(p.optional ? "?" : "")}: ${getTypeScriptTypeFromParameter(p)};`);
     }
-    methodParameterInterfaces += `${indent(2)}}\r\n`;
+    moduleEmitter.unindent();
+    moduleEmitter.writeline("}");
 }
 
-function getTypeScriptType(name: string) {
-    switch (name) {
+// Write the actual implementation interfaces with methodes, parameters and callbacks
+var domainInterfaceEmitter = new Emitter(1);
+for (var i = 0; i < domains.length; i++) {
+    var domain = domains[i];
+    domainInterfaceEmitter.writeline(`interface I${domain.domain} {`);
+    var commands: any[] = domain.commands;
+    domainInterfaceEmitter.indent();
+    if (commands && commands.length > 0) {
+        for (var j = 0; j < commands.length; j++) {
+            var command = commands[j];
+            var parameters: any[] = command.parameters;
+            if (command.description) {
+                domainInterfaceEmitter.writeStartMultilineComment();
+                domainInterfaceEmitter.writeline(command.description);
+                domainInterfaceEmitter.writeEndMultilineComment();
+            }
+            domainInterfaceEmitter.writeIndent();
+            domainInterfaceEmitter.write(`${command.name}(`);
+            if (parameters && parameters.length > 0) {
+                var optional = containsOptionalParameters(parameters);
+                var commandName  = command.name.replace(/(.)/,(val) => val.toUpperCase());
+                var name = `I${commandName}Params`;
+                domainInterfaceEmitter.write(`params${(optional ? "?" : "")}: ${domain.domain}.${name}`);
+                domainInterfaceEmitter.write(", ");
+            }
+            domainInterfaceEmitter.write("cb?: Function);");
+            domainInterfaceEmitter.writenewline();
+        }
+    }
+    domainInterfaceEmitter.unindent();
+    domainInterfaceEmitter.writeline("}")
+}
+
+function getTypeScriptTypeFromParameter(parameter: any) {
+    switch (parameter.type) {
         case "boolean":
         case "string":
-            return name;
+            return parameter.type;
         case "integer":
             return "number";
         case "array":
@@ -94,12 +181,11 @@ function containsOptionalParameters(params: any[]) {
 
 var maindts = fs.readFileSync(path.join(__dirname, "../main.d.ts"), "utf8");
 
+var importsEmitter = new Emitter(1);
 var importRegex = /import (?:.+;)/g;
-var imports = "";
-
 var match: RegExpExecArray;
 while ((match = importRegex.exec(maindts)) != null) {
-    imports += indent(1) + match[0] + "\r\n";
+    importsEmitter.writeline(match[0]);
 }
 
 var header = `// Type definitions for ws
@@ -113,8 +199,8 @@ var header = `// Type definitions for ws
 maindts = header + maindts.replace(/import (?:.+;)/g, "")
     .replace(
         /(class ChromeDebugger (?:.+) {)([\s\S]+?)([ ]+)}/g,
-        `$1$2${chromeDomains}$3}\r\n${domainInterfaces}${methodParameterInterfaces}`
-    ).replace(/declare module Chrome {/, "declare module \"chrome-debug-protocol\" {\r\n" + imports)
+        `$1$2${domainEmitter.toString()}$3}\r\n${domainInterfaceEmitter.toString()}${moduleEmitter.toString()}`
+    ).replace(/declare module Chrome {/, "declare module \"chrome-debug-protocol\" {\r\n" + importsEmitter .toString())
     .replace("export = Chrome;", "");
 
 fs.writeFileSync(path.join(__dirname, "typings/chrome-debug-protocol/chrome-debug-protocol.d.ts"), maindts);

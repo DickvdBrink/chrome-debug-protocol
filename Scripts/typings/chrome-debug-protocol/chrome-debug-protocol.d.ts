@@ -32,20 +32,50 @@ declare module "chrome-debug-protocol" {
         private implementCommand(domain, object, command);
         Inspector: IInspector;
         Memory: IMemory;
+         /**
+         * Actions and events related to the inspected page belong to the page domain.
+         */
         Page: IPage;
+         /**
+         * Runtime domain exposes JavaScript runtime by means of remote evaluation and mirror objects. Evaluation results are returned as mirror object that expose object type, string representation and unique identifier that can be used for further object reference. Original objects are maintained in memory unless they are either explicitly released or are released along with the other objects in their object group.
+         */
         Runtime: IRuntime;
+         /**
+         * Console domain defines methods and events for interaction with the JavaScript console. Console collects messages created by means of the <a href='http://getfirebug.com/wiki/index.php/Console_API'>JavaScript Console API</a>. One needs to enable this domain using <code>enable</code> command in order to start receiving the console messages. Browser collects messages issued while console domain is not enabled as well and reports them using <code>messageAdded</code> notification upon enabling.
+         */
         Console: IConsole;
+         /**
+         * Network domain allows tracking network activities of the page. It exposes information about http, file, data and other requests and responses, their headers, bodies, timing, etc.
+         */
         Network: INetwork;
         Database: IDatabase;
         IndexedDB: IIndexedDB;
         ServiceWorkerCache: IServiceWorkerCache;
+         /**
+         * Query and modify DOM storage.
+         */
         DOMStorage: IDOMStorage;
         ApplicationCache: IApplicationCache;
         FileSystem: IFileSystem;
+         /**
+         * This domain exposes DOM read/write operations. Each DOM Node is represented with its mirror object that has an <code>id</code>. This <code>id</code> can be used to get additional information on the Node, resolve it into the JavaScript object wrapper, etc. It is important that client receives DOM events only for the nodes that are known to the client. Backend keeps track of the nodes that were sent to the client and never sends the same node twice. It is client's responsibility to collect information about the nodes that were sent to the client.<p>Note that <code>iframe</code> owner elements will return corresponding document elements as their child nodes.</p>
+         */
         DOM: IDOM;
+         /**
+         * This domain exposes CSS read/write operations. All CSS objects (stylesheets, rules, and styles) have an associated <code>id</code> used in subsequent operations on the related object. Each object type has a specific <code>id</code> structure, and those are not interchangeable between objects of different kinds. CSS objects can be loaded using the <code>get*ForNode()</code> calls (which accept a DOM node id). A client can also discover all the existing stylesheets with the <code>getAllStyleSheets()</code> method (or keeping track of the <code>styleSheetAdded</code>/<code>styleSheetRemoved</code> events) and subsequently load the required stylesheet contents using the <code>getStyleSheet[Text]()</code> methods.
+         */
         CSS: ICSS;
+         /**
+         * Timeline provides its clients with instrumentation records that are generated during the page runtime. Timeline instrumentation can be started and stopped using corresponding commands. While timeline is started, it is generating timeline event records.
+         */
         Timeline: ITimeline;
+         /**
+         * Debugger domain exposes JavaScript debugging capabilities. It allows setting and removing breakpoints, stepping through execution, exploring stack traces, etc.
+         */
         Debugger: IDebugger;
+         /**
+         * DOM debugging allows setting breakpoints on particular DOM operations and events. JavaScript execution will stop on these operations as if there was a regular breakpoint set.
+         */
         DOMDebugger: IDOMDebugger;
         Profiler: IProfiler;
         HeapProfiler: IHeapProfiler;
@@ -84,16 +114,16 @@ declare module "chrome-debug-protocol" {
          * Disables page domain notifications.
          */
         disable(cb?: Function);
-        addScriptToEvaluateOnLoad(params: Page.IPageAddScriptToEvaluateOnLoadParams, cb?: Function);
-        removeScriptToEvaluateOnLoad(params: Page.IPageRemoveScriptToEvaluateOnLoadParams, cb?: Function);
+        addScriptToEvaluateOnLoad(params: Page.IAddScriptToEvaluateOnLoadParams, cb?: Function);
+        removeScriptToEvaluateOnLoad(params: Page.IRemoveScriptToEvaluateOnLoadParams, cb?: Function);
          /**
          * Reloads given page optionally ignoring the cache.
          */
-        reload(params?: Page.IPageReloadParams, cb?: Function);
+        reload(params?: Page.IReloadParams, cb?: Function);
          /**
          * Navigates current page to the given URL.
          */
-        navigate(params: Page.IPageNavigateParams, cb?: Function);
+        navigate(params: Page.INavigateParams, cb?: Function);
          /**
          * Returns navigation history for the current page.
          */
@@ -101,7 +131,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Navigates current page to the given history entry.
          */
-        navigateToHistoryEntry(params: Page.IPageNavigateToHistoryEntryParams, cb?: Function);
+        navigateToHistoryEntry(params: Page.INavigateToHistoryEntryParams, cb?: Function);
          /**
          * Returns all browser cookies. Depending on the backend support, will return detailed cookie information in the <code>cookies</code> field.
          */
@@ -109,7 +139,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Deletes browser cookie with given name, domain and path.
          */
-        deleteCookie(params: Page.IPageDeleteCookieParams, cb?: Function);
+        deleteCookie(params: Page.IDeleteCookieParams, cb?: Function);
          /**
          * Returns present frame / resource tree structure.
          */
@@ -117,19 +147,19 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns content of the given resource.
          */
-        getResourceContent(params: Page.IPageGetResourceContentParams, cb?: Function);
+        getResourceContent(params: Page.IGetResourceContentParams, cb?: Function);
          /**
          * Searches for given string in resource content.
          */
-        searchInResource(params?: Page.IPageSearchInResourceParams, cb?: Function);
+        searchInResource(params?: Page.ISearchInResourceParams, cb?: Function);
          /**
          * Sets given markup as the document's HTML.
          */
-        setDocumentContent(params: Page.IPageSetDocumentContentParams, cb?: Function);
+        setDocumentContent(params: Page.ISetDocumentContentParams, cb?: Function);
          /**
          * Overrides the values of device screen dimensions (window.screen.width, window.screen.height, window.innerWidth, window.innerHeight, and "device-width"/"device-height"-related CSS media query results).
          */
-        setDeviceMetricsOverride(params?: Page.IPageSetDeviceMetricsOverrideParams, cb?: Function);
+        setDeviceMetricsOverride(params?: Page.ISetDeviceMetricsOverrideParams, cb?: Function);
          /**
          * Clears the overriden device metrics.
          */
@@ -141,27 +171,27 @@ declare module "chrome-debug-protocol" {
          /**
          * Sets a specified page scale factor.
          */
-        setPageScaleFactor(params: Page.IPageSetPageScaleFactorParams, cb?: Function);
+        setPageScaleFactor(params: Page.ISetPageScaleFactorParams, cb?: Function);
          /**
          * Requests that backend shows paint rectangles
          */
-        setShowPaintRects(params: Page.IPageSetShowPaintRectsParams, cb?: Function);
+        setShowPaintRects(params: Page.ISetShowPaintRectsParams, cb?: Function);
          /**
          * Requests that backend shows debug borders on layers
          */
-        setShowDebugBorders(params: Page.IPageSetShowDebugBordersParams, cb?: Function);
+        setShowDebugBorders(params: Page.ISetShowDebugBordersParams, cb?: Function);
          /**
          * Requests that backend shows the FPS counter
          */
-        setShowFPSCounter(params: Page.IPageSetShowFPSCounterParams, cb?: Function);
+        setShowFPSCounter(params: Page.ISetShowFPSCounterParams, cb?: Function);
          /**
          * Requests that backend enables continuous painting
          */
-        setContinuousPaintingEnabled(params: Page.IPageSetContinuousPaintingEnabledParams, cb?: Function);
+        setContinuousPaintingEnabled(params: Page.ISetContinuousPaintingEnabledParams, cb?: Function);
          /**
          * Requests that backend shows scroll bottleneck rects
          */
-        setShowScrollBottleneckRects(params: Page.IPageSetShowScrollBottleneckRectsParams, cb?: Function);
+        setShowScrollBottleneckRects(params: Page.ISetShowScrollBottleneckRectsParams, cb?: Function);
          /**
          * Determines if scripts can be executed in the page.
          */
@@ -169,11 +199,11 @@ declare module "chrome-debug-protocol" {
          /**
          * Switches script execution in the page.
          */
-        setScriptExecutionDisabled(params: Page.IPageSetScriptExecutionDisabledParams, cb?: Function);
+        setScriptExecutionDisabled(params: Page.ISetScriptExecutionDisabledParams, cb?: Function);
          /**
          * Overrides the Geolocation Position or Error. Omitting any of the parameters emulates position unavailable.
          */
-        setGeolocationOverride(params?: Page.IPageSetGeolocationOverrideParams, cb?: Function);
+        setGeolocationOverride(params?: Page.ISetGeolocationOverrideParams, cb?: Function);
          /**
          * Clears the overriden Geolocation Position and Error.
          */
@@ -181,7 +211,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Overrides the Device Orientation.
          */
-        setDeviceOrientationOverride(params: Page.IPageSetDeviceOrientationOverrideParams, cb?: Function);
+        setDeviceOrientationOverride(params: Page.ISetDeviceOrientationOverrideParams, cb?: Function);
          /**
          * Clears the overridden Device Orientation.
          */
@@ -189,11 +219,11 @@ declare module "chrome-debug-protocol" {
          /**
          * Toggles mouse event-based touch event emulation.
          */
-        setTouchEmulationEnabled(params?: Page.IPageSetTouchEmulationEnabledParams, cb?: Function);
+        setTouchEmulationEnabled(params?: Page.ISetTouchEmulationEnabledParams, cb?: Function);
          /**
          * Emulates the given media for CSS media queries.
          */
-        setEmulatedMedia(params: Page.IPageSetEmulatedMediaParams, cb?: Function);
+        setEmulatedMedia(params: Page.ISetEmulatedMediaParams, cb?: Function);
          /**
          * Capture page screenshot.
          */
@@ -209,7 +239,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Starts sending each frame using the <code>screencastFrame</code> event.
          */
-        startScreencast(params?: Page.IPageStartScreencastParams, cb?: Function);
+        startScreencast(params?: Page.IStartScreencastParams, cb?: Function);
          /**
          * Stops sending each frame in the <code>screencastFrame</code>.
          */
@@ -217,11 +247,11 @@ declare module "chrome-debug-protocol" {
          /**
          * Acknowledges that a screencast frame has been received by the frontend.
          */
-        screencastFrameAck(params: Page.IPageScreencastFrameAckParams, cb?: Function);
+        screencastFrameAck(params: Page.IScreencastFrameAckParams, cb?: Function);
          /**
          * Starts recording each frame to the buffer.
          */
-        startRecordingFrames(params: Page.IPageStartRecordingFramesParams, cb?: Function);
+        startRecordingFrames(params: Page.IStartRecordingFramesParams, cb?: Function);
          /**
          * Stops recording, encodes and returns images.
          */
@@ -229,23 +259,23 @@ declare module "chrome-debug-protocol" {
          /**
          * Accepts or dismisses a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload).
          */
-        handleJavaScriptDialog(params?: Page.IPageHandleJavaScriptDialogParams, cb?: Function);
+        handleJavaScriptDialog(params?: Page.IHandleJavaScriptDialogParams, cb?: Function);
          /**
          * Paints viewport size upon main frame resize.
          */
-        setShowViewportSizeOnResize(params?: Page.IPageSetShowViewportSizeOnResizeParams, cb?: Function);
+        setShowViewportSizeOnResize(params?: Page.ISetShowViewportSizeOnResizeParams, cb?: Function);
          /**
          * Queries more detailed quota and usage data than Storage API provides.
          */
-        queryUsageAndQuota(params: Page.IPageQueryUsageAndQuotaParams, cb?: Function);
+        queryUsageAndQuota(params: Page.IQueryUsageAndQuotaParams, cb?: Function);
          /**
          * Shows / hides color picker
          */
-        setColorPickerEnabled(params: Page.IPageSetColorPickerEnabledParams, cb?: Function);
+        setColorPickerEnabled(params: Page.ISetColorPickerEnabledParams, cb?: Function);
          /**
          * Sets overlay message.
          */
-        setOverlayMessage(params?: Page.IPageSetOverlayMessageParams, cb?: Function);
+        setOverlayMessage(params?: Page.ISetOverlayMessageParams, cb?: Function);
          /**
          * Gets the playback rate of the document timeline.
          */
@@ -253,29 +283,29 @@ declare module "chrome-debug-protocol" {
          /**
          * Sets the playback rate of the document timeline.
          */
-        setAnimationsPlaybackRate(params: Page.IPageSetAnimationsPlaybackRateParams, cb?: Function);
+        setAnimationsPlaybackRate(params: Page.ISetAnimationsPlaybackRateParams, cb?: Function);
     }
     interface IRuntime {
          /**
          * Evaluates expression on global object.
          */
-        evaluate(params?: Runtime.IRuntimeEvaluateParams, cb?: Function);
+        evaluate(params?: Runtime.IEvaluateParams, cb?: Function);
          /**
          * Calls function with given declaration on the given object. Object group of the result is inherited from the target object.
          */
-        callFunctionOn(params?: Runtime.IRuntimeCallFunctionOnParams, cb?: Function);
+        callFunctionOn(params?: Runtime.ICallFunctionOnParams, cb?: Function);
          /**
          * Returns properties of a given object. Object group of the result is inherited from the target object.
          */
-        getProperties(params?: Runtime.IRuntimeGetPropertiesParams, cb?: Function);
+        getProperties(params?: Runtime.IGetPropertiesParams, cb?: Function);
          /**
          * Releases remote object with given id.
          */
-        releaseObject(params: Runtime.IRuntimeReleaseObjectParams, cb?: Function);
+        releaseObject(params: Runtime.IReleaseObjectParams, cb?: Function);
          /**
          * Releases all remote objects that belong to a given group.
          */
-        releaseObjectGroup(params: Runtime.IRuntimeReleaseObjectGroupParams, cb?: Function);
+        releaseObjectGroup(params: Runtime.IReleaseObjectGroupParams, cb?: Function);
          /**
          * Tells inspected instance(worker or page) that it can run in case it was started paused.
          */
@@ -289,7 +319,7 @@ declare module "chrome-debug-protocol" {
          */
         disable(cb?: Function);
         isRunRequired(cb?: Function);
-        setCustomObjectFormatterEnabled(params: Runtime.IRuntimeSetCustomObjectFormatterEnabledParams, cb?: Function);
+        setCustomObjectFormatterEnabled(params: Runtime.ISetCustomObjectFormatterEnabledParams, cb?: Function);
     }
     interface IConsole {
          /**
@@ -307,16 +337,16 @@ declare module "chrome-debug-protocol" {
          /**
          * Toggles monitoring of XMLHttpRequest. If <code>true</code>, console will receive messages upon each XHR issued.
          */
-        setMonitoringXHREnabled(params: Console.IConsoleSetMonitoringXHREnabledParams, cb?: Function);
+        setMonitoringXHREnabled(params: Console.ISetMonitoringXHREnabledParams, cb?: Function);
          /**
          * Enables console to refer to the node with given id via $x (see Command Line API for more details $x functions).
          */
-        addInspectedNode(params: Console.IConsoleAddInspectedNodeParams, cb?: Function);
-        addInspectedHeapObject(params: Console.IConsoleAddInspectedHeapObjectParams, cb?: Function);
+        addInspectedNode(params: Console.IAddInspectedNodeParams, cb?: Function);
+        addInspectedHeapObject(params: Console.IAddInspectedHeapObjectParams, cb?: Function);
          /**
          * Sets last evaluation result in console. Can be accessed via <code>$_</code> command line API.
          */
-        setLastEvaluationResult(params: Console.IConsoleSetLastEvaluationResultParams, cb?: Function);
+        setLastEvaluationResult(params: Console.ISetLastEvaluationResultParams, cb?: Function);
     }
     interface INetwork {
          /**
@@ -330,19 +360,19 @@ declare module "chrome-debug-protocol" {
          /**
          * Allows overriding user agent with the given string.
          */
-        setUserAgentOverride(params: Network.INetworkSetUserAgentOverrideParams, cb?: Function);
+        setUserAgentOverride(params: Network.ISetUserAgentOverrideParams, cb?: Function);
          /**
          * Specifies whether to always send extra HTTP headers with the requests from this page.
          */
-        setExtraHTTPHeaders(params: Network.INetworkSetExtraHTTPHeadersParams, cb?: Function);
+        setExtraHTTPHeaders(params: Network.ISetExtraHTTPHeadersParams, cb?: Function);
          /**
          * Returns content served for the given request.
          */
-        getResponseBody(params: Network.INetworkGetResponseBodyParams, cb?: Function);
+        getResponseBody(params: Network.IGetResponseBodyParams, cb?: Function);
          /**
          * This method sends a new XMLHttpRequest which is identical to the original one. The following parameters should be identical: method, url, async, request body, extra headers, withCredentials attribute, user, password.
          */
-        replayXHR(params: Network.INetworkReplayXHRParams, cb?: Function);
+        replayXHR(params: Network.IReplayXHRParams, cb?: Function);
          /**
          * Tells whether clearing browser cache is supported.
          */
@@ -366,15 +396,15 @@ declare module "chrome-debug-protocol" {
          /**
          * Activates emulation of network conditions.
          */
-        emulateNetworkConditions(params: Network.INetworkEmulateNetworkConditionsParams, cb?: Function);
+        emulateNetworkConditions(params: Network.IEmulateNetworkConditionsParams, cb?: Function);
          /**
          * Toggles ignoring cache for each request. If <code>true</code>, cache will not be used.
          */
-        setCacheDisabled(params: Network.INetworkSetCacheDisabledParams, cb?: Function);
+        setCacheDisabled(params: Network.ISetCacheDisabledParams, cb?: Function);
          /**
          * Loads a resource in the context of a frame on the inspected page without cross origin checks.
          */
-        loadResourceForFrontend(params?: Network.INetworkLoadResourceForFrontendParams, cb?: Function);
+        loadResourceForFrontend(params?: Network.ILoadResourceForFrontendParams, cb?: Function);
     }
     interface IDatabase {
          /**
@@ -385,8 +415,8 @@ declare module "chrome-debug-protocol" {
          * Disables database tracking, prevents database events from being sent to the client.
          */
         disable(cb?: Function);
-        getDatabaseTableNames(params: Database.IDatabaseGetDatabaseTableNamesParams, cb?: Function);
-        executeSQL(params: Database.IDatabaseExecuteSQLParams, cb?: Function);
+        getDatabaseTableNames(params: Database.IGetDatabaseTableNamesParams, cb?: Function);
+        executeSQL(params: Database.IExecuteSQLParams, cb?: Function);
     }
     interface IIndexedDB {
          /**
@@ -400,19 +430,19 @@ declare module "chrome-debug-protocol" {
          /**
          * Requests database names for given security origin.
          */
-        requestDatabaseNames(params: IndexedDB.IIndexedDBRequestDatabaseNamesParams, cb?: Function);
+        requestDatabaseNames(params: IndexedDB.IRequestDatabaseNamesParams, cb?: Function);
          /**
          * Requests database with given name in given frame.
          */
-        requestDatabase(params: IndexedDB.IIndexedDBRequestDatabaseParams, cb?: Function);
+        requestDatabase(params: IndexedDB.IRequestDatabaseParams, cb?: Function);
          /**
          * Requests data from object store or index.
          */
-        requestData(params?: IndexedDB.IIndexedDBRequestDataParams, cb?: Function);
+        requestData(params?: IndexedDB.IRequestDataParams, cb?: Function);
          /**
          * Clears all entries from an object store.
          */
-        clearObjectStore(params: IndexedDB.IIndexedDBClearObjectStoreParams, cb?: Function);
+        clearObjectStore(params: IndexedDB.IClearObjectStoreParams, cb?: Function);
     }
     interface IServiceWorkerCache {
          /**
@@ -422,11 +452,11 @@ declare module "chrome-debug-protocol" {
          /**
          * Requests data from cache.
          */
-        requestEntries(params: ServiceWorkerCache.IServiceWorkerCacheRequestEntriesParams, cb?: Function);
+        requestEntries(params: ServiceWorkerCache.IRequestEntriesParams, cb?: Function);
          /**
          * Deletes a cache.
          */
-        deleteCache(params: ServiceWorkerCache.IServiceWorkerCacheDeleteCacheParams, cb?: Function);
+        deleteCache(params: ServiceWorkerCache.IDeleteCacheParams, cb?: Function);
     }
     interface IDOMStorage {
          /**
@@ -437,9 +467,9 @@ declare module "chrome-debug-protocol" {
          * Disables storage tracking, prevents storage events from being sent to the client.
          */
         disable(cb?: Function);
-        getDOMStorageItems(params: DOMStorage.IDOMStorageGetDOMStorageItemsParams, cb?: Function);
-        setDOMStorageItem(params: DOMStorage.IDOMStorageSetDOMStorageItemParams, cb?: Function);
-        removeDOMStorageItem(params: DOMStorage.IDOMStorageRemoveDOMStorageItemParams, cb?: Function);
+        getDOMStorageItems(params: DOMStorage.IGetDOMStorageItemsParams, cb?: Function);
+        setDOMStorageItem(params: DOMStorage.ISetDOMStorageItemParams, cb?: Function);
+        removeDOMStorageItem(params: DOMStorage.IRemoveDOMStorageItemParams, cb?: Function);
     }
     interface IApplicationCache {
          /**
@@ -453,11 +483,11 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns manifest URL for document in the given frame.
          */
-        getManifestForFrame(params: ApplicationCache.IApplicationCacheGetManifestForFrameParams, cb?: Function);
+        getManifestForFrame(params: ApplicationCache.IGetManifestForFrameParams, cb?: Function);
          /**
          * Returns relevant application cache data for the document in given frame.
          */
-        getApplicationCacheForFrame(params: ApplicationCache.IApplicationCacheGetApplicationCacheForFrameParams, cb?: Function);
+        getApplicationCacheForFrame(params: ApplicationCache.IGetApplicationCacheForFrameParams, cb?: Function);
     }
     interface IFileSystem {
          /**
@@ -471,23 +501,23 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns root directory of the FileSystem, if exists.
          */
-        requestFileSystemRoot(params: FileSystem.IFileSystemRequestFileSystemRootParams, cb?: Function);
+        requestFileSystemRoot(params: FileSystem.IRequestFileSystemRootParams, cb?: Function);
          /**
          * Returns content of the directory.
          */
-        requestDirectoryContent(params: FileSystem.IFileSystemRequestDirectoryContentParams, cb?: Function);
+        requestDirectoryContent(params: FileSystem.IRequestDirectoryContentParams, cb?: Function);
          /**
          * Returns metadata of the entry.
          */
-        requestMetadata(params: FileSystem.IFileSystemRequestMetadataParams, cb?: Function);
+        requestMetadata(params: FileSystem.IRequestMetadataParams, cb?: Function);
          /**
          * Returns content of the file. Result should be sliced into [start, end).
          */
-        requestFileContent(params?: FileSystem.IFileSystemRequestFileContentParams, cb?: Function);
+        requestFileContent(params?: FileSystem.IRequestFileContentParams, cb?: Function);
          /**
          * Deletes specified entry. If the entry is a directory, the agent deletes children recursively.
          */
-        deleteEntry(params: FileSystem.IFileSystemDeleteEntryParams, cb?: Function);
+        deleteEntry(params: FileSystem.IDeleteEntryParams, cb?: Function);
     }
     interface IDOM {
          /**
@@ -505,87 +535,87 @@ declare module "chrome-debug-protocol" {
          /**
          * Requests that children of the node with given id are returned to the caller in form of <code>setChildNodes</code> events where not only immediate children are retrieved, but all children down to the specified depth.
          */
-        requestChildNodes(params?: DOM.IDOMRequestChildNodesParams, cb?: Function);
+        requestChildNodes(params?: DOM.IRequestChildNodesParams, cb?: Function);
          /**
          * Returns distribution data for all insertion points in shadow tree of the given node.
          */
-        requestShadowHostDistributedNodes(params: DOM.IDOMRequestShadowHostDistributedNodesParams, cb?: Function);
+        requestShadowHostDistributedNodes(params: DOM.IRequestShadowHostDistributedNodesParams, cb?: Function);
          /**
          * Executes <code>querySelector</code> on a given node.
          */
-        querySelector(params: DOM.IDOMQuerySelectorParams, cb?: Function);
+        querySelector(params: DOM.IQuerySelectorParams, cb?: Function);
          /**
          * Executes <code>querySelectorAll</code> on a given node.
          */
-        querySelectorAll(params: DOM.IDOMQuerySelectorAllParams, cb?: Function);
+        querySelectorAll(params: DOM.IQuerySelectorAllParams, cb?: Function);
          /**
          * Sets node name for a node with given id.
          */
-        setNodeName(params: DOM.IDOMSetNodeNameParams, cb?: Function);
+        setNodeName(params: DOM.ISetNodeNameParams, cb?: Function);
          /**
          * Sets node value for a node with given id.
          */
-        setNodeValue(params: DOM.IDOMSetNodeValueParams, cb?: Function);
+        setNodeValue(params: DOM.ISetNodeValueParams, cb?: Function);
          /**
          * Removes node with given id.
          */
-        removeNode(params: DOM.IDOMRemoveNodeParams, cb?: Function);
+        removeNode(params: DOM.IRemoveNodeParams, cb?: Function);
          /**
          * Sets attribute for an element with given id.
          */
-        setAttributeValue(params: DOM.IDOMSetAttributeValueParams, cb?: Function);
+        setAttributeValue(params: DOM.ISetAttributeValueParams, cb?: Function);
          /**
          * Sets attributes on element with given id. This method is useful when user edits some existing attribute value and types in several attribute name/value pairs.
          */
-        setAttributesAsText(params?: DOM.IDOMSetAttributesAsTextParams, cb?: Function);
+        setAttributesAsText(params?: DOM.ISetAttributesAsTextParams, cb?: Function);
          /**
          * Removes attribute with given name from an element with given id.
          */
-        removeAttribute(params: DOM.IDOMRemoveAttributeParams, cb?: Function);
+        removeAttribute(params: DOM.IRemoveAttributeParams, cb?: Function);
          /**
          * Returns event listeners relevant to the node.
          */
-        getEventListenersForNode(params?: DOM.IDOMGetEventListenersForNodeParams, cb?: Function);
+        getEventListenersForNode(params?: DOM.IGetEventListenersForNodeParams, cb?: Function);
          /**
          * Returns node's HTML markup.
          */
-        getOuterHTML(params: DOM.IDOMGetOuterHTMLParams, cb?: Function);
+        getOuterHTML(params: DOM.IGetOuterHTMLParams, cb?: Function);
          /**
          * Sets node HTML markup, returns new node id.
          */
-        setOuterHTML(params: DOM.IDOMSetOuterHTMLParams, cb?: Function);
+        setOuterHTML(params: DOM.ISetOuterHTMLParams, cb?: Function);
          /**
          * Searches for a given string in the DOM tree. Use <code>getSearchResults</code> to access search results or <code>cancelSearch</code> to end this search session.
          */
-        performSearch(params?: DOM.IDOMPerformSearchParams, cb?: Function);
+        performSearch(params?: DOM.IPerformSearchParams, cb?: Function);
          /**
          * Returns search results from given <code>fromIndex</code> to given <code>toIndex</code> from the sarch with the given identifier.
          */
-        getSearchResults(params: DOM.IDOMGetSearchResultsParams, cb?: Function);
+        getSearchResults(params: DOM.IGetSearchResultsParams, cb?: Function);
          /**
          * Discards search results from the session with the given id. <code>getSearchResults</code> should no longer be called for that search.
          */
-        discardSearchResults(params: DOM.IDOMDiscardSearchResultsParams, cb?: Function);
+        discardSearchResults(params: DOM.IDiscardSearchResultsParams, cb?: Function);
          /**
          * Requests that the node is sent to the caller given the JavaScript node object reference. All nodes that form the path from the node to the root are also sent to the client as a series of <code>setChildNodes</code> notifications.
          */
-        requestNode(params: DOM.IDOMRequestNodeParams, cb?: Function);
+        requestNode(params: DOM.IRequestNodeParams, cb?: Function);
          /**
          * Enters the 'inspect' mode. In this mode, elements that user is hovering over are highlighted. Backend then generates 'inspectNodeRequested' event upon element selection.
          */
-        setInspectModeEnabled(params?: DOM.IDOMSetInspectModeEnabledParams, cb?: Function);
+        setInspectModeEnabled(params?: DOM.ISetInspectModeEnabledParams, cb?: Function);
          /**
          * Highlights given rectangle. Coordinates are absolute with respect to the main frame viewport.
          */
-        highlightRect(params?: DOM.IDOMHighlightRectParams, cb?: Function);
+        highlightRect(params?: DOM.IHighlightRectParams, cb?: Function);
          /**
          * Highlights given quad. Coordinates are absolute with respect to the main frame viewport.
          */
-        highlightQuad(params?: DOM.IDOMHighlightQuadParams, cb?: Function);
+        highlightQuad(params?: DOM.IHighlightQuadParams, cb?: Function);
          /**
          * Highlights DOM node with given id or with the given JavaScript object wrapper. Either nodeId or objectId must be specified.
          */
-        highlightNode(params?: DOM.IDOMHighlightNodeParams, cb?: Function);
+        highlightNode(params?: DOM.IHighlightNodeParams, cb?: Function);
          /**
          * Hides DOM node highlight.
          */
@@ -593,31 +623,31 @@ declare module "chrome-debug-protocol" {
          /**
          * Highlights owner element of the frame with given id.
          */
-        highlightFrame(params?: DOM.IDOMHighlightFrameParams, cb?: Function);
+        highlightFrame(params?: DOM.IHighlightFrameParams, cb?: Function);
          /**
          * Requests that the node is sent to the caller given its path. // FIXME, use XPath
          */
-        pushNodeByPathToFrontend(params: DOM.IDOMPushNodeByPathToFrontendParams, cb?: Function);
+        pushNodeByPathToFrontend(params: DOM.IPushNodeByPathToFrontendParams, cb?: Function);
          /**
          * Requests that a batch of nodes is sent to the caller given their backend node ids.
          */
-        pushNodesByBackendIdsToFrontend(params: DOM.IDOMPushNodesByBackendIdsToFrontendParams, cb?: Function);
+        pushNodesByBackendIdsToFrontend(params: DOM.IPushNodesByBackendIdsToFrontendParams, cb?: Function);
          /**
          * Resolves JavaScript node object for given node id.
          */
-        resolveNode(params?: DOM.IDOMResolveNodeParams, cb?: Function);
+        resolveNode(params?: DOM.IResolveNodeParams, cb?: Function);
          /**
          * Returns attributes for the specified node.
          */
-        getAttributes(params: DOM.IDOMGetAttributesParams, cb?: Function);
+        getAttributes(params: DOM.IGetAttributesParams, cb?: Function);
          /**
          * Creates a deep copy of the specified node and places it into the target container before the given anchor.
          */
-        copyTo(params?: DOM.IDOMCopyToParams, cb?: Function);
+        copyTo(params?: DOM.ICopyToParams, cb?: Function);
          /**
          * Moves node into the new container, places it before the given anchor.
          */
-        moveTo(params?: DOM.IDOMMoveToParams, cb?: Function);
+        moveTo(params?: DOM.IMoveToParams, cb?: Function);
          /**
          * Undoes the last performed action.
          */
@@ -633,23 +663,23 @@ declare module "chrome-debug-protocol" {
          /**
          * Focuses the given element.
          */
-        focus(params: DOM.IDOMFocusParams, cb?: Function);
+        focus(params: DOM.IFocusParams, cb?: Function);
          /**
          * Sets files for the given file input element.
          */
-        setFileInputFiles(params: DOM.IDOMSetFileInputFilesParams, cb?: Function);
+        setFileInputFiles(params: DOM.ISetFileInputFilesParams, cb?: Function);
          /**
          * Returns boxes for the currently selected nodes.
          */
-        getBoxModel(params: DOM.IDOMGetBoxModelParams, cb?: Function);
+        getBoxModel(params: DOM.IGetBoxModelParams, cb?: Function);
          /**
          * Returns node id at given location.
          */
-        getNodeForLocation(params: DOM.IDOMGetNodeForLocationParams, cb?: Function);
+        getNodeForLocation(params: DOM.IGetNodeForLocationParams, cb?: Function);
          /**
          * Returns the id of the nearest ancestor that is a relayout boundary.
          */
-        getRelayoutBoundary(params: DOM.IDOMGetRelayoutBoundaryParams, cb?: Function);
+        getRelayoutBoundary(params: DOM.IGetRelayoutBoundaryParams, cb?: Function);
     }
     interface ICSS {
          /**
@@ -663,51 +693,51 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns requested styles for a DOM node identified by <code>nodeId</code>.
          */
-        getMatchedStylesForNode(params?: CSS.ICSSGetMatchedStylesForNodeParams, cb?: Function);
+        getMatchedStylesForNode(params?: CSS.IGetMatchedStylesForNodeParams, cb?: Function);
          /**
          * Returns the styles defined inline (explicitly in the "style" attribute and implicitly, using DOM attributes) for a DOM node identified by <code>nodeId</code>.
          */
-        getInlineStylesForNode(params: CSS.ICSSGetInlineStylesForNodeParams, cb?: Function);
+        getInlineStylesForNode(params: CSS.IGetInlineStylesForNodeParams, cb?: Function);
          /**
          * Returns the computed style for a DOM node identified by <code>nodeId</code>.
          */
-        getComputedStyleForNode(params: CSS.ICSSGetComputedStyleForNodeParams, cb?: Function);
+        getComputedStyleForNode(params: CSS.IGetComputedStyleForNodeParams, cb?: Function);
          /**
          * Requests information about platform fonts which we used to render child TextNodes in the given node.
          */
-        getPlatformFontsForNode(params: CSS.ICSSGetPlatformFontsForNodeParams, cb?: Function);
+        getPlatformFontsForNode(params: CSS.IGetPlatformFontsForNodeParams, cb?: Function);
          /**
          * Returns the current textual content and the URL for a stylesheet.
          */
-        getStyleSheetText(params: CSS.ICSSGetStyleSheetTextParams, cb?: Function);
+        getStyleSheetText(params: CSS.IGetStyleSheetTextParams, cb?: Function);
          /**
          * Sets the new stylesheet text.
          */
-        setStyleSheetText(params: CSS.ICSSSetStyleSheetTextParams, cb?: Function);
+        setStyleSheetText(params: CSS.ISetStyleSheetTextParams, cb?: Function);
          /**
          * Either replaces a property identified by <code>styleSheetId</code> and <code>range</code> with <code>text</code> or inserts a new property <code>text</code> at the position identified by an empty <code>range</code>.
          */
-        setPropertyText(params: CSS.ICSSSetPropertyTextParams, cb?: Function);
+        setPropertyText(params: CSS.ISetPropertyTextParams, cb?: Function);
          /**
          * Modifies the rule selector.
          */
-        setRuleSelector(params: CSS.ICSSSetRuleSelectorParams, cb?: Function);
+        setRuleSelector(params: CSS.ISetRuleSelectorParams, cb?: Function);
          /**
          * Modifies the rule selector.
          */
-        setMediaText(params: CSS.ICSSSetMediaTextParams, cb?: Function);
+        setMediaText(params: CSS.ISetMediaTextParams, cb?: Function);
          /**
          * Creates a new special "via-inspector" stylesheet in the frame with given <code>frameId</code>.
          */
-        createStyleSheet(params: CSS.ICSSCreateStyleSheetParams, cb?: Function);
+        createStyleSheet(params: CSS.ICreateStyleSheetParams, cb?: Function);
          /**
          * Inserts a new rule with the given <code>ruleText</code> in a stylesheet with given <code>styleSheetId</code>, at the position specified by <code>location</code>.
          */
-        addRule(params: CSS.ICSSAddRuleParams, cb?: Function);
+        addRule(params: CSS.IAddRuleParams, cb?: Function);
          /**
          * Ensures that the given node will have specified pseudo-classes whenever its style is computed by the browser.
          */
-        forcePseudoState(params: CSS.ICSSForcePseudoStateParams, cb?: Function);
+        forcePseudoState(params: CSS.IForcePseudoStateParams, cb?: Function);
          /**
          * Returns all media queries parsed by the rendering engine.
          */
@@ -725,7 +755,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Starts capturing instrumentation events.
          */
-        start(params?: Timeline.ITimelineStartParams, cb?: Function);
+        start(params?: Timeline.IStartParams, cb?: Function);
          /**
          * Stops capturing instrumentation events.
          */
@@ -743,27 +773,27 @@ declare module "chrome-debug-protocol" {
          /**
          * Activates / deactivates all breakpoints on the page.
          */
-        setBreakpointsActive(params: Debugger.IDebuggerSetBreakpointsActiveParams, cb?: Function);
+        setBreakpointsActive(params: Debugger.ISetBreakpointsActiveParams, cb?: Function);
          /**
          * Makes page not interrupt on any pauses (breakpoint, exception, dom exception etc).
          */
-        setSkipAllPauses(params?: Debugger.IDebuggerSetSkipAllPausesParams, cb?: Function);
+        setSkipAllPauses(params?: Debugger.ISetSkipAllPausesParams, cb?: Function);
          /**
          * Sets JavaScript breakpoint at given location specified either by URL or URL regex. Once this command is issued, all existing parsed scripts will have breakpoints resolved and returned in <code>locations</code> property. Further matching script parsing will result in subsequent <code>breakpointResolved</code> events issued. This logical breakpoint will survive page reloads.
          */
-        setBreakpointByUrl(params?: Debugger.IDebuggerSetBreakpointByUrlParams, cb?: Function);
+        setBreakpointByUrl(params?: Debugger.ISetBreakpointByUrlParams, cb?: Function);
          /**
          * Sets JavaScript breakpoint at a given location.
          */
-        setBreakpoint(params?: Debugger.IDebuggerSetBreakpointParams, cb?: Function);
+        setBreakpoint(params?: Debugger.ISetBreakpointParams, cb?: Function);
          /**
          * Removes JavaScript breakpoint.
          */
-        removeBreakpoint(params: Debugger.IDebuggerRemoveBreakpointParams, cb?: Function);
+        removeBreakpoint(params: Debugger.IRemoveBreakpointParams, cb?: Function);
          /**
          * Continues execution until specific location is reached.
          */
-        continueToLocation(params?: Debugger.IDebuggerContinueToLocationParams, cb?: Function);
+        continueToLocation(params?: Debugger.IContinueToLocationParams, cb?: Function);
          /**
          * Steps over the statement.
          */
@@ -791,7 +821,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Searches for given string in script content.
          */
-        searchInContent(params?: Debugger.IDebuggerSearchInContentParams, cb?: Function);
+        searchInContent(params?: Debugger.ISearchInContentParams, cb?: Function);
          /**
          * Always returns true.
          */
@@ -799,51 +829,51 @@ declare module "chrome-debug-protocol" {
          /**
          * Edits JavaScript source live.
          */
-        setScriptSource(params?: Debugger.IDebuggerSetScriptSourceParams, cb?: Function);
+        setScriptSource(params?: Debugger.ISetScriptSourceParams, cb?: Function);
          /**
          * Restarts particular call frame from the beginning.
          */
-        restartFrame(params: Debugger.IDebuggerRestartFrameParams, cb?: Function);
+        restartFrame(params: Debugger.IRestartFrameParams, cb?: Function);
          /**
          * Returns source for the script with given id.
          */
-        getScriptSource(params: Debugger.IDebuggerGetScriptSourceParams, cb?: Function);
+        getScriptSource(params: Debugger.IGetScriptSourceParams, cb?: Function);
          /**
          * Returns detailed information on given function.
          */
-        getFunctionDetails(params: Debugger.IDebuggerGetFunctionDetailsParams, cb?: Function);
+        getFunctionDetails(params: Debugger.IGetFunctionDetailsParams, cb?: Function);
          /**
          * Returns detailed information on given generator object.
          */
-        getGeneratorObjectDetails(params: Debugger.IDebuggerGetGeneratorObjectDetailsParams, cb?: Function);
+        getGeneratorObjectDetails(params: Debugger.IGetGeneratorObjectDetailsParams, cb?: Function);
          /**
          * Returns entries of given collection.
          */
-        getCollectionEntries(params: Debugger.IDebuggerGetCollectionEntriesParams, cb?: Function);
+        getCollectionEntries(params: Debugger.IGetCollectionEntriesParams, cb?: Function);
          /**
          * Defines pause on exceptions state. Can be set to stop on all exceptions, uncaught exceptions or no exceptions. Initial pause on exceptions state is <code>none</code>.
          */
-        setPauseOnExceptions(params: Debugger.IDebuggerSetPauseOnExceptionsParams, cb?: Function);
+        setPauseOnExceptions(params: Debugger.ISetPauseOnExceptionsParams, cb?: Function);
          /**
          * Evaluates expression on a given call frame.
          */
-        evaluateOnCallFrame(params?: Debugger.IDebuggerEvaluateOnCallFrameParams, cb?: Function);
+        evaluateOnCallFrame(params?: Debugger.IEvaluateOnCallFrameParams, cb?: Function);
          /**
          * Compiles expression.
          */
-        compileScript(params?: Debugger.IDebuggerCompileScriptParams, cb?: Function);
+        compileScript(params?: Debugger.ICompileScriptParams, cb?: Function);
          /**
          * Runs script with given id in a given context.
          */
-        runScript(params?: Debugger.IDebuggerRunScriptParams, cb?: Function);
+        runScript(params?: Debugger.IRunScriptParams, cb?: Function);
          /**
          * Changes value of variable in a callframe or a closure. Either callframe or function must be specified. Object-based scopes are not supported and must be mutated manually.
          */
-        setVariableValue(params?: Debugger.IDebuggerSetVariableValueParams, cb?: Function);
+        setVariableValue(params?: Debugger.ISetVariableValueParams, cb?: Function);
          /**
          * Lists all positions where step-in is possible for a current statement in a specified call frame
          */
-        getStepInPositions(params: Debugger.IDebuggerGetStepInPositionsParams, cb?: Function);
+        getStepInPositions(params: Debugger.IGetStepInPositionsParams, cb?: Function);
          /**
          * Returns call stack including variables changed since VM was paused. VM must be paused.
          */
@@ -851,15 +881,15 @@ declare module "chrome-debug-protocol" {
          /**
          * Makes backend skip steps in the sources with names matching given pattern. VM will try leave blacklisted scripts by performing 'step in' several times, finally resorting to 'step out' if unsuccessful.
          */
-        skipStackFrames(params?: Debugger.IDebuggerSkipStackFramesParams, cb?: Function);
+        skipStackFrames(params?: Debugger.ISkipStackFramesParams, cb?: Function);
          /**
          * Enables or disables async call stacks tracking.
          */
-        setAsyncCallStackDepth(params: Debugger.IDebuggerSetAsyncCallStackDepthParams, cb?: Function);
+        setAsyncCallStackDepth(params: Debugger.ISetAsyncCallStackDepthParams, cb?: Function);
          /**
          * Enables promise tracking, information about <code>Promise</code>s created or updated will now be stored on the backend.
          */
-        enablePromiseTracker(params?: Debugger.IDebuggerEnablePromiseTrackerParams, cb?: Function);
+        enablePromiseTracker(params?: Debugger.IEnablePromiseTrackerParams, cb?: Function);
          /**
          * Disables promise tracking.
          */
@@ -871,41 +901,41 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns <code>Promise</code> with specified ID.
          */
-        getPromiseById(params?: Debugger.IDebuggerGetPromiseByIdParams, cb?: Function);
+        getPromiseById(params?: Debugger.IGetPromiseByIdParams, cb?: Function);
     }
     interface IDOMDebugger {
          /**
          * Sets breakpoint on particular operation with DOM.
          */
-        setDOMBreakpoint(params: DOMDebugger.IDOMDebuggerSetDOMBreakpointParams, cb?: Function);
+        setDOMBreakpoint(params: DOMDebugger.ISetDOMBreakpointParams, cb?: Function);
          /**
          * Removes DOM breakpoint that was set using <code>setDOMBreakpoint</code>.
          */
-        removeDOMBreakpoint(params: DOMDebugger.IDOMDebuggerRemoveDOMBreakpointParams, cb?: Function);
+        removeDOMBreakpoint(params: DOMDebugger.IRemoveDOMBreakpointParams, cb?: Function);
          /**
          * Sets breakpoint on particular DOM event.
          */
-        setEventListenerBreakpoint(params?: DOMDebugger.IDOMDebuggerSetEventListenerBreakpointParams, cb?: Function);
+        setEventListenerBreakpoint(params?: DOMDebugger.ISetEventListenerBreakpointParams, cb?: Function);
          /**
          * Removes breakpoint on particular DOM event.
          */
-        removeEventListenerBreakpoint(params?: DOMDebugger.IDOMDebuggerRemoveEventListenerBreakpointParams, cb?: Function);
+        removeEventListenerBreakpoint(params?: DOMDebugger.IRemoveEventListenerBreakpointParams, cb?: Function);
          /**
          * Sets breakpoint on particular native event.
          */
-        setInstrumentationBreakpoint(params: DOMDebugger.IDOMDebuggerSetInstrumentationBreakpointParams, cb?: Function);
+        setInstrumentationBreakpoint(params: DOMDebugger.ISetInstrumentationBreakpointParams, cb?: Function);
          /**
          * Removes breakpoint on particular native event.
          */
-        removeInstrumentationBreakpoint(params: DOMDebugger.IDOMDebuggerRemoveInstrumentationBreakpointParams, cb?: Function);
+        removeInstrumentationBreakpoint(params: DOMDebugger.IRemoveInstrumentationBreakpointParams, cb?: Function);
          /**
          * Sets breakpoint on XMLHttpRequest.
          */
-        setXHRBreakpoint(params: DOMDebugger.IDOMDebuggerSetXHRBreakpointParams, cb?: Function);
+        setXHRBreakpoint(params: DOMDebugger.ISetXHRBreakpointParams, cb?: Function);
          /**
          * Removes breakpoint from XMLHttpRequest.
          */
-        removeXHRBreakpoint(params: DOMDebugger.IDOMDebuggerRemoveXHRBreakpointParams, cb?: Function);
+        removeXHRBreakpoint(params: DOMDebugger.IRemoveXHRBreakpointParams, cb?: Function);
     }
     interface IProfiler {
         enable(cb?: Function);
@@ -913,31 +943,31 @@ declare module "chrome-debug-protocol" {
          /**
          * Changes CPU profiler sampling interval. Must be called before CPU profiles recording started.
          */
-        setSamplingInterval(params: Profiler.IProfilerSetSamplingIntervalParams, cb?: Function);
+        setSamplingInterval(params: Profiler.ISetSamplingIntervalParams, cb?: Function);
         start(cb?: Function);
         stop(cb?: Function);
     }
     interface IHeapProfiler {
         enable(cb?: Function);
         disable(cb?: Function);
-        startTrackingHeapObjects(params?: HeapProfiler.IHeapProfilerStartTrackingHeapObjectsParams, cb?: Function);
-        stopTrackingHeapObjects(params?: HeapProfiler.IHeapProfilerStopTrackingHeapObjectsParams, cb?: Function);
-        takeHeapSnapshot(params?: HeapProfiler.IHeapProfilerTakeHeapSnapshotParams, cb?: Function);
+        startTrackingHeapObjects(params?: HeapProfiler.IStartTrackingHeapObjectsParams, cb?: Function);
+        stopTrackingHeapObjects(params?: HeapProfiler.IStopTrackingHeapObjectsParams, cb?: Function);
+        takeHeapSnapshot(params?: HeapProfiler.ITakeHeapSnapshotParams, cb?: Function);
         collectGarbage(cb?: Function);
-        getObjectByHeapObjectId(params?: HeapProfiler.IHeapProfilerGetObjectByHeapObjectIdParams, cb?: Function);
-        getHeapObjectId(params: HeapProfiler.IHeapProfilerGetHeapObjectIdParams, cb?: Function);
+        getObjectByHeapObjectId(params?: HeapProfiler.IGetObjectByHeapObjectIdParams, cb?: Function);
+        getHeapObjectId(params: HeapProfiler.IGetHeapObjectIdParams, cb?: Function);
     }
     interface IWorker {
         enable(cb?: Function);
         disable(cb?: Function);
-        sendMessageToWorker(params: Worker.IWorkerSendMessageToWorkerParams, cb?: Function);
+        sendMessageToWorker(params: Worker.ISendMessageToWorkerParams, cb?: Function);
          /**
          * Tells whether browser supports workers inspection.
          */
         canInspectWorkers(cb?: Function);
-        connectToWorker(params: Worker.IWorkerConnectToWorkerParams, cb?: Function);
-        disconnectFromWorker(params: Worker.IWorkerDisconnectFromWorkerParams, cb?: Function);
-        setAutoconnectToWorkers(params: Worker.IWorkerSetAutoconnectToWorkersParams, cb?: Function);
+        connectToWorker(params: Worker.IConnectToWorkerParams, cb?: Function);
+        disconnectFromWorker(params: Worker.IDisconnectFromWorkerParams, cb?: Function);
+        setAutoconnectToWorkers(params: Worker.ISetAutoconnectToWorkersParams, cb?: Function);
     }
     interface ICanvas {
          /**
@@ -948,7 +978,7 @@ declare module "chrome-debug-protocol" {
          * Disables Canvas inspection.
          */
         disable(cb?: Function);
-        dropTraceLog(params: Canvas.ICanvasDropTraceLogParams, cb?: Function);
+        dropTraceLog(params: Canvas.IDropTraceLogParams, cb?: Function);
          /**
          * Checks if there is any uninstrumented canvas in the inspected page.
          */
@@ -956,37 +986,37 @@ declare module "chrome-debug-protocol" {
          /**
          * Starts (or continues) a canvas frame capturing which will be stopped automatically after the next frame is prepared.
          */
-        captureFrame(params?: Canvas.ICanvasCaptureFrameParams, cb?: Function);
+        captureFrame(params?: Canvas.ICaptureFrameParams, cb?: Function);
          /**
          * Starts (or continues) consecutive canvas frames capturing. The capturing is stopped by the corresponding stopCapturing command.
          */
-        startCapturing(params?: Canvas.ICanvasStartCapturingParams, cb?: Function);
-        stopCapturing(params: Canvas.ICanvasStopCapturingParams, cb?: Function);
-        getTraceLog(params?: Canvas.ICanvasGetTraceLogParams, cb?: Function);
-        replayTraceLog(params: Canvas.ICanvasReplayTraceLogParams, cb?: Function);
-        getResourceState(params: Canvas.ICanvasGetResourceStateParams, cb?: Function);
+        startCapturing(params?: Canvas.IStartCapturingParams, cb?: Function);
+        stopCapturing(params: Canvas.IStopCapturingParams, cb?: Function);
+        getTraceLog(params?: Canvas.IGetTraceLogParams, cb?: Function);
+        replayTraceLog(params: Canvas.IReplayTraceLogParams, cb?: Function);
+        getResourceState(params: Canvas.IGetResourceStateParams, cb?: Function);
          /**
          * Evaluates a given trace call argument or its result.
          */
-        evaluateTraceLogCallArgument(params?: Canvas.ICanvasEvaluateTraceLogCallArgumentParams, cb?: Function);
+        evaluateTraceLogCallArgument(params?: Canvas.IEvaluateTraceLogCallArgumentParams, cb?: Function);
     }
     interface IInput {
          /**
          * Dispatches a key event to the page.
          */
-        dispatchKeyEvent(params?: Input.IInputDispatchKeyEventParams, cb?: Function);
+        dispatchKeyEvent(params?: Input.IDispatchKeyEventParams, cb?: Function);
          /**
          * Dispatches a mouse event to the page.
          */
-        dispatchMouseEvent(params?: Input.IInputDispatchMouseEventParams, cb?: Function);
+        dispatchMouseEvent(params?: Input.IDispatchMouseEventParams, cb?: Function);
          /**
          * Dispatches a touch event to the page.
          */
-        dispatchTouchEvent(params?: Input.IInputDispatchTouchEventParams, cb?: Function);
+        dispatchTouchEvent(params?: Input.IDispatchTouchEventParams, cb?: Function);
          /**
          * Emulates touch event from the mouse event parameters.
          */
-        emulateTouchFromMouseEvent(params?: Input.IInputEmulateTouchFromMouseEventParams, cb?: Function);
+        emulateTouchFromMouseEvent(params?: Input.IEmulateTouchFromMouseEventParams, cb?: Function);
     }
     interface ILayerTree {
          /**
@@ -1000,34 +1030,34 @@ declare module "chrome-debug-protocol" {
          /**
          * Provides the reasons why the given layer was composited.
          */
-        compositingReasons(params: LayerTree.ILayerTreeCompositingReasonsParams, cb?: Function);
+        compositingReasons(params: LayerTree.ICompositingReasonsParams, cb?: Function);
          /**
          * Returns the layer snapshot identifier.
          */
-        makeSnapshot(params: LayerTree.ILayerTreeMakeSnapshotParams, cb?: Function);
+        makeSnapshot(params: LayerTree.IMakeSnapshotParams, cb?: Function);
          /**
          * Returns the snapshot identifier.
          */
-        loadSnapshot(params: LayerTree.ILayerTreeLoadSnapshotParams, cb?: Function);
+        loadSnapshot(params: LayerTree.ILoadSnapshotParams, cb?: Function);
          /**
          * Releases layer snapshot captured by the back-end.
          */
-        releaseSnapshot(params: LayerTree.ILayerTreeReleaseSnapshotParams, cb?: Function);
-        profileSnapshot(params?: LayerTree.ILayerTreeProfileSnapshotParams, cb?: Function);
+        releaseSnapshot(params: LayerTree.IReleaseSnapshotParams, cb?: Function);
+        profileSnapshot(params?: LayerTree.IProfileSnapshotParams, cb?: Function);
          /**
          * Replays the layer snapshot and returns the resulting bitmap.
          */
-        replaySnapshot(params?: LayerTree.ILayerTreeReplaySnapshotParams, cb?: Function);
+        replaySnapshot(params?: LayerTree.IReplaySnapshotParams, cb?: Function);
          /**
          * Replays the layer snapshot and returns canvas log.
          */
-        snapshotCommandLog(params: LayerTree.ILayerTreeSnapshotCommandLogParams, cb?: Function);
+        snapshotCommandLog(params: LayerTree.ISnapshotCommandLogParams, cb?: Function);
     }
     interface IDeviceOrientation {
          /**
          * Overrides the Device Orientation.
          */
-        setDeviceOrientationOverride(params: DeviceOrientation.IDeviceOrientationSetDeviceOrientationOverrideParams, cb?: Function);
+        setDeviceOrientationOverride(params: DeviceOrientation.ISetDeviceOrientationOverrideParams, cb?: Function);
          /**
          * Clears the overridden Device Orientation.
          */
@@ -1037,7 +1067,7 @@ declare module "chrome-debug-protocol" {
          /**
          * Start trace events collection.
          */
-        start(params?: Tracing.ITracingStartParams, cb?: Function);
+        start(params?: Tracing.IStartParams, cb?: Function);
          /**
          * Stop trace events collection.
          */
@@ -1073,27 +1103,27 @@ declare module "chrome-debug-protocol" {
          /**
          * Returns animation players relevant to the node.
          */
-        getAnimationPlayersForNode(params: Animation.IAnimationGetAnimationPlayersForNodeParams, cb?: Function);
+        getAnimationPlayersForNode(params: Animation.IGetAnimationPlayersForNodeParams, cb?: Function);
          /**
          * Pauses animations relevant to the node.
          */
-        pauseAnimationPlayer(params: Animation.IAnimationPauseAnimationPlayerParams, cb?: Function);
+        pauseAnimationPlayer(params: Animation.IPauseAnimationPlayerParams, cb?: Function);
          /**
          * Plays animations relevant to the node.
          */
-        playAnimationPlayer(params: Animation.IAnimationPlayAnimationPlayerParams, cb?: Function);
+        playAnimationPlayer(params: Animation.IPlayAnimationPlayerParams, cb?: Function);
          /**
          * Sets the current time on given AnimationPlayer.
          */
-        setAnimationPlayerCurrentTime(params: Animation.IAnimationSetAnimationPlayerCurrentTimeParams, cb?: Function);
+        setAnimationPlayerCurrentTime(params: Animation.ISetAnimationPlayerCurrentTimeParams, cb?: Function);
          /**
          * Gets the state of an AnimationPlayer.
          */
-        getAnimationPlayerState(params: Animation.IAnimationGetAnimationPlayerStateParams, cb?: Function);
+        getAnimationPlayerState(params: Animation.IGetAnimationPlayerStateParams, cb?: Function);
          /**
          * Sets the parameters of recording for new animations events.
          */
-        startListening(params: Animation.IAnimationStartListeningParams, cb?: Function);
+        startListening(params: Animation.IStartListeningParams, cb?: Function);
          /**
          * Stops recording for new animation player events.
          */
@@ -1104,13 +1134,13 @@ declare module "chrome-debug-protocol" {
     module Memory {
     }
     module Page {
-        export interface IPageAddScriptToEvaluateOnLoadParams {
+        export interface IAddScriptToEvaluateOnLoadParams {
             scriptSource: string;
         }
-        export interface IPageRemoveScriptToEvaluateOnLoadParams {
+        export interface IRemoveScriptToEvaluateOnLoadParams {
             identifier: any;
         }
-        export interface IPageReloadParams {
+        export interface IReloadParams {
              /**
              * If true, browser cache is ignored (as if the user pressed Shift+refresh).
              */
@@ -1124,19 +1154,19 @@ declare module "chrome-debug-protocol" {
              */
             scriptPreprocessor?: string;
         }
-        export interface IPageNavigateParams {
+        export interface INavigateParams {
              /**
              * URL to navigate the page to.
              */
             url: string;
         }
-        export interface IPageNavigateToHistoryEntryParams {
+        export interface INavigateToHistoryEntryParams {
              /**
              * Unique id of the entry to navigate to.
              */
             entryId: number;
         }
-        export interface IPageDeleteCookieParams {
+        export interface IDeleteCookieParams {
              /**
              * Name of the cookie to remove.
              */
@@ -1146,7 +1176,7 @@ declare module "chrome-debug-protocol" {
              */
             url: string;
         }
-        export interface IPageGetResourceContentParams {
+        export interface IGetResourceContentParams {
              /**
              * Frame id to get resource for.
              */
@@ -1156,7 +1186,7 @@ declare module "chrome-debug-protocol" {
              */
             url: string;
         }
-        export interface IPageSearchInResourceParams {
+        export interface ISearchInResourceParams {
              /**
              * Frame id for resource to search in.
              */
@@ -1178,7 +1208,7 @@ declare module "chrome-debug-protocol" {
              */
             isRegex?: boolean;
         }
-        export interface IPageSetDocumentContentParams {
+        export interface ISetDocumentContentParams {
              /**
              * Frame id to set HTML for.
              */
@@ -1188,7 +1218,7 @@ declare module "chrome-debug-protocol" {
              */
             html: string;
         }
-        export interface IPageSetDeviceMetricsOverrideParams {
+        export interface ISetDeviceMetricsOverrideParams {
              /**
              * Overriding width value in pixels (minimum 0, maximum 10000000). 0 disables the override.
              */
@@ -1222,49 +1252,49 @@ declare module "chrome-debug-protocol" {
              */
             offsetY?: any;
         }
-        export interface IPageSetPageScaleFactorParams {
+        export interface ISetPageScaleFactorParams {
              /**
              * Page scale factor.
              */
             pageScaleFactor: any;
         }
-        export interface IPageSetShowPaintRectsParams {
+        export interface ISetShowPaintRectsParams {
              /**
              * True for showing paint rectangles
              */
             result: boolean;
         }
-        export interface IPageSetShowDebugBordersParams {
+        export interface ISetShowDebugBordersParams {
              /**
              * True for showing debug borders
              */
             show: boolean;
         }
-        export interface IPageSetShowFPSCounterParams {
+        export interface ISetShowFPSCounterParams {
              /**
              * True for showing the FPS counter
              */
             show: boolean;
         }
-        export interface IPageSetContinuousPaintingEnabledParams {
+        export interface ISetContinuousPaintingEnabledParams {
              /**
              * True for enabling cointinuous painting
              */
             enabled: boolean;
         }
-        export interface IPageSetShowScrollBottleneckRectsParams {
+        export interface ISetShowScrollBottleneckRectsParams {
              /**
              * True for showing scroll bottleneck rects
              */
             show: boolean;
         }
-        export interface IPageSetScriptExecutionDisabledParams {
+        export interface ISetScriptExecutionDisabledParams {
              /**
              * Whether script execution should be disabled in the page.
              */
             value: boolean;
         }
-        export interface IPageSetGeolocationOverrideParams {
+        export interface ISetGeolocationOverrideParams {
              /**
              * Mock latitude
              */
@@ -1278,7 +1308,7 @@ declare module "chrome-debug-protocol" {
              */
             accuracy?: any;
         }
-        export interface IPageSetDeviceOrientationOverrideParams {
+        export interface ISetDeviceOrientationOverrideParams {
              /**
              * Mock alpha
              */
@@ -1292,7 +1322,7 @@ declare module "chrome-debug-protocol" {
              */
             gamma: any;
         }
-        export interface IPageSetTouchEmulationEnabledParams {
+        export interface ISetTouchEmulationEnabledParams {
              /**
              * Whether the touch event emulation should be enabled.
              */
@@ -1302,13 +1332,13 @@ declare module "chrome-debug-protocol" {
              */
             configuration?: string;
         }
-        export interface IPageSetEmulatedMediaParams {
+        export interface ISetEmulatedMediaParams {
              /**
              * Media type to emulate. Empty string disables the override.
              */
             media: string;
         }
-        export interface IPageStartScreencastParams {
+        export interface IStartScreencastParams {
              /**
              * Image compression format.
              */
@@ -1326,19 +1356,19 @@ declare module "chrome-debug-protocol" {
              */
             maxHeight?: number;
         }
-        export interface IPageScreencastFrameAckParams {
+        export interface IScreencastFrameAckParams {
              /**
              * Frame number.
              */
             frameNumber: number;
         }
-        export interface IPageStartRecordingFramesParams {
+        export interface IStartRecordingFramesParams {
              /**
              * Maximal number of frames to record from range. Actual maximum depends on implementation.
              */
             maxFrameCount: number;
         }
-        export interface IPageHandleJavaScriptDialogParams {
+        export interface IHandleJavaScriptDialogParams {
              /**
              * Whether to accept or dismiss the dialog.
              */
@@ -1348,7 +1378,7 @@ declare module "chrome-debug-protocol" {
              */
             promptText?: string;
         }
-        export interface IPageSetShowViewportSizeOnResizeParams {
+        export interface ISetShowViewportSizeOnResizeParams {
              /**
              * Whether to paint size or not.
              */
@@ -1358,25 +1388,25 @@ declare module "chrome-debug-protocol" {
              */
             showGrid?: boolean;
         }
-        export interface IPageQueryUsageAndQuotaParams {
+        export interface IQueryUsageAndQuotaParams {
              /**
              * Security origin quota and usage requested for
              */
             securityOrigin: string;
         }
-        export interface IPageSetColorPickerEnabledParams {
+        export interface ISetColorPickerEnabledParams {
              /**
              * Shows / hides color picker
              */
             enabled: boolean;
         }
-        export interface IPageSetOverlayMessageParams {
+        export interface ISetOverlayMessageParams {
              /**
              * Overlay message to display when paused in debugger.
              */
             message?: string;
         }
-        export interface IPageSetAnimationsPlaybackRateParams {
+        export interface ISetAnimationsPlaybackRateParams {
              /**
              * Playback rate for animations on page
              */
@@ -1384,7 +1414,7 @@ declare module "chrome-debug-protocol" {
         }
     }
     module Runtime {
-        export interface IRuntimeEvaluateParams {
+        export interface IEvaluateParams {
              /**
              * Expression to evaluate.
              */
@@ -1414,7 +1444,7 @@ declare module "chrome-debug-protocol" {
              */
             generatePreview?: boolean;
         }
-        export interface IRuntimeCallFunctionOnParams {
+        export interface ICallFunctionOnParams {
              /**
              * Identifier of the object to call function on.
              */
@@ -1440,7 +1470,7 @@ declare module "chrome-debug-protocol" {
              */
             generatePreview?: boolean;
         }
-        export interface IRuntimeGetPropertiesParams {
+        export interface IGetPropertiesParams {
              /**
              * Identifier of the object to return properties for.
              */
@@ -1454,39 +1484,39 @@ declare module "chrome-debug-protocol" {
              */
             accessorPropertiesOnly?: boolean;
         }
-        export interface IRuntimeReleaseObjectParams {
+        export interface IReleaseObjectParams {
              /**
              * Identifier of the object to release.
              */
             objectId: any;
         }
-        export interface IRuntimeReleaseObjectGroupParams {
+        export interface IReleaseObjectGroupParams {
              /**
              * Symbolic object group name.
              */
             objectGroup: string;
         }
-        export interface IRuntimeSetCustomObjectFormatterEnabledParams {
+        export interface ISetCustomObjectFormatterEnabledParams {
             enabled: boolean;
         }
     }
     module Console {
-        export interface IConsoleSetMonitoringXHREnabledParams {
+        export interface ISetMonitoringXHREnabledParams {
              /**
              * Monitoring enabled state.
              */
             enabled: boolean;
         }
-        export interface IConsoleAddInspectedNodeParams {
+        export interface IAddInspectedNodeParams {
              /**
              * DOM node id to be accessible by means of $x command line API.
              */
             nodeId: any;
         }
-        export interface IConsoleAddInspectedHeapObjectParams {
+        export interface IAddInspectedHeapObjectParams {
             heapObjectId: number;
         }
-        export interface IConsoleSetLastEvaluationResultParams {
+        export interface ISetLastEvaluationResultParams {
              /**
              * Identifier of the object to set as last evaluation result.
              */
@@ -1494,31 +1524,31 @@ declare module "chrome-debug-protocol" {
         }
     }
     module Network {
-        export interface INetworkSetUserAgentOverrideParams {
+        export interface ISetUserAgentOverrideParams {
              /**
              * User agent to use.
              */
             userAgent: string;
         }
-        export interface INetworkSetExtraHTTPHeadersParams {
+        export interface ISetExtraHTTPHeadersParams {
              /**
              * Map with extra HTTP headers.
              */
             headers: any;
         }
-        export interface INetworkGetResponseBodyParams {
+        export interface IGetResponseBodyParams {
              /**
              * Identifier of the network request to get content for.
              */
             requestId: any;
         }
-        export interface INetworkReplayXHRParams {
+        export interface IReplayXHRParams {
              /**
              * Identifier of XHR to replay.
              */
             requestId: any;
         }
-        export interface INetworkEmulateNetworkConditionsParams {
+        export interface IEmulateNetworkConditionsParams {
              /**
              * True to emulate internet disconnection.
              */
@@ -1536,13 +1566,13 @@ declare module "chrome-debug-protocol" {
              */
             uploadThroughput: any;
         }
-        export interface INetworkSetCacheDisabledParams {
+        export interface ISetCacheDisabledParams {
              /**
              * Cache disabled state.
              */
             cacheDisabled: boolean;
         }
-        export interface INetworkLoadResourceForFrontendParams {
+        export interface ILoadResourceForFrontendParams {
              /**
              * Frame to load the resource from.
              */
@@ -1558,22 +1588,22 @@ declare module "chrome-debug-protocol" {
         }
     }
     module Database {
-        export interface IDatabaseGetDatabaseTableNamesParams {
+        export interface IGetDatabaseTableNamesParams {
             databaseId: any;
         }
-        export interface IDatabaseExecuteSQLParams {
+        export interface IExecuteSQLParams {
             databaseId: any;
             query: string;
         }
     }
     module IndexedDB {
-        export interface IIndexedDBRequestDatabaseNamesParams {
+        export interface IRequestDatabaseNamesParams {
              /**
              * Security origin.
              */
             securityOrigin: string;
         }
-        export interface IIndexedDBRequestDatabaseParams {
+        export interface IRequestDatabaseParams {
              /**
              * Security origin.
              */
@@ -1583,7 +1613,7 @@ declare module "chrome-debug-protocol" {
              */
             databaseName: string;
         }
-        export interface IIndexedDBRequestDataParams {
+        export interface IRequestDataParams {
              /**
              * Security origin.
              */
@@ -1613,7 +1643,7 @@ declare module "chrome-debug-protocol" {
              */
             keyRange?: any;
         }
-        export interface IIndexedDBClearObjectStoreParams {
+        export interface IClearObjectStoreParams {
              /**
              * Security origin.
              */
@@ -1629,7 +1659,7 @@ declare module "chrome-debug-protocol" {
         }
     }
     module ServiceWorkerCache {
-        export interface IServiceWorkerCacheRequestEntriesParams {
+        export interface IRequestEntriesParams {
              /**
              * Cache name.
              */
@@ -1643,7 +1673,7 @@ declare module "chrome-debug-protocol" {
              */
             pageSize: number;
         }
-        export interface IServiceWorkerCacheDeleteCacheParams {
+        export interface IDeleteCacheParams {
              /**
              * Cache name.
              */
@@ -1651,27 +1681,27 @@ declare module "chrome-debug-protocol" {
         }
     }
     module DOMStorage {
-        export interface IDOMStorageGetDOMStorageItemsParams {
+        export interface IGetDOMStorageItemsParams {
             storageId: any;
         }
-        export interface IDOMStorageSetDOMStorageItemParams {
+        export interface ISetDOMStorageItemParams {
             storageId: any;
             key: string;
             value: string;
         }
-        export interface IDOMStorageRemoveDOMStorageItemParams {
+        export interface IRemoveDOMStorageItemParams {
             storageId: any;
             key: string;
         }
     }
     module ApplicationCache {
-        export interface IApplicationCacheGetManifestForFrameParams {
+        export interface IGetManifestForFrameParams {
              /**
              * Identifier of the frame containing document whose manifest is retrieved.
              */
             frameId: any;
         }
-        export interface IApplicationCacheGetApplicationCacheForFrameParams {
+        export interface IGetApplicationCacheForFrameParams {
              /**
              * Identifier of the frame containing document whose application cache is retrieved.
              */
@@ -1679,7 +1709,7 @@ declare module "chrome-debug-protocol" {
         }
     }
     module FileSystem {
-        export interface IFileSystemRequestFileSystemRootParams {
+        export interface IRequestFileSystemRootParams {
              /**
              * Security origin of requesting FileSystem. One of frames in current page needs to have this security origin.
              */
@@ -1689,19 +1719,19 @@ declare module "chrome-debug-protocol" {
              */
             type: string;
         }
-        export interface IFileSystemRequestDirectoryContentParams {
+        export interface IRequestDirectoryContentParams {
              /**
              * URL of the directory that the frontend is requesting to read from.
              */
             url: string;
         }
-        export interface IFileSystemRequestMetadataParams {
+        export interface IRequestMetadataParams {
              /**
              * URL of the entry that the frontend is requesting to get metadata from.
              */
             url: string;
         }
-        export interface IFileSystemRequestFileContentParams {
+        export interface IRequestFileContentParams {
              /**
              * URL of the file that the frontend is requesting to read from.
              */
@@ -1723,7 +1753,7 @@ declare module "chrome-debug-protocol" {
              */
             charset?: string;
         }
-        export interface IFileSystemDeleteEntryParams {
+        export interface IDeleteEntryParams {
              /**
              * URL of the entry to delete.
              */
@@ -1731,7 +1761,7 @@ declare module "chrome-debug-protocol" {
         }
     }
     module DOM {
-        export interface IDOMRequestChildNodesParams {
+        export interface IRequestChildNodesParams {
              /**
              * Id of the node to get children for.
              */
@@ -1741,13 +1771,13 @@ declare module "chrome-debug-protocol" {
              */
             depth?: number;
         }
-        export interface IDOMRequestShadowHostDistributedNodesParams {
+        export interface IRequestShadowHostDistributedNodesParams {
              /**
              * Id of the node to get distributed nodes for.
              */
             nodeId: any;
         }
-        export interface IDOMQuerySelectorParams {
+        export interface IQuerySelectorParams {
              /**
              * Id of the node to query upon.
              */
@@ -1757,7 +1787,7 @@ declare module "chrome-debug-protocol" {
              */
             selector: string;
         }
-        export interface IDOMQuerySelectorAllParams {
+        export interface IQuerySelectorAllParams {
              /**
              * Id of the node to query upon.
              */
@@ -1767,7 +1797,7 @@ declare module "chrome-debug-protocol" {
              */
             selector: string;
         }
-        export interface IDOMSetNodeNameParams {
+        export interface ISetNodeNameParams {
              /**
              * Id of the node to set name for.
              */
@@ -1777,7 +1807,7 @@ declare module "chrome-debug-protocol" {
              */
             name: string;
         }
-        export interface IDOMSetNodeValueParams {
+        export interface ISetNodeValueParams {
              /**
              * Id of the node to set value for.
              */
@@ -1787,13 +1817,13 @@ declare module "chrome-debug-protocol" {
              */
             value: string;
         }
-        export interface IDOMRemoveNodeParams {
+        export interface IRemoveNodeParams {
              /**
              * Id of the node to remove.
              */
             nodeId: any;
         }
-        export interface IDOMSetAttributeValueParams {
+        export interface ISetAttributeValueParams {
              /**
              * Id of the element to set attribute for.
              */
@@ -1807,7 +1837,7 @@ declare module "chrome-debug-protocol" {
              */
             value: string;
         }
-        export interface IDOMSetAttributesAsTextParams {
+        export interface ISetAttributesAsTextParams {
              /**
              * Id of the element to set attributes for.
              */
@@ -1821,7 +1851,7 @@ declare module "chrome-debug-protocol" {
              */
             name?: string;
         }
-        export interface IDOMRemoveAttributeParams {
+        export interface IRemoveAttributeParams {
              /**
              * Id of the element to remove attribute from.
              */
@@ -1831,7 +1861,7 @@ declare module "chrome-debug-protocol" {
              */
             name: string;
         }
-        export interface IDOMGetEventListenersForNodeParams {
+        export interface IGetEventListenersForNodeParams {
              /**
              * Id of the node to get listeners for.
              */
@@ -1841,13 +1871,13 @@ declare module "chrome-debug-protocol" {
              */
             objectGroup?: string;
         }
-        export interface IDOMGetOuterHTMLParams {
+        export interface IGetOuterHTMLParams {
              /**
              * Id of the node to get markup for.
              */
             nodeId: any;
         }
-        export interface IDOMSetOuterHTMLParams {
+        export interface ISetOuterHTMLParams {
              /**
              * Id of the node to set markup for.
              */
@@ -1857,7 +1887,7 @@ declare module "chrome-debug-protocol" {
              */
             outerHTML: string;
         }
-        export interface IDOMPerformSearchParams {
+        export interface IPerformSearchParams {
              /**
              * Plain text or query selector or XPath search query.
              */
@@ -1867,7 +1897,7 @@ declare module "chrome-debug-protocol" {
              */
             includeUserAgentShadowDOM?: boolean;
         }
-        export interface IDOMGetSearchResultsParams {
+        export interface IGetSearchResultsParams {
              /**
              * Unique search session identifier.
              */
@@ -1881,19 +1911,19 @@ declare module "chrome-debug-protocol" {
              */
             toIndex: number;
         }
-        export interface IDOMDiscardSearchResultsParams {
+        export interface IDiscardSearchResultsParams {
              /**
              * Unique search session identifier.
              */
             searchId: string;
         }
-        export interface IDOMRequestNodeParams {
+        export interface IRequestNodeParams {
              /**
              * JavaScript object id to convert into node.
              */
             objectId: any;
         }
-        export interface IDOMSetInspectModeEnabledParams {
+        export interface ISetInspectModeEnabledParams {
              /**
              * True to enable inspection mode, false to disable it.
              */
@@ -1907,7 +1937,7 @@ declare module "chrome-debug-protocol" {
              */
             highlightConfig?: any;
         }
-        export interface IDOMHighlightRectParams {
+        export interface IHighlightRectParams {
              /**
              * X coordinate
              */
@@ -1933,7 +1963,7 @@ declare module "chrome-debug-protocol" {
              */
             outlineColor?: any;
         }
-        export interface IDOMHighlightQuadParams {
+        export interface IHighlightQuadParams {
              /**
              * Quad to highlight
              */
@@ -1947,7 +1977,7 @@ declare module "chrome-debug-protocol" {
              */
             outlineColor?: any;
         }
-        export interface IDOMHighlightNodeParams {
+        export interface IHighlightNodeParams {
              /**
              * A descriptor for the highlight appearance.
              */
@@ -1961,7 +1991,7 @@ declare module "chrome-debug-protocol" {
              */
             objectId?: any;
         }
-        export interface IDOMHighlightFrameParams {
+        export interface IHighlightFrameParams {
              /**
              * Identifier of the frame to highlight.
              */
@@ -1975,19 +2005,19 @@ declare module "chrome-debug-protocol" {
              */
             contentOutlineColor?: any;
         }
-        export interface IDOMPushNodeByPathToFrontendParams {
+        export interface IPushNodeByPathToFrontendParams {
              /**
              * Path to node in the proprietary format.
              */
             path: string;
         }
-        export interface IDOMPushNodesByBackendIdsToFrontendParams {
+        export interface IPushNodesByBackendIdsToFrontendParams {
              /**
              * The array of backend node ids.
              */
             backendNodeIds: any[];
         }
-        export interface IDOMResolveNodeParams {
+        export interface IResolveNodeParams {
              /**
              * Id of the node to resolve.
              */
@@ -1997,13 +2027,13 @@ declare module "chrome-debug-protocol" {
              */
             objectGroup?: string;
         }
-        export interface IDOMGetAttributesParams {
+        export interface IGetAttributesParams {
              /**
              * Id of the node to retrieve attibutes for.
              */
             nodeId: any;
         }
-        export interface IDOMCopyToParams {
+        export interface ICopyToParams {
              /**
              * Id of the node to copy.
              */
@@ -2017,7 +2047,7 @@ declare module "chrome-debug-protocol" {
              */
             insertBeforeNodeId?: any;
         }
-        export interface IDOMMoveToParams {
+        export interface IMoveToParams {
              /**
              * Id of the node to move.
              */
@@ -2031,13 +2061,13 @@ declare module "chrome-debug-protocol" {
              */
             insertBeforeNodeId?: any;
         }
-        export interface IDOMFocusParams {
+        export interface IFocusParams {
              /**
              * Id of the node to focus.
              */
             nodeId: any;
         }
-        export interface IDOMSetFileInputFilesParams {
+        export interface ISetFileInputFilesParams {
              /**
              * Id of the file input node to set files for.
              */
@@ -2047,13 +2077,13 @@ declare module "chrome-debug-protocol" {
              */
             files: any[];
         }
-        export interface IDOMGetBoxModelParams {
+        export interface IGetBoxModelParams {
              /**
              * Id of the node to get box model for.
              */
             nodeId: any;
         }
-        export interface IDOMGetNodeForLocationParams {
+        export interface IGetNodeForLocationParams {
              /**
              * X coordinate.
              */
@@ -2063,7 +2093,7 @@ declare module "chrome-debug-protocol" {
              */
             y: number;
         }
-        export interface IDOMGetRelayoutBoundaryParams {
+        export interface IGetRelayoutBoundaryParams {
              /**
              * Id of the node.
              */
@@ -2071,7 +2101,7 @@ declare module "chrome-debug-protocol" {
         }
     }
     module CSS {
-        export interface ICSSGetMatchedStylesForNodeParams {
+        export interface IGetMatchedStylesForNodeParams {
             nodeId: any;
              /**
              * Whether to exclude pseudo styles (default: false).
@@ -2082,23 +2112,23 @@ declare module "chrome-debug-protocol" {
              */
             excludeInherited?: boolean;
         }
-        export interface ICSSGetInlineStylesForNodeParams {
+        export interface IGetInlineStylesForNodeParams {
             nodeId: any;
         }
-        export interface ICSSGetComputedStyleForNodeParams {
+        export interface IGetComputedStyleForNodeParams {
             nodeId: any;
         }
-        export interface ICSSGetPlatformFontsForNodeParams {
+        export interface IGetPlatformFontsForNodeParams {
             nodeId: any;
         }
-        export interface ICSSGetStyleSheetTextParams {
+        export interface IGetStyleSheetTextParams {
             styleSheetId: any;
         }
-        export interface ICSSSetStyleSheetTextParams {
+        export interface ISetStyleSheetTextParams {
             styleSheetId: any;
             text: string;
         }
-        export interface ICSSSetPropertyTextParams {
+        export interface ISetPropertyTextParams {
             styleSheetId: any;
              /**
              * Either a source range of the property to be edited or an empty range representing a position for the property insertion.
@@ -2106,23 +2136,23 @@ declare module "chrome-debug-protocol" {
             range: any;
             text: string;
         }
-        export interface ICSSSetRuleSelectorParams {
+        export interface ISetRuleSelectorParams {
             styleSheetId: any;
             range: any;
             selector: string;
         }
-        export interface ICSSSetMediaTextParams {
+        export interface ISetMediaTextParams {
             styleSheetId: any;
             range: any;
             text: string;
         }
-        export interface ICSSCreateStyleSheetParams {
+        export interface ICreateStyleSheetParams {
              /**
              * Identifier of the frame where "via-inspector" stylesheet should be created.
              */
             frameId: any;
         }
-        export interface ICSSAddRuleParams {
+        export interface IAddRuleParams {
              /**
              * The css style sheet identifier where a new rule should be inserted.
              */
@@ -2136,7 +2166,7 @@ declare module "chrome-debug-protocol" {
              */
             location: any;
         }
-        export interface ICSSForcePseudoStateParams {
+        export interface IForcePseudoStateParams {
              /**
              * The element id for which to force the pseudo state.
              */
@@ -2148,7 +2178,7 @@ declare module "chrome-debug-protocol" {
         }
     }
     module Timeline {
-        export interface ITimelineStartParams {
+        export interface IStartParams {
              /**
              * Samples JavaScript stack traces up to <code>maxCallStackDepth</code>, defaults to 5.
              */
@@ -2172,13 +2202,13 @@ declare module "chrome-debug-protocol" {
         }
     }
     module Debugger {
-        export interface IDebuggerSetBreakpointsActiveParams {
+        export interface ISetBreakpointsActiveParams {
              /**
              * New value for breakpoints active state.
              */
             active: boolean;
         }
-        export interface IDebuggerSetSkipAllPausesParams {
+        export interface ISetSkipAllPausesParams {
              /**
              * New value for skip pauses state.
              */
@@ -2188,7 +2218,7 @@ declare module "chrome-debug-protocol" {
              */
             untilReload?: boolean;
         }
-        export interface IDebuggerSetBreakpointByUrlParams {
+        export interface ISetBreakpointByUrlParams {
              /**
              * Line number to set breakpoint at.
              */
@@ -2210,7 +2240,7 @@ declare module "chrome-debug-protocol" {
              */
             condition?: string;
         }
-        export interface IDebuggerSetBreakpointParams {
+        export interface ISetBreakpointParams {
              /**
              * Location to set breakpoint in.
              */
@@ -2220,10 +2250,10 @@ declare module "chrome-debug-protocol" {
              */
             condition?: string;
         }
-        export interface IDebuggerRemoveBreakpointParams {
+        export interface IRemoveBreakpointParams {
             breakpointId: any;
         }
-        export interface IDebuggerContinueToLocationParams {
+        export interface IContinueToLocationParams {
              /**
              * Location to continue to.
              */
@@ -2233,7 +2263,7 @@ declare module "chrome-debug-protocol" {
              */
             interstatementLocation?: boolean;
         }
-        export interface IDebuggerSearchInContentParams {
+        export interface ISearchInContentParams {
              /**
              * Id of the script to search in.
              */
@@ -2251,7 +2281,7 @@ declare module "chrome-debug-protocol" {
              */
             isRegex?: boolean;
         }
-        export interface IDebuggerSetScriptSourceParams {
+        export interface ISetScriptSourceParams {
              /**
              * Id of the script to edit.
              */
@@ -2265,43 +2295,43 @@ declare module "chrome-debug-protocol" {
              */
             preview?: boolean;
         }
-        export interface IDebuggerRestartFrameParams {
+        export interface IRestartFrameParams {
              /**
              * Call frame identifier to evaluate on.
              */
             callFrameId: any;
         }
-        export interface IDebuggerGetScriptSourceParams {
+        export interface IGetScriptSourceParams {
              /**
              * Id of the script to get source for.
              */
             scriptId: any;
         }
-        export interface IDebuggerGetFunctionDetailsParams {
+        export interface IGetFunctionDetailsParams {
              /**
              * Id of the function to get details for.
              */
             functionId: any;
         }
-        export interface IDebuggerGetGeneratorObjectDetailsParams {
+        export interface IGetGeneratorObjectDetailsParams {
              /**
              * Id of the generator object to get details for.
              */
             objectId: any;
         }
-        export interface IDebuggerGetCollectionEntriesParams {
+        export interface IGetCollectionEntriesParams {
              /**
              * Id of the collection to get entries for.
              */
             objectId: any;
         }
-        export interface IDebuggerSetPauseOnExceptionsParams {
+        export interface ISetPauseOnExceptionsParams {
              /**
              * Pause on exceptions mode.
              */
             state: string;
         }
-        export interface IDebuggerEvaluateOnCallFrameParams {
+        export interface IEvaluateOnCallFrameParams {
              /**
              * Call frame identifier to evaluate on.
              */
@@ -2331,7 +2361,7 @@ declare module "chrome-debug-protocol" {
              */
             generatePreview?: boolean;
         }
-        export interface IDebuggerCompileScriptParams {
+        export interface ICompileScriptParams {
              /**
              * Expression to compile.
              */
@@ -2345,7 +2375,7 @@ declare module "chrome-debug-protocol" {
              */
             executionContextId?: any;
         }
-        export interface IDebuggerRunScriptParams {
+        export interface IRunScriptParams {
              /**
              * Id of the script to run.
              */
@@ -2363,7 +2393,7 @@ declare module "chrome-debug-protocol" {
              */
             doNotPauseOnExceptionsAndMuteConsole?: boolean;
         }
-        export interface IDebuggerSetVariableValueParams {
+        export interface ISetVariableValueParams {
              /**
              * 0-based number of scope as was listed in scope chain. Only 'local', 'closure' and 'catch' scope types are allowed. Other scopes could be manipulated manually.
              */
@@ -2385,13 +2415,13 @@ declare module "chrome-debug-protocol" {
              */
             functionObjectId?: any;
         }
-        export interface IDebuggerGetStepInPositionsParams {
+        export interface IGetStepInPositionsParams {
              /**
              * Id of a call frame where the current statement should be analized
              */
             callFrameId: any;
         }
-        export interface IDebuggerSkipStackFramesParams {
+        export interface ISkipStackFramesParams {
              /**
              * Regular expression defining the scripts to ignore while stepping.
              */
@@ -2401,19 +2431,19 @@ declare module "chrome-debug-protocol" {
              */
             skipContentScripts?: boolean;
         }
-        export interface IDebuggerSetAsyncCallStackDepthParams {
+        export interface ISetAsyncCallStackDepthParams {
              /**
              * Maximum depth of async call stacks. Setting to <code>0</code> will effectively disable collecting async call stacks (default).
              */
             maxDepth: number;
         }
-        export interface IDebuggerEnablePromiseTrackerParams {
+        export interface IEnablePromiseTrackerParams {
              /**
              * Whether to capture stack traces for promise creation and settlement events (default: false).
              */
             captureStacks?: boolean;
         }
-        export interface IDebuggerGetPromiseByIdParams {
+        export interface IGetPromiseByIdParams {
             promiseId: number;
              /**
              * Symbolic group name that can be used to release multiple objects.
@@ -2422,7 +2452,7 @@ declare module "chrome-debug-protocol" {
         }
     }
     module DOMDebugger {
-        export interface IDOMDebuggerSetDOMBreakpointParams {
+        export interface ISetDOMBreakpointParams {
              /**
              * Identifier of the node to set breakpoint on.
              */
@@ -2432,7 +2462,7 @@ declare module "chrome-debug-protocol" {
              */
             type: any;
         }
-        export interface IDOMDebuggerRemoveDOMBreakpointParams {
+        export interface IRemoveDOMBreakpointParams {
              /**
              * Identifier of the node to remove breakpoint from.
              */
@@ -2442,7 +2472,7 @@ declare module "chrome-debug-protocol" {
              */
             type: any;
         }
-        export interface IDOMDebuggerSetEventListenerBreakpointParams {
+        export interface ISetEventListenerBreakpointParams {
              /**
              * DOM Event name to stop on (any DOM event will do).
              */
@@ -2452,7 +2482,7 @@ declare module "chrome-debug-protocol" {
              */
             targetName?: string;
         }
-        export interface IDOMDebuggerRemoveEventListenerBreakpointParams {
+        export interface IRemoveEventListenerBreakpointParams {
              /**
              * Event name.
              */
@@ -2462,25 +2492,25 @@ declare module "chrome-debug-protocol" {
              */
             targetName?: string;
         }
-        export interface IDOMDebuggerSetInstrumentationBreakpointParams {
+        export interface ISetInstrumentationBreakpointParams {
              /**
              * Instrumentation name to stop on.
              */
             eventName: string;
         }
-        export interface IDOMDebuggerRemoveInstrumentationBreakpointParams {
+        export interface IRemoveInstrumentationBreakpointParams {
              /**
              * Instrumentation name to stop on.
              */
             eventName: string;
         }
-        export interface IDOMDebuggerSetXHRBreakpointParams {
+        export interface ISetXHRBreakpointParams {
              /**
              * Resource URL substring. All XHRs having this substring in the URL will get stopped upon.
              */
             url: string;
         }
-        export interface IDOMDebuggerRemoveXHRBreakpointParams {
+        export interface IRemoveXHRBreakpointParams {
              /**
              * Resource URL substring.
              */
@@ -2488,7 +2518,7 @@ declare module "chrome-debug-protocol" {
         }
     }
     module Profiler {
-        export interface IProfilerSetSamplingIntervalParams {
+        export interface ISetSamplingIntervalParams {
              /**
              * New sampling interval in microseconds.
              */
@@ -2496,29 +2526,29 @@ declare module "chrome-debug-protocol" {
         }
     }
     module HeapProfiler {
-        export interface IHeapProfilerStartTrackingHeapObjectsParams {
+        export interface IStartTrackingHeapObjectsParams {
             trackAllocations?: boolean;
         }
-        export interface IHeapProfilerStopTrackingHeapObjectsParams {
+        export interface IStopTrackingHeapObjectsParams {
              /**
              * If true 'reportHeapSnapshotProgress' events will be generated while snapshot is being taken when the tracking is stopped.
              */
             reportProgress?: boolean;
         }
-        export interface IHeapProfilerTakeHeapSnapshotParams {
+        export interface ITakeHeapSnapshotParams {
              /**
              * If true 'reportHeapSnapshotProgress' events will be generated while snapshot is being taken.
              */
             reportProgress?: boolean;
         }
-        export interface IHeapProfilerGetObjectByHeapObjectIdParams {
+        export interface IGetObjectByHeapObjectIdParams {
             objectId: any;
              /**
              * Symbolic group name that can be used to release multiple objects.
              */
             objectGroup?: string;
         }
-        export interface IHeapProfilerGetHeapObjectIdParams {
+        export interface IGetHeapObjectIdParams {
              /**
              * Identifier of the object to get heap object id for.
              */
@@ -2526,56 +2556,56 @@ declare module "chrome-debug-protocol" {
         }
     }
     module Worker {
-        export interface IWorkerSendMessageToWorkerParams {
+        export interface ISendMessageToWorkerParams {
             workerId: number;
             message: any;
         }
-        export interface IWorkerConnectToWorkerParams {
+        export interface IConnectToWorkerParams {
             workerId: number;
         }
-        export interface IWorkerDisconnectFromWorkerParams {
+        export interface IDisconnectFromWorkerParams {
             workerId: number;
         }
-        export interface IWorkerSetAutoconnectToWorkersParams {
+        export interface ISetAutoconnectToWorkersParams {
             value: boolean;
         }
     }
     module Canvas {
-        export interface ICanvasDropTraceLogParams {
+        export interface IDropTraceLogParams {
             traceLogId: any;
         }
-        export interface ICanvasCaptureFrameParams {
+        export interface ICaptureFrameParams {
              /**
              * Identifier of the frame containing document whose canvases are to be captured. If omitted, main frame is assumed.
              */
             frameId?: any;
         }
-        export interface ICanvasStartCapturingParams {
+        export interface IStartCapturingParams {
              /**
              * Identifier of the frame containing document whose canvases are to be captured. If omitted, main frame is assumed.
              */
             frameId?: any;
         }
-        export interface ICanvasStopCapturingParams {
+        export interface IStopCapturingParams {
             traceLogId: any;
         }
-        export interface ICanvasGetTraceLogParams {
+        export interface IGetTraceLogParams {
             traceLogId: any;
             startOffset?: number;
             maxLength?: number;
         }
-        export interface ICanvasReplayTraceLogParams {
+        export interface IReplayTraceLogParams {
             traceLogId: any;
              /**
              * Last call index in the trace log to replay (zero based).
              */
             stepNo: number;
         }
-        export interface ICanvasGetResourceStateParams {
+        export interface IGetResourceStateParams {
             traceLogId: any;
             resourceId: any;
         }
-        export interface ICanvasEvaluateTraceLogCallArgumentParams {
+        export interface IEvaluateTraceLogCallArgumentParams {
             traceLogId: any;
              /**
              * Index of the call to evaluate on (zero based).
@@ -2592,7 +2622,7 @@ declare module "chrome-debug-protocol" {
         }
     }
     module Input {
-        export interface IInputDispatchKeyEventParams {
+        export interface IDispatchKeyEventParams {
              /**
              * Type of the key event.
              */
@@ -2638,7 +2668,7 @@ declare module "chrome-debug-protocol" {
              */
             isSystemKey?: boolean;
         }
-        export interface IInputDispatchMouseEventParams {
+        export interface IDispatchMouseEventParams {
              /**
              * Type of the mouse event.
              */
@@ -2668,7 +2698,7 @@ declare module "chrome-debug-protocol" {
              */
             clickCount?: number;
         }
-        export interface IInputDispatchTouchEventParams {
+        export interface IDispatchTouchEventParams {
              /**
              * Type of the touch event.
              */
@@ -2686,7 +2716,7 @@ declare module "chrome-debug-protocol" {
              */
             timestamp?: any;
         }
-        export interface IInputEmulateTouchFromMouseEventParams {
+        export interface IEmulateTouchFromMouseEventParams {
              /**
              * Type of the mouse event.
              */
@@ -2726,31 +2756,31 @@ declare module "chrome-debug-protocol" {
         }
     }
     module LayerTree {
-        export interface ILayerTreeCompositingReasonsParams {
+        export interface ICompositingReasonsParams {
              /**
              * The id of the layer for which we want to get the reasons it was composited.
              */
             layerId: any;
         }
-        export interface ILayerTreeMakeSnapshotParams {
+        export interface IMakeSnapshotParams {
              /**
              * The id of the layer.
              */
             layerId: any;
         }
-        export interface ILayerTreeLoadSnapshotParams {
+        export interface ILoadSnapshotParams {
              /**
              * An array of tiles composing the snapshot.
              */
             tiles: any[];
         }
-        export interface ILayerTreeReleaseSnapshotParams {
+        export interface IReleaseSnapshotParams {
              /**
              * The id of the layer snapshot.
              */
             snapshotId: any;
         }
-        export interface ILayerTreeProfileSnapshotParams {
+        export interface IProfileSnapshotParams {
              /**
              * The id of the layer snapshot.
              */
@@ -2768,7 +2798,7 @@ declare module "chrome-debug-protocol" {
              */
             clipRect?: any;
         }
-        export interface ILayerTreeReplaySnapshotParams {
+        export interface IReplaySnapshotParams {
              /**
              * The id of the layer snapshot.
              */
@@ -2786,7 +2816,7 @@ declare module "chrome-debug-protocol" {
              */
             scale?: any;
         }
-        export interface ILayerTreeSnapshotCommandLogParams {
+        export interface ISnapshotCommandLogParams {
              /**
              * The id of the layer snapshot.
              */
@@ -2794,7 +2824,7 @@ declare module "chrome-debug-protocol" {
         }
     }
     module DeviceOrientation {
-        export interface IDeviceOrientationSetDeviceOrientationOverrideParams {
+        export interface ISetDeviceOrientationOverrideParams {
              /**
              * Mock alpha
              */
@@ -2810,7 +2840,7 @@ declare module "chrome-debug-protocol" {
         }
     }
     module Tracing {
-        export interface ITracingStartParams {
+        export interface IStartParams {
              /**
              * Category/tag filter
              */
@@ -2828,7 +2858,7 @@ declare module "chrome-debug-protocol" {
     module Power {
     }
     module Animation {
-        export interface IAnimationGetAnimationPlayersForNodeParams {
+        export interface IGetAnimationPlayersForNodeParams {
              /**
              * Id of the node to get animation players for.
              */
@@ -2838,19 +2868,19 @@ declare module "chrome-debug-protocol" {
              */
             includeSubtreeAnimations: boolean;
         }
-        export interface IAnimationPauseAnimationPlayerParams {
+        export interface IPauseAnimationPlayerParams {
              /**
              * Id of the animation player.
              */
             id: string;
         }
-        export interface IAnimationPlayAnimationPlayerParams {
+        export interface IPlayAnimationPlayerParams {
              /**
              * Id of the animation player.
              */
             id: string;
         }
-        export interface IAnimationSetAnimationPlayerCurrentTimeParams {
+        export interface ISetAnimationPlayerCurrentTimeParams {
              /**
              * Id of the animation player.
              */
@@ -2860,13 +2890,13 @@ declare module "chrome-debug-protocol" {
              */
             currentTime: any;
         }
-        export interface IAnimationGetAnimationPlayerStateParams {
+        export interface IGetAnimationPlayerStateParams {
              /**
              * Id of the animation player.
              */
             id: string;
         }
-        export interface IAnimationStartListeningParams {
+        export interface IStartListeningParams {
              /**
              * Id of the node to record on.
              */
