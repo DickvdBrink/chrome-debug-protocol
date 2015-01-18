@@ -36,10 +36,7 @@ module Chrome {
         req.end();
     }
 
-    export interface ChromeDomains {
-    }
-
-    export class ChromeDebugger extends event.EventEmitter implements ChromeDomains {
+    export class ChromeDebugger extends event.EventEmitter {
         private ws: WebSocket;
 
         private callbackId: number = 0;
