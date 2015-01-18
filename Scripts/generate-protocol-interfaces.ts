@@ -24,13 +24,13 @@ function emitInterface(domain: any) {
     var commands: any[] = domain.commands;
     if (commands && commands.length > 0) {
         for (var i = 0; i < commands.length; i++) {
-            emitCommand(commands[i]);
+            emitCommand(domain.domain, commands[i]);
         }
     }
     domainInterfaces += indent(1) + "}\r\n";
 }
 
-function emitCommand(command: any) {
+function emitCommand(domainName: string, command: any) {
     if (command.description) {
         domainInterfaces += `${indent(2)} /**\r\n`;
         domainInterfaces += `${indent(2)} * ${command.description}\r\n`;
@@ -40,7 +40,8 @@ function emitCommand(command: any) {
     domainInterfaces += "(";
     var parameters: any[] = command.parameters;
     if (parameters && parameters.length > 0) {
-        var name = `I${command.name}Params`.replace(/I(.)/, (val) => val.toUpperCase());
+        var commandName  = command.name.replace(/(.)/,(val) => val.toUpperCase());
+        var name = `I${domainName}${commandName}Params`;
         domainInterfaces += `params: ${name}`;
 
         emitParameterInterface(name, parameters);
@@ -68,11 +69,19 @@ while ((match = importRegex.exec(maindts)) != null) {
     imports += indent(1) + match[0] + "\r\n";
 }
 
-maindts = maindts.replace(/import (?:.+;)/g, "")
+var header = `// Type definitions for ws
+// Project: https://github.com/DickvdBrink/chrome-debug-protocol
+// Definitions by: Dick van den Brink <https://github.com/DickvdBrink>
+// Definitions: https://github.com/borisyankov/DefinitelyTyped
+
+/// <reference path="../node/node.d.ts" />
+`;
+
+maindts = header + maindts.replace(/import (?:.+;)/g, "")
     .replace(
         /(class ChromeDebugger (?:.+) {)([\s\S]+?)([ ]+)}/g,
         `$1$2${chromeDomains}$3}\r\n${domainInterfaces}${methodParameterInterfaces}`
     ).replace(/declare module Chrome {/, "declare module \"chrome-debug-protocol\" {\r\n" + imports)
     .replace("export = Chrome;", "");
 
-fs.writeFileSync(path.join(__dirname, "chrome-debug-protocol/chrome-debug-protocol.d.ts"), maindts);
+fs.writeFileSync(path.join(__dirname, "typings/chrome-debug-protocol/chrome-debug-protocol.d.ts"), maindts);
