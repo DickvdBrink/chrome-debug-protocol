@@ -40,23 +40,48 @@ function emitCommand(domainName: string, command: any) {
     domainInterfaces += "(";
     var parameters: any[] = command.parameters;
     if (parameters && parameters.length > 0) {
+        var optional = containsOptionalParameters(parameters);
         var commandName  = command.name.replace(/(.)/,(val) => val.toUpperCase());
         var name = `I${domainName}${commandName}Params`;
-        domainInterfaces += `params: ${name}`;
+        domainInterfaces += `params${(optional ? "?" : "")}: ${name}`;
 
         emitParameterInterface(name, parameters);
         domainInterfaces += ", ";
     }
-    domainInterfaces += "cb: Function";
+    domainInterfaces += "cb?: Function";
     domainInterfaces += ");\r\n";
 }
 
 function emitParameterInterface(name: string, parameters: any[]) {
     methodParameterInterfaces += `${indent(1)}interface ${name} {\r\n`;
     for (var j = 0; j < parameters.length; j++) {
-        methodParameterInterfaces += `${indent(2)}${parameters[j].name};\r\n`;
+        var p = parameters[j];
+        methodParameterInterfaces += `${indent(2)}${p.name}${(p.optional ? "?" : "")}: ${getTypeScriptType(p.type)};\r\n`;
     }
     methodParameterInterfaces += `${indent(1)}}\r\n`;
+}
+
+function getTypeScriptType(name: string) {
+    switch (name) {
+        case "boolean":
+        case "string":
+            return name;
+        case "integer":
+            return "number";
+        case "array":
+            return "any[]";
+        default:
+            return "any";
+    }
+}
+
+function containsOptionalParameters(params: any[]) {
+    for (var i = 0; i < params.length; i++) {
+        if (params[i].optional) {
+            return true;
+        }
+    }
+    return false;
 }
 
 var maindts = fs.readFileSync(path.join(__dirname, "../main.d.ts"), "utf8");
