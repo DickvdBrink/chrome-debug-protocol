@@ -15,6 +15,15 @@ module Chrome {
         webSocketDebuggerUrl: string;
     }
 
+    export interface ChromeCallBack<T> {
+        (result: T, error: ChromeError ): void;
+    }
+
+    export interface ChromeError {
+        code: number;
+        message: string;
+    }
+
     export function createDebugger(tab: string|ChromeTab) {
         if (typeof tab === "string") {
             return new Chrome.ChromeDebugger(tab);
@@ -57,7 +66,7 @@ module Chrome {
             this.ws.close();
         }
 
-        public send(method: string, params: any, callback: Function) {
+        public send<T>(method: string, params: any, callback: ChromeCallBack<T>) {
             if (this.ws.readyState == WebSocket.CONNECTING) {
                 this.ws.on("open",() => {
                     this.sendInternal(method, params, callback);
@@ -67,7 +76,7 @@ module Chrome {
             }
         }
 
-        private sendInternal(method: string, params: any, callback: Function) {
+        private sendInternal<T>(method: string, params: any, callback: ChromeCallBack<T>) {
             console.log("Send command: " + method);
             this.ws.send(JSON.stringify({ method, params, id: this.callbackId }));
             this.callbacks[this.callbackId] = callback;
@@ -113,7 +122,7 @@ module Chrome {
 
         private implementCommand(domain: any, object: Object, command: any) {
             object[command.name] = (args: Object) => {
-                var callback: Function;
+                var callback: ChromeCallBack<any>;
                 if (arguments.length == 1 && typeof arguments[0] == "function") {
                     callback = arguments[0];
                     args = null;
