@@ -4,14 +4,6 @@ import util = require("util");
 import event = require("events");
 var protocol = require("./protocol.json");
 
-function Chrome(tab: string|Chrome.ChromeTab) {
-    if (typeof tab === "string") {
-        return new Chrome.ChromeDebugger(tab);
-    } else {
-        return new Chrome.ChromeDebugger(tab.webSocketDebuggerUrl);
-    }
-}
-
 module Chrome {
     export interface ChromeTab {
         description: string;
@@ -22,6 +14,15 @@ module Chrome {
         url: string;
         webSocketDebuggerUrl: string;
     }
+
+    export function createDebugger(tab: string|ChromeTab) {
+        if (typeof tab === "string") {
+            return new Chrome.ChromeDebugger(tab);
+        } else {
+            return new Chrome.ChromeDebugger(tab.webSocketDebuggerUrl);
+        }
+    }
+
     export function getTabs(options, callback: (tabs: ChromeTab[]) => void) {
         var req = http.request(options, function (res) {
             var body = "";
