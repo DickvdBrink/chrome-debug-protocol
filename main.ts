@@ -57,7 +57,6 @@ module Chrome {
             var ws = this.ws = new WebSocket(websocketUrl);
             ws.on("message", this.messageRecieved);
             ws.on("error", (error) => {
-                console.log("Error: " + error);
                 this.emit("error", error);
             });
         }
@@ -77,14 +76,12 @@ module Chrome {
         }
 
         private sendInternal<T>(method: string, params: any, callback: ChromeCallBack<T>) {
-            console.log("Send command: " + method);
             this.ws.send(JSON.stringify({ method, params, id: this.callbackId }));
             this.callbacks[this.callbackId] = callback;
             this.callbackId++;
         }
 
         private messageRecieved = (data: any, flags: any) => {
-            console.log(data);
             var obj = JSON.parse(data);
             if (typeof obj.id !== "undefined") {
                 // When an id is present, this means it is the return value from a method
@@ -99,7 +96,7 @@ module Chrome {
                 }
             } else {
                 // This is an event
-                this.emit(obj.method);
+                this.emit(obj.method, obj.params);
             }
         }
 
@@ -108,9 +105,11 @@ module Chrome {
             for (var i = 0; i < domains.length; i++) {
                 var domain = domains[i];
                 var domainObject = this[domain.domain] = <any>{};
-                domainObject.on = function () {
-                    this.on.apply(this, arguments);
-                };
+                domainObject.on = ((domain: any) => {
+                    return () => {
+                        this.on.call(this, `${domain.domain}.${arguments[0]}`, arguments[1]);
+                    };
+                })(domain);
                 var commands: any[] = domain.commands;
                 if (commands && commands.length > 0) {
                     for (var j = 0; j < commands.length; j++) {
