@@ -43,6 +43,12 @@ class Emitter {
         }
     }
 
+    public writeTypeDescription(str: string) {
+        this.writeStartMultilineComment();
+        this.writeline(str);
+        this.writeEndMultilineComment();
+    }
+
     public writeStartMultilineComment() {
         this.isInComment = true;
         this.buffer.push(`${this.createIndentString()} /**${this.newline}`);
@@ -75,9 +81,7 @@ var domainEmitter = new Emitter(2);
 for (var i = 0; i < domains.length; i++) {
     var domain = domains[i];
     if (domain.description) {
-        domainEmitter.writeStartMultilineComment();
-        domainEmitter.writeline(domain.description);
-        domainEmitter.writeEndMultilineComment();
+        domainEmitter.writeTypeDescription(domain.description);
     }
     domainEmitter.writeline(`${domain.domain}: I${domain.domain};`);
 }
@@ -97,7 +101,7 @@ for (var i = 0; i < domains.length; i++) {
                 var optional = containsOptionalParameters(parameters);
                 var commandName = command.name.replace(/(.)/,(val) => val.toUpperCase());
                 var name = `I${commandName}Params`;
-                emitParameterInterface(name, parameters, domain);
+                emitInterface(name, parameters, domain);
             }
         }
     }
@@ -105,7 +109,10 @@ for (var i = 0; i < domains.length; i++) {
         for (var j = 0; j < domain.types.length; j++) {
             var type = domain.types[j];
             if (type.type == "object") {
-                generateDomainCustomTypes(type, domain);
+                if (type.description) {
+                    moduleEmitter.writeTypeDescription(type.description);
+                }
+                emitInterface(type.id, type.properties || [], domain);
             }
         }
     }
@@ -115,7 +122,7 @@ for (var i = 0; i < domains.length; i++) {
             var event = domain.events[j];
             var commandName = event.name.replace(/(.)/,(val) => val.toUpperCase());
             var name = `I${commandName}Event`;
-            emitParameterInterface(name, event.parameters || [], domain);
+            emitInterface(name, event.parameters || [], domain);
         }
     }
 
@@ -123,42 +130,16 @@ for (var i = 0; i < domains.length; i++) {
     moduleEmitter.writeline("}");
 }
 
-function generateDomainCustomTypes(type: any, currentDomain: any) {
-    if (type.description) {
-        moduleEmitter.writeStartMultilineComment();
-        moduleEmitter.writeline(type.description);
-        moduleEmitter.writeEndMultilineComment();
-    }
-    moduleEmitter.writeline(`export interface ${type.id} {`);
+function emitInterface(name: string, properties: any[], currentDomain: any) {
+    moduleEmitter.writeline(`export interface ${name} {`);
     moduleEmitter.indent();
-
-    var properties = type.properties || [];
     for (var i = 0; i < properties.length; i++) {
         var p = properties[i];
         if (p.description) {
-            moduleEmitter.writeStartMultilineComment();
-            moduleEmitter.writeline(p.description);
-            moduleEmitter.writeEndMultilineComment();
-        }
-        moduleEmitter.writeline(`${p.name}${(p.optional ? "?" : "") }: ${getTypeScriptTypeFromParameter(p, currentDomain, false)};`);
-    }
-
-    moduleEmitter.unindent();
-    moduleEmitter.writeline("}");
-}
-
-function emitParameterInterface(name: string, parameters: any[], currentDomain: any) {
-    moduleEmitter.writeline(`export interface ${name} {`);
-    moduleEmitter.indent();
-    for (var i = 0; i < parameters.length; i++) {
-        var p = parameters[i];
-        if (p.description) {
-            moduleEmitter.writeStartMultilineComment();
-            moduleEmitter.writeline(p.description);
-            moduleEmitter.writeEndMultilineComment();
+            moduleEmitter.writeTypeDescription(p.description);
         }
 
-        moduleEmitter.writeline(`${p.name}${(p.optional ? "?" : "")}: ${getTypeScriptTypeFromParameter(p, currentDomain, false)};`);
+        moduleEmitter.writeline(`${p.name}${(p.optional ? "?" : "") }: ${getTypeScriptTypeFromParameter(p, currentDomain, false) };`);
     }
     moduleEmitter.unindent();
     moduleEmitter.writeline("}");
@@ -176,9 +157,7 @@ for (var i = 0; i < domains.length; i++) {
             var command = commands[j];
             var parameters: any[] = command.parameters;
             if (command.description) {
-                domainInterfaceEmitter.writeStartMultilineComment();
-                domainInterfaceEmitter.writeline(command.description);
-                domainInterfaceEmitter.writeEndMultilineComment();
+                domainInterfaceEmitter.writeTypeDescription(command.description);
             }
             domainInterfaceEmitter.writeIndent();
             domainInterfaceEmitter.write(`${command.name}(`);
@@ -211,9 +190,7 @@ for (var i = 0; i < domains.length; i++) {
         for (var j = 0; j < domain.events.length; j++) {
             var event = domain.events[j];
             if (event.description) {
-                domainInterfaceEmitter.writeStartMultilineComment();
-                domainInterfaceEmitter.writeline(event.description);
-                domainInterfaceEmitter.writeEndMultilineComment();
+                domainInterfaceEmitter.writeTypeDescription(event.description);
             }
             var eventName = event.name.replace(/(.)/,(val) => val.toUpperCase());
             var name = `I${eventName}Event`;
