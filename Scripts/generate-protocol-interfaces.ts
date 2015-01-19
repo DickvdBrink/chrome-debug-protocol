@@ -110,6 +110,15 @@ for (var i = 0; i < domains.length; i++) {
         }
     }
 
+    if (domain.events) {
+        for (var j = 0; j < domain.events.length; j++) {
+            var event = domain.events[j];
+            var commandName = event.name.replace(/(.)/,(val) => val.toUpperCase());
+            var name = `I${commandName}Event`;
+            emitParameterInterface(name, event.parameters || [], domain);
+        }
+    }
+
     moduleEmitter.unindent();
     moduleEmitter.writeline("}");
 }
@@ -197,6 +206,23 @@ for (var i = 0; i < domains.length; i++) {
             domainInterfaceEmitter.writenewline();
         }
     }
+
+    if (domain.events && domain.events.length > 0) {
+        for (var j = 0; j < domain.events.length; j++) {
+            var event = domain.events[j];
+            if (event.description) {
+                domainInterfaceEmitter.writeStartMultilineComment();
+                domainInterfaceEmitter.writeline(event.description);
+                domainInterfaceEmitter.writeEndMultilineComment();
+            }
+            var eventName = event.name.replace(/(.)/,(val) => val.toUpperCase());
+            var name = `I${eventName}Event`;
+
+            domainInterfaceEmitter.writeline(`on(event: "${event.name}", listener: ChromeCallBack<${domain.domain}.${name}>): NodeJS.EventEmitter;`);
+        }
+        domainInterfaceEmitter.writeline(`on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;`);
+    }
+
     domainInterfaceEmitter.unindent();
     domainInterfaceEmitter.writeline("}")
 }
@@ -205,24 +231,24 @@ function getTypeScriptTypeFromParameter(parameter: any, currentDomain: any, with
     var paramType: string;
 
     if (parameter["$ref"]) {
-        var customTypeFullName: string = parameter["$ref"];
-        var splitted = customTypeFullName.split(".");
+        var typeId: string = parameter["$ref"];
+        var splitted = typeId.split(".");
 
         var typeDomain = splitted.length == 1
             ? currentDomain
             : (<any[]>domains).filter((item) => item.domain == splitted[0])[0];
 
         var typeName: string = splitted.length == 1
-            ? customTypeFullName
+            ? typeId
             : splitted[1];
 
         var customType = (<any[]>typeDomain.types).filter((item) => item.id == typeName)[0];
 
         if (customType.type == "object") {
             if (splitted.length == 1 && withModulePrefix) {
-                return `${typeDomain.domain}.${customTypeFullName}`;
+                return `${typeDomain.domain}.${typeId}`;
             }
-            return customTypeFullName;
+            return typeId;
         } else {
             paramType = customType.type;
         }
@@ -264,7 +290,7 @@ while ((match = importRegex.exec(maindts)) != null) {
     importsEmitter.writeline(match[0]);
 }
 
-var header = `// Type definitions for ws
+var header = `// Type definitions for chrome-debug-protocol
 // Project: https://github.com/DickvdBrink/chrome-debug-protocol
 // Definitions by: Dick van den Brink <https://github.com/DickvdBrink>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped

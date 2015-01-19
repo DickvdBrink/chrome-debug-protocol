@@ -1,4 +1,4 @@
-// Type definitions for ws
+// Type definitions for chrome-debug-protocol
 // Project: https://github.com/DickvdBrink/chrome-debug-protocol
 // Definitions by: Dick van den Brink <https://github.com/DickvdBrink>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
@@ -108,6 +108,17 @@ declare module "chrome-debug-protocol" {
          * Resets all domains.
          */
         reset(cb?: ChromeCallBack<any>);
+        on(event: "evaluateForTestInFrontend", listener: ChromeCallBack<Inspector.IEvaluateForTestInFrontendEvent>): NodeJS.EventEmitter;
+        on(event: "inspect", listener: ChromeCallBack<Inspector.IInspectEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when remote debugging connection is about to be terminated. Contains detach reason.
+         */
+        on(event: "detached", listener: ChromeCallBack<Inspector.IDetachedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when debugging target has crashed
+         */
+        on(event: "targetCrashed", listener: ChromeCallBack<Inspector.ITargetCrashedEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     interface IMemory {
         getDOMCounters(cb?: ChromeCallBack<{documents: number; nodes: number; jsEventListeners: number;}>);
@@ -291,6 +302,74 @@ declare module "chrome-debug-protocol" {
          * Sets the playback rate of the document timeline.
          */
         setAnimationsPlaybackRate(params: Page.ISetAnimationsPlaybackRateParams, cb?: ChromeCallBack<any>);
+        on(event: "domContentEventFired", listener: ChromeCallBack<Page.IDomContentEventFiredEvent>): NodeJS.EventEmitter;
+        on(event: "loadEventFired", listener: ChromeCallBack<Page.ILoadEventFiredEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when frame has been attached to its parent.
+         */
+        on(event: "frameAttached", listener: ChromeCallBack<Page.IFrameAttachedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired once navigation of the frame has completed. Frame is now associated with the new loader.
+         */
+        on(event: "frameNavigated", listener: ChromeCallBack<Page.IFrameNavigatedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when frame has been detached from its parent.
+         */
+        on(event: "frameDetached", listener: ChromeCallBack<Page.IFrameDetachedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when frame has started loading.
+         */
+        on(event: "frameStartedLoading", listener: ChromeCallBack<Page.IFrameStartedLoadingEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when frame has stopped loading.
+         */
+        on(event: "frameStoppedLoading", listener: ChromeCallBack<Page.IFrameStoppedLoadingEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when frame schedules a potential navigation.
+         */
+        on(event: "frameScheduledNavigation", listener: ChromeCallBack<Page.IFrameScheduledNavigationEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when frame no longer has a scheduled navigation.
+         */
+        on(event: "frameClearedScheduledNavigation", listener: ChromeCallBack<Page.IFrameClearedScheduledNavigationEvent>): NodeJS.EventEmitter;
+        on(event: "frameResized", listener: ChromeCallBack<Page.IFrameResizedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload) is about to open.
+         */
+        on(event: "javascriptDialogOpening", listener: ChromeCallBack<Page.IJavascriptDialogOpeningEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload) has been closed.
+         */
+        on(event: "javascriptDialogClosed", listener: ChromeCallBack<Page.IJavascriptDialogClosedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when the JavaScript is enabled/disabled on the page
+         */
+        on(event: "scriptsEnabled", listener: ChromeCallBack<Page.IScriptsEnabledEvent>): NodeJS.EventEmitter;
+         /**
+         * Compressed image data requested by the <code>startScreencast</code>.
+         */
+        on(event: "screencastFrame", listener: ChromeCallBack<Page.IScreencastFrameEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when the page with currently enabled screencast was shown or hidden </code>.
+         */
+        on(event: "screencastVisibilityChanged", listener: ChromeCallBack<Page.IScreencastVisibilityChangedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when a visible page viewport has changed.
+         */
+        on(event: "viewportChanged", listener: ChromeCallBack<Page.IViewportChangedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when a color has been picked.
+         */
+        on(event: "colorPicked", listener: ChromeCallBack<Page.IColorPickedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when interstitial page was shown
+         */
+        on(event: "interstitialShown", listener: ChromeCallBack<Page.IInterstitialShownEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when interstitial page was hidden
+         */
+        on(event: "interstitialHidden", listener: ChromeCallBack<Page.IInterstitialHiddenEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     interface IRuntime {
          /**
@@ -327,6 +406,19 @@ declare module "chrome-debug-protocol" {
         disable(cb?: ChromeCallBack<any>);
         isRunRequired(cb?: ChromeCallBack<{result: boolean;}>);
         setCustomObjectFormatterEnabled(params: Runtime.ISetCustomObjectFormatterEnabledParams, cb?: ChromeCallBack<any>);
+         /**
+         * Issued when new execution context is created.
+         */
+        on(event: "executionContextCreated", listener: ChromeCallBack<Runtime.IExecutionContextCreatedEvent>): NodeJS.EventEmitter;
+         /**
+         * Issued when execution context is destroyed.
+         */
+        on(event: "executionContextDestroyed", listener: ChromeCallBack<Runtime.IExecutionContextDestroyedEvent>): NodeJS.EventEmitter;
+         /**
+         * Issued when all executionContexts were cleared in browser
+         */
+        on(event: "executionContextsCleared", listener: ChromeCallBack<Runtime.IExecutionContextsClearedEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     interface IConsole {
          /**
@@ -354,6 +446,19 @@ declare module "chrome-debug-protocol" {
          * Sets last evaluation result in console. Can be accessed via <code>$_</code> command line API.
          */
         setLastEvaluationResult(params: Console.ISetLastEvaluationResultParams, cb?: ChromeCallBack<any>);
+         /**
+         * Issued when new console message is added.
+         */
+        on(event: "messageAdded", listener: ChromeCallBack<Console.IMessageAddedEvent>): NodeJS.EventEmitter;
+         /**
+         * Is not issued. Will be gone in the future versions of the protocol.
+         */
+        on(event: "messageRepeatCountUpdated", listener: ChromeCallBack<Console.IMessageRepeatCountUpdatedEvent>): NodeJS.EventEmitter;
+         /**
+         * Issued when console is cleared. This happens either upon <code>clearMessages</code> command or after page navigation.
+         */
+        on(event: "messagesCleared", listener: ChromeCallBack<Console.IMessagesClearedEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     interface INetwork {
          /**
@@ -412,6 +517,59 @@ declare module "chrome-debug-protocol" {
          * Loads a resource in the context of a frame on the inspected page without cross origin checks.
          */
         loadResourceForFrontend(params?: Network.ILoadResourceForFrontendParams, cb?: ChromeCallBack<{statusCode: any; responseHeaders: Network.Headers; content: string;}>);
+         /**
+         * Fired when page is about to send HTTP request.
+         */
+        on(event: "requestWillBeSent", listener: ChromeCallBack<Network.IRequestWillBeSentEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired if request ended up loading from cache.
+         */
+        on(event: "requestServedFromCache", listener: ChromeCallBack<Network.IRequestServedFromCacheEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when HTTP response is available.
+         */
+        on(event: "responseReceived", listener: ChromeCallBack<Network.IResponseReceivedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when data chunk was received over the network.
+         */
+        on(event: "dataReceived", listener: ChromeCallBack<Network.IDataReceivedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when HTTP request has finished loading.
+         */
+        on(event: "loadingFinished", listener: ChromeCallBack<Network.ILoadingFinishedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when HTTP request has failed to load.
+         */
+        on(event: "loadingFailed", listener: ChromeCallBack<Network.ILoadingFailedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when WebSocket is about to initiate handshake.
+         */
+        on(event: "webSocketWillSendHandshakeRequest", listener: ChromeCallBack<Network.IWebSocketWillSendHandshakeRequestEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when WebSocket handshake response becomes available.
+         */
+        on(event: "webSocketHandshakeResponseReceived", listener: ChromeCallBack<Network.IWebSocketHandshakeResponseReceivedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired upon WebSocket creation.
+         */
+        on(event: "webSocketCreated", listener: ChromeCallBack<Network.IWebSocketCreatedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when WebSocket is closed.
+         */
+        on(event: "webSocketClosed", listener: ChromeCallBack<Network.IWebSocketClosedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when WebSocket frame is received.
+         */
+        on(event: "webSocketFrameReceived", listener: ChromeCallBack<Network.IWebSocketFrameReceivedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when WebSocket frame error occurs.
+         */
+        on(event: "webSocketFrameError", listener: ChromeCallBack<Network.IWebSocketFrameErrorEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when WebSocket frame is sent.
+         */
+        on(event: "webSocketFrameSent", listener: ChromeCallBack<Network.IWebSocketFrameSentEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     interface IDatabase {
          /**
@@ -424,6 +582,8 @@ declare module "chrome-debug-protocol" {
         disable(cb?: ChromeCallBack<any>);
         getDatabaseTableNames(params: Database.IGetDatabaseTableNamesParams, cb?: ChromeCallBack<{tableNames: string[];}>);
         executeSQL(params: Database.IExecuteSQLParams, cb?: ChromeCallBack<{columnNames: string[]; values: any[]; sqlError: Database.Error;}>);
+        on(event: "addDatabase", listener: ChromeCallBack<Database.IAddDatabaseEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     interface IIndexedDB {
          /**
@@ -477,6 +637,11 @@ declare module "chrome-debug-protocol" {
         getDOMStorageItems(params: DOMStorage.IGetDOMStorageItemsParams, cb?: ChromeCallBack<{entries: any[][];}>);
         setDOMStorageItem(params: DOMStorage.ISetDOMStorageItemParams, cb?: ChromeCallBack<any>);
         removeDOMStorageItem(params: DOMStorage.IRemoveDOMStorageItemParams, cb?: ChromeCallBack<any>);
+        on(event: "domStorageItemsCleared", listener: ChromeCallBack<DOMStorage.IDomStorageItemsClearedEvent>): NodeJS.EventEmitter;
+        on(event: "domStorageItemRemoved", listener: ChromeCallBack<DOMStorage.IDomStorageItemRemovedEvent>): NodeJS.EventEmitter;
+        on(event: "domStorageItemAdded", listener: ChromeCallBack<DOMStorage.IDomStorageItemAddedEvent>): NodeJS.EventEmitter;
+        on(event: "domStorageItemUpdated", listener: ChromeCallBack<DOMStorage.IDomStorageItemUpdatedEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     interface IApplicationCache {
          /**
@@ -495,6 +660,9 @@ declare module "chrome-debug-protocol" {
          * Returns relevant application cache data for the document in given frame.
          */
         getApplicationCacheForFrame(params: ApplicationCache.IGetApplicationCacheForFrameParams, cb?: ChromeCallBack<{applicationCache: ApplicationCache.ApplicationCache;}>);
+        on(event: "applicationCacheStatusUpdated", listener: ChromeCallBack<ApplicationCache.IApplicationCacheStatusUpdatedEvent>): NodeJS.EventEmitter;
+        on(event: "networkStateUpdated", listener: ChromeCallBack<ApplicationCache.INetworkStateUpdatedEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     interface IFileSystem {
          /**
@@ -687,6 +855,67 @@ declare module "chrome-debug-protocol" {
          * Returns the id of the nearest ancestor that is a relayout boundary.
          */
         getRelayoutBoundary(params: DOM.IGetRelayoutBoundaryParams, cb?: ChromeCallBack<{nodeId: number;}>);
+         /**
+         * Fired when <code>Document</code> has been totally updated. Node ids are no longer valid.
+         */
+        on(event: "documentUpdated", listener: ChromeCallBack<DOM.IDocumentUpdatedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when the node should be inspected. This happens after call to <code>setInspectModeEnabled</code>.
+         */
+        on(event: "inspectNodeRequested", listener: ChromeCallBack<DOM.IInspectNodeRequestedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when backend wants to provide client with the missing DOM structure. This happens upon most of the calls requesting node ids.
+         */
+        on(event: "setChildNodes", listener: ChromeCallBack<DOM.ISetChildNodesEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when <code>Element</code>'s attribute is modified.
+         */
+        on(event: "attributeModified", listener: ChromeCallBack<DOM.IAttributeModifiedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when <code>Element</code>'s attribute is removed.
+         */
+        on(event: "attributeRemoved", listener: ChromeCallBack<DOM.IAttributeRemovedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when <code>Element</code>'s inline style is modified via a CSS property modification.
+         */
+        on(event: "inlineStyleInvalidated", listener: ChromeCallBack<DOM.IInlineStyleInvalidatedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when shadow host node content distribution is recalculated.
+         */
+        on(event: "shadowHostDistributionInvalidated", listener: ChromeCallBack<DOM.IShadowHostDistributionInvalidatedEvent>): NodeJS.EventEmitter;
+         /**
+         * Mirrors <code>DOMCharacterDataModified</code> event.
+         */
+        on(event: "characterDataModified", listener: ChromeCallBack<DOM.ICharacterDataModifiedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when <code>Container</code>'s child node count has changed.
+         */
+        on(event: "childNodeCountUpdated", listener: ChromeCallBack<DOM.IChildNodeCountUpdatedEvent>): NodeJS.EventEmitter;
+         /**
+         * Mirrors <code>DOMNodeInserted</code> event.
+         */
+        on(event: "childNodeInserted", listener: ChromeCallBack<DOM.IChildNodeInsertedEvent>): NodeJS.EventEmitter;
+         /**
+         * Mirrors <code>DOMNodeRemoved</code> event.
+         */
+        on(event: "childNodeRemoved", listener: ChromeCallBack<DOM.IChildNodeRemovedEvent>): NodeJS.EventEmitter;
+         /**
+         * Called when shadow root is pushed into the element.
+         */
+        on(event: "shadowRootPushed", listener: ChromeCallBack<DOM.IShadowRootPushedEvent>): NodeJS.EventEmitter;
+         /**
+         * Called when shadow root is popped from the element.
+         */
+        on(event: "shadowRootPopped", listener: ChromeCallBack<DOM.IShadowRootPoppedEvent>): NodeJS.EventEmitter;
+         /**
+         * Called when a pseudo element is added to an element.
+         */
+        on(event: "pseudoElementAdded", listener: ChromeCallBack<DOM.IPseudoElementAddedEvent>): NodeJS.EventEmitter;
+         /**
+         * Called when a pseudo element is removed from an element.
+         */
+        on(event: "pseudoElementRemoved", listener: ChromeCallBack<DOM.IPseudoElementRemovedEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     interface ICSS {
          /**
@@ -749,6 +978,23 @@ declare module "chrome-debug-protocol" {
          * Returns all media queries parsed by the rendering engine.
          */
         getMediaQueries(cb?: ChromeCallBack<{medias: CSS.CSSMedia[];}>);
+         /**
+         * Fires whenever a MediaQuery result changes (for example, after a browser window has been resized.) The current implementation considers only viewport-dependent media features.
+         */
+        on(event: "mediaQueryResultChanged", listener: ChromeCallBack<CSS.IMediaQueryResultChangedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired whenever a stylesheet is changed as a result of the client operation.
+         */
+        on(event: "styleSheetChanged", listener: ChromeCallBack<CSS.IStyleSheetChangedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired whenever an active document stylesheet is added.
+         */
+        on(event: "styleSheetAdded", listener: ChromeCallBack<CSS.IStyleSheetAddedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired whenever an active document stylesheet is removed.
+         */
+        on(event: "styleSheetRemoved", listener: ChromeCallBack<CSS.IStyleSheetRemovedEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     interface ITimeline {
          /**
@@ -767,6 +1013,20 @@ declare module "chrome-debug-protocol" {
          * Stops capturing instrumentation events.
          */
         stop(cb?: ChromeCallBack<any>);
+         /**
+         * Fired for every instrumentation event while timeline is started.
+         */
+        on(event: "eventRecorded", listener: ChromeCallBack<Timeline.IEventRecordedEvent>): NodeJS.EventEmitter;
+        on(event: "progress", listener: ChromeCallBack<Timeline.IProgressEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when timeline is started.
+         */
+        on(event: "started", listener: ChromeCallBack<Timeline.IStartedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when timeline is stopped.
+         */
+        on(event: "stopped", listener: ChromeCallBack<Timeline.IStoppedEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     interface IDebugger {
          /**
@@ -909,6 +1169,31 @@ declare module "chrome-debug-protocol" {
          * Returns <code>Promise</code> with specified ID.
          */
         getPromiseById(params?: Debugger.IGetPromiseByIdParams, cb?: ChromeCallBack<{promise: Runtime.RemoteObject;}>);
+         /**
+         * Called when global has been cleared and debugger client should reset its state. Happens upon navigation or reload.
+         */
+        on(event: "globalObjectCleared", listener: ChromeCallBack<Debugger.IGlobalObjectClearedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when virtual machine parses script. This event is also fired for all known and uncollected scripts upon enabling debugger.
+         */
+        on(event: "scriptParsed", listener: ChromeCallBack<Debugger.IScriptParsedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when virtual machine fails to parse the script.
+         */
+        on(event: "scriptFailedToParse", listener: ChromeCallBack<Debugger.IScriptFailedToParseEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when breakpoint is resolved to an actual script and location.
+         */
+        on(event: "breakpointResolved", listener: ChromeCallBack<Debugger.IBreakpointResolvedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when the virtual machine stopped on breakpoint or exception or any other stop criteria.
+         */
+        on(event: "paused", listener: ChromeCallBack<Debugger.IPausedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when the virtual machine resumed execution.
+         */
+        on(event: "resumed", listener: ChromeCallBack<Debugger.IResumedEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     interface IDOMDebugger {
          /**
@@ -953,6 +1238,12 @@ declare module "chrome-debug-protocol" {
         setSamplingInterval(params: Profiler.ISetSamplingIntervalParams, cb?: ChromeCallBack<any>);
         start(cb?: ChromeCallBack<any>);
         stop(cb?: ChromeCallBack<{profile: Profiler.CPUProfile;}>);
+         /**
+         * Sent when new profile recodring is started using console.profile() call.
+         */
+        on(event: "consoleProfileStarted", listener: ChromeCallBack<Profiler.IConsoleProfileStartedEvent>): NodeJS.EventEmitter;
+        on(event: "consoleProfileFinished", listener: ChromeCallBack<Profiler.IConsoleProfileFinishedEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     interface IHeapProfiler {
         enable(cb?: ChromeCallBack<any>);
@@ -963,6 +1254,18 @@ declare module "chrome-debug-protocol" {
         collectGarbage(cb?: ChromeCallBack<any>);
         getObjectByHeapObjectId(params?: HeapProfiler.IGetObjectByHeapObjectIdParams, cb?: ChromeCallBack<{result: Runtime.RemoteObject;}>);
         getHeapObjectId(params: HeapProfiler.IGetHeapObjectIdParams, cb?: ChromeCallBack<{heapSnapshotObjectId: string;}>);
+        on(event: "addHeapSnapshotChunk", listener: ChromeCallBack<HeapProfiler.IAddHeapSnapshotChunkEvent>): NodeJS.EventEmitter;
+        on(event: "resetProfiles", listener: ChromeCallBack<HeapProfiler.IResetProfilesEvent>): NodeJS.EventEmitter;
+        on(event: "reportHeapSnapshotProgress", listener: ChromeCallBack<HeapProfiler.IReportHeapSnapshotProgressEvent>): NodeJS.EventEmitter;
+         /**
+         * If heap objects tracking has been started then backend regulary sends a current value for last seen object id and corresponding timestamp. If the were changes in the heap since last event then one or more heapStatsUpdate events will be sent before a new lastSeenObjectId event.
+         */
+        on(event: "lastSeenObjectId", listener: ChromeCallBack<HeapProfiler.ILastSeenObjectIdEvent>): NodeJS.EventEmitter;
+         /**
+         * If heap objects tracking has been started then backend may send update for one or more fragments
+         */
+        on(event: "heapStatsUpdate", listener: ChromeCallBack<HeapProfiler.IHeapStatsUpdateEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     interface IWorker {
         enable(cb?: ChromeCallBack<any>);
@@ -975,6 +1278,11 @@ declare module "chrome-debug-protocol" {
         connectToWorker(params: Worker.IConnectToWorkerParams, cb?: ChromeCallBack<any>);
         disconnectFromWorker(params: Worker.IDisconnectFromWorkerParams, cb?: ChromeCallBack<any>);
         setAutoconnectToWorkers(params: Worker.ISetAutoconnectToWorkersParams, cb?: ChromeCallBack<any>);
+        on(event: "workerCreated", listener: ChromeCallBack<Worker.IWorkerCreatedEvent>): NodeJS.EventEmitter;
+        on(event: "workerTerminated", listener: ChromeCallBack<Worker.IWorkerTerminatedEvent>): NodeJS.EventEmitter;
+        on(event: "dispatchMessageFromWorker", listener: ChromeCallBack<Worker.IDispatchMessageFromWorkerEvent>): NodeJS.EventEmitter;
+        on(event: "disconnectedFromWorker", listener: ChromeCallBack<Worker.IDisconnectedFromWorkerEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     interface ICanvas {
          /**
@@ -1006,6 +1314,15 @@ declare module "chrome-debug-protocol" {
          * Evaluates a given trace call argument or its result.
          */
         evaluateTraceLogCallArgument(params?: Canvas.IEvaluateTraceLogCallArgumentParams, cb?: ChromeCallBack<{result: Runtime.RemoteObject; resourceState: Canvas.ResourceState;}>);
+         /**
+         * Fired when a canvas context has been created in the given frame. The context may not be instrumented (see hasUninstrumentedCanvases command).
+         */
+        on(event: "contextCreated", listener: ChromeCallBack<Canvas.IContextCreatedEvent>): NodeJS.EventEmitter;
+         /**
+         * Fired when a set of trace logs were removed from the backend. If no parameters are given, all trace logs were removed.
+         */
+        on(event: "traceLogsRemoved", listener: ChromeCallBack<Canvas.ITraceLogsRemovedEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     interface IInput {
          /**
@@ -1059,6 +1376,9 @@ declare module "chrome-debug-protocol" {
          * Replays the layer snapshot and returns canvas log.
          */
         snapshotCommandLog(params: LayerTree.ISnapshotCommandLogParams, cb?: ChromeCallBack<{commandLog: any[];}>);
+        on(event: "layerTreeDidChange", listener: ChromeCallBack<LayerTree.ILayerTreeDidChangeEvent>): NodeJS.EventEmitter;
+        on(event: "layerPainted", listener: ChromeCallBack<LayerTree.ILayerPaintedEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     interface IDeviceOrientation {
          /**
@@ -1083,6 +1403,16 @@ declare module "chrome-debug-protocol" {
          * Gets supported tracing categories.
          */
         getCategories(cb?: ChromeCallBack<{categories: string[];}>);
+         /**
+         * Contains an bucket of collected trace events. When tracing is stopped collected events will be send as a sequence of dataCollected events followed by tracingComplete event.
+         */
+        on(event: "dataCollected", listener: ChromeCallBack<Tracing.IDataCollectedEvent>): NodeJS.EventEmitter;
+         /**
+         * Signals that tracing is stopped and there is no trace buffers pending flush, all data were delivered via dataCollected events.
+         */
+        on(event: "tracingComplete", listener: ChromeCallBack<Tracing.ITracingCompleteEvent>): NodeJS.EventEmitter;
+        on(event: "bufferUsage", listener: ChromeCallBack<Tracing.IBufferUsageEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     interface IPower {
          /**
@@ -1101,6 +1431,8 @@ declare module "chrome-debug-protocol" {
          * Describes the accuracy level of the data provider.
          */
         getAccuracyLevel(cb?: ChromeCallBack<{result: string;}>);
+        on(event: "dataAvailable", listener: ChromeCallBack<Power.IDataAvailableEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     interface IAnimation {
          /**
@@ -1135,8 +1467,26 @@ declare module "chrome-debug-protocol" {
          * Stops recording for new animation player events.
          */
         stopListening(cb?: ChromeCallBack<any>);
+        on(event: "animationPlayerCreated", listener: ChromeCallBack<Animation.IAnimationPlayerCreatedEvent>): NodeJS.EventEmitter;
+        on(event: string, listener: ChromeCallBack<any>): NodeJS.EventEmitter;
     }
     module Inspector {
+        export interface IEvaluateForTestInFrontendEvent {
+            testCallId: number;
+            script: string;
+        }
+        export interface IInspectEvent {
+            object: Runtime.RemoteObject;
+            hints: any;
+        }
+        export interface IDetachedEvent {
+             /**
+             * The reason why connection has been terminated.
+             */
+            reason: string;
+        }
+        export interface ITargetCrashedEvent {
+        }
     }
     module Memory {
     }
@@ -1662,6 +2012,114 @@ declare module "chrome-debug-protocol" {
              */
             timestamp: any;
         }
+        export interface IDomContentEventFiredEvent {
+            timestamp: any;
+        }
+        export interface ILoadEventFiredEvent {
+            timestamp: any;
+        }
+        export interface IFrameAttachedEvent {
+             /**
+             * Id of the frame that has been attached.
+             */
+            frameId: string;
+             /**
+             * Parent frame identifier.
+             */
+            parentFrameId: string;
+        }
+        export interface IFrameNavigatedEvent {
+             /**
+             * Frame object.
+             */
+            frame: Frame;
+        }
+        export interface IFrameDetachedEvent {
+             /**
+             * Id of the frame that has been detached.
+             */
+            frameId: string;
+        }
+        export interface IFrameStartedLoadingEvent {
+             /**
+             * Id of the frame that has started loading.
+             */
+            frameId: string;
+        }
+        export interface IFrameStoppedLoadingEvent {
+             /**
+             * Id of the frame that has stopped loading.
+             */
+            frameId: string;
+        }
+        export interface IFrameScheduledNavigationEvent {
+             /**
+             * Id of the frame that has scheduled a navigation.
+             */
+            frameId: string;
+             /**
+             * Delay (in seconds) until the navigation is scheduled to begin. The navigation is not guaranteed to start.
+             */
+            delay: any;
+        }
+        export interface IFrameClearedScheduledNavigationEvent {
+             /**
+             * Id of the frame that has cleared its scheduled navigation.
+             */
+            frameId: string;
+        }
+        export interface IFrameResizedEvent {
+        }
+        export interface IJavascriptDialogOpeningEvent {
+             /**
+             * Message that will be displayed by the dialog.
+             */
+            message: string;
+        }
+        export interface IJavascriptDialogClosedEvent {
+        }
+        export interface IScriptsEnabledEvent {
+             /**
+             * Whether script execution is enabled or disabled on the page.
+             */
+            isEnabled: boolean;
+        }
+        export interface IScreencastFrameEvent {
+             /**
+             * Base64-encoded compressed image.
+             */
+            data: string;
+             /**
+             * Screencast frame metadata.
+             */
+            metadata: ScreencastFrameMetadata;
+             /**
+             * Frame number.
+             */
+            frameNumber?: number;
+        }
+        export interface IScreencastVisibilityChangedEvent {
+             /**
+             * True if the page is visible.
+             */
+            visible: boolean;
+        }
+        export interface IViewportChangedEvent {
+             /**
+             * Viewport description.
+             */
+            viewport: Viewport;
+        }
+        export interface IColorPickedEvent {
+             /**
+             * RGBA of the picked color.
+             */
+            color: DOM.RGBA;
+        }
+        export interface IInterstitialShownEvent {
+        }
+        export interface IInterstitialHiddenEvent {
+        }
     }
     module Runtime {
         export interface IEvaluateParams {
@@ -1952,6 +2410,20 @@ declare module "chrome-debug-protocol" {
              */
             frameId: string;
         }
+        export interface IExecutionContextCreatedEvent {
+             /**
+             * A newly created execution contex.
+             */
+            context: ExecutionContextDescription;
+        }
+        export interface IExecutionContextDestroyedEvent {
+             /**
+             * Id of the destroyed context
+             */
+            executionContextId: number;
+        }
+        export interface IExecutionContextsClearedEvent {
+        }
     }
     module Console {
         export interface ISetMonitoringXHREnabledParams {
@@ -2081,6 +2553,24 @@ declare module "chrome-debug-protocol" {
              * Next asynchronous stack trace, if any.
              */
             asyncStackTrace?: AsyncStackTrace;
+        }
+        export interface IMessageAddedEvent {
+             /**
+             * Console message that has been added.
+             */
+            message: ConsoleMessage;
+        }
+        export interface IMessageRepeatCountUpdatedEvent {
+             /**
+             * New repeat count value.
+             */
+            count: number;
+             /**
+             * Timestamp of most recent message in batch.
+             */
+            timestamp: any;
+        }
+        export interface IMessagesClearedEvent {
         }
     }
     module Network {
@@ -2411,6 +2901,220 @@ declare module "chrome-debug-protocol" {
              */
             asyncStackTrace?: Console.AsyncStackTrace;
         }
+        export interface IRequestWillBeSentEvent {
+             /**
+             * Request identifier.
+             */
+            requestId: string;
+             /**
+             * Frame identifier.
+             */
+            frameId: string;
+             /**
+             * Loader identifier.
+             */
+            loaderId: string;
+             /**
+             * URL of the document this request is loaded for.
+             */
+            documentURL: string;
+             /**
+             * Request data.
+             */
+            request: Request;
+             /**
+             * Timestamp.
+             */
+            timestamp: any;
+             /**
+             * Request initiator.
+             */
+            initiator: Initiator;
+             /**
+             * Redirect response data.
+             */
+            redirectResponse?: Response;
+             /**
+             * Type of this resource.
+             */
+            type?: string;
+        }
+        export interface IRequestServedFromCacheEvent {
+             /**
+             * Request identifier.
+             */
+            requestId: string;
+        }
+        export interface IResponseReceivedEvent {
+             /**
+             * Request identifier.
+             */
+            requestId: string;
+             /**
+             * Frame identifier.
+             */
+            frameId: string;
+             /**
+             * Loader identifier.
+             */
+            loaderId: string;
+             /**
+             * Timestamp.
+             */
+            timestamp: any;
+             /**
+             * Resource type.
+             */
+            type: string;
+             /**
+             * Response data.
+             */
+            response: Response;
+        }
+        export interface IDataReceivedEvent {
+             /**
+             * Request identifier.
+             */
+            requestId: string;
+             /**
+             * Timestamp.
+             */
+            timestamp: any;
+             /**
+             * Data chunk length.
+             */
+            dataLength: number;
+             /**
+             * Actual bytes received (might be less than dataLength for compressed encodings).
+             */
+            encodedDataLength: number;
+        }
+        export interface ILoadingFinishedEvent {
+             /**
+             * Request identifier.
+             */
+            requestId: string;
+             /**
+             * Timestamp.
+             */
+            timestamp: any;
+             /**
+             * Total number of bytes received for this request.
+             */
+            encodedDataLength: any;
+        }
+        export interface ILoadingFailedEvent {
+             /**
+             * Request identifier.
+             */
+            requestId: string;
+             /**
+             * Timestamp.
+             */
+            timestamp: any;
+             /**
+             * Resource type.
+             */
+            type: string;
+             /**
+             * User friendly error message.
+             */
+            errorText: string;
+             /**
+             * True if loading was canceled.
+             */
+            canceled?: boolean;
+        }
+        export interface IWebSocketWillSendHandshakeRequestEvent {
+             /**
+             * Request identifier.
+             */
+            requestId: string;
+             /**
+             * Timestamp.
+             */
+            timestamp: any;
+             /**
+             * WebSocket request data.
+             */
+            request: WebSocketRequest;
+        }
+        export interface IWebSocketHandshakeResponseReceivedEvent {
+             /**
+             * Request identifier.
+             */
+            requestId: string;
+             /**
+             * Timestamp.
+             */
+            timestamp: any;
+             /**
+             * WebSocket response data.
+             */
+            response: WebSocketResponse;
+        }
+        export interface IWebSocketCreatedEvent {
+             /**
+             * Request identifier.
+             */
+            requestId: string;
+             /**
+             * WebSocket request URL.
+             */
+            url: string;
+        }
+        export interface IWebSocketClosedEvent {
+             /**
+             * Request identifier.
+             */
+            requestId: string;
+             /**
+             * Timestamp.
+             */
+            timestamp: any;
+        }
+        export interface IWebSocketFrameReceivedEvent {
+             /**
+             * Request identifier.
+             */
+            requestId: string;
+             /**
+             * Timestamp.
+             */
+            timestamp: any;
+             /**
+             * WebSocket response data.
+             */
+            response: WebSocketFrame;
+        }
+        export interface IWebSocketFrameErrorEvent {
+             /**
+             * Request identifier.
+             */
+            requestId: string;
+             /**
+             * Timestamp.
+             */
+            timestamp: any;
+             /**
+             * WebSocket frame error message.
+             */
+            errorMessage: string;
+        }
+        export interface IWebSocketFrameSentEvent {
+             /**
+             * Request identifier.
+             */
+            requestId: string;
+             /**
+             * Timestamp.
+             */
+            timestamp: any;
+             /**
+             * WebSocket response data.
+             */
+            response: WebSocketFrame;
+        }
     }
     module Database {
         export interface IGetDatabaseTableNamesParams {
@@ -2453,6 +3157,9 @@ declare module "chrome-debug-protocol" {
              * Error code.
              */
             code: number;
+        }
+        export interface IAddDatabaseEvent {
+            database: Database;
         }
     }
     module IndexedDB {
@@ -2721,6 +3428,24 @@ declare module "chrome-debug-protocol" {
              */
             isLocalStorage: boolean;
         }
+        export interface IDomStorageItemsClearedEvent {
+            storageId: StorageId;
+        }
+        export interface IDomStorageItemRemovedEvent {
+            storageId: StorageId;
+            key: string;
+        }
+        export interface IDomStorageItemAddedEvent {
+            storageId: StorageId;
+            key: string;
+            newValue: string;
+        }
+        export interface IDomStorageItemUpdatedEvent {
+            storageId: StorageId;
+            key: string;
+            oldValue: string;
+            newValue: string;
+        }
     }
     module ApplicationCache {
         export interface IGetManifestForFrameParams {
@@ -2793,6 +3518,23 @@ declare module "chrome-debug-protocol" {
              * Application cache status.
              */
             status: number;
+        }
+        export interface IApplicationCacheStatusUpdatedEvent {
+             /**
+             * Identifier of the frame containing document whose application cache updated status.
+             */
+            frameId: string;
+             /**
+             * Manifest URL.
+             */
+            manifestURL: string;
+             /**
+             * Updated application cache status.
+             */
+            status: number;
+        }
+        export interface INetworkStateUpdatedEvent {
+            isNowOnline: boolean;
         }
     }
     module FileSystem {
@@ -3529,6 +4271,144 @@ declare module "chrome-debug-protocol" {
              */
             distributedNodes: DistributedNode[];
         }
+        export interface IDocumentUpdatedEvent {
+        }
+        export interface IInspectNodeRequestedEvent {
+             /**
+             * Id of the node to inspect.
+             */
+            nodeId: number;
+        }
+        export interface ISetChildNodesEvent {
+             /**
+             * Parent node id to populate with children.
+             */
+            parentId: number;
+             /**
+             * Child nodes array.
+             */
+            nodes: Node[];
+        }
+        export interface IAttributeModifiedEvent {
+             /**
+             * Id of the node that has changed.
+             */
+            nodeId: number;
+             /**
+             * Attribute name.
+             */
+            name: string;
+             /**
+             * Attribute value.
+             */
+            value: string;
+        }
+        export interface IAttributeRemovedEvent {
+             /**
+             * Id of the node that has changed.
+             */
+            nodeId: number;
+             /**
+             * A ttribute name.
+             */
+            name: string;
+        }
+        export interface IInlineStyleInvalidatedEvent {
+             /**
+             * Ids of the nodes for which the inline styles have been invalidated.
+             */
+            nodeIds: number[];
+        }
+        export interface IShadowHostDistributionInvalidatedEvent {
+             /**
+             * Ids of the shadow host nodes for which content distribution has been invalidated.
+             */
+            nodeIds: number[];
+        }
+        export interface ICharacterDataModifiedEvent {
+             /**
+             * Id of the node that has changed.
+             */
+            nodeId: number;
+             /**
+             * New text value.
+             */
+            characterData: string;
+        }
+        export interface IChildNodeCountUpdatedEvent {
+             /**
+             * Id of the node that has changed.
+             */
+            nodeId: number;
+             /**
+             * New node count.
+             */
+            childNodeCount: number;
+        }
+        export interface IChildNodeInsertedEvent {
+             /**
+             * Id of the node that has changed.
+             */
+            parentNodeId: number;
+             /**
+             * If of the previous siblint.
+             */
+            previousNodeId: number;
+             /**
+             * Inserted node data.
+             */
+            node: Node;
+        }
+        export interface IChildNodeRemovedEvent {
+             /**
+             * Parent id.
+             */
+            parentNodeId: number;
+             /**
+             * Id of the node that has been removed.
+             */
+            nodeId: number;
+        }
+        export interface IShadowRootPushedEvent {
+             /**
+             * Host element id.
+             */
+            hostId: number;
+             /**
+             * Shadow root.
+             */
+            root: Node;
+        }
+        export interface IShadowRootPoppedEvent {
+             /**
+             * Host element id.
+             */
+            hostId: number;
+             /**
+             * Shadow root id.
+             */
+            rootId: number;
+        }
+        export interface IPseudoElementAddedEvent {
+             /**
+             * Pseudo element's parent element id.
+             */
+            parentId: number;
+             /**
+             * The added pseudo element.
+             */
+            pseudoElement: Node;
+        }
+        export interface IPseudoElementRemovedEvent {
+             /**
+             * Pseudo element's parent element id.
+             */
+            parentId: number;
+             /**
+             * The removed pseudo element id.
+             */
+            pseudoElementId: number;
+        }
     }
     module CSS {
         export interface IGetMatchedStylesForNodeParams {
@@ -3932,6 +4812,23 @@ declare module "chrome-debug-protocol" {
              */
             glyphCount: any;
         }
+        export interface IMediaQueryResultChangedEvent {
+        }
+        export interface IStyleSheetChangedEvent {
+            styleSheetId: string;
+        }
+        export interface IStyleSheetAddedEvent {
+             /**
+             * Added stylesheet metainfo.
+             */
+            header: CSSStyleSheetHeader;
+        }
+        export interface IStyleSheetRemovedEvent {
+             /**
+             * Identifier of the removed stylesheet.
+             */
+            styleSheetId: string;
+        }
     }
     module Timeline {
         export interface IStartParams {
@@ -4012,6 +4909,31 @@ declare module "chrome-debug-protocol" {
              * Unique identifier of the frame within the page that the event relates to.
              */
             frameId?: string;
+        }
+        export interface IEventRecordedEvent {
+             /**
+             * Timeline event record data.
+             */
+            record: TimelineEvent;
+        }
+        export interface IProgressEvent {
+            count: any;
+        }
+        export interface IStartedEvent {
+             /**
+             * If specified, identifies that timeline was started using console.timeline() call.
+             */
+            consoleTimeline?: boolean;
+        }
+        export interface IStoppedEvent {
+             /**
+             * If specified, identifies that timeline was started using console.timeline() call.
+             */
+            consoleTimeline?: boolean;
+             /**
+             * Timeline event record data.
+             */
+            events?: TimelineEvent[];
         }
     }
     module Debugger {
@@ -4474,6 +5396,118 @@ declare module "chrome-debug-protocol" {
              */
             asyncSettlementStack?: Console.AsyncStackTrace;
         }
+        export interface IGlobalObjectClearedEvent {
+        }
+        export interface IScriptParsedEvent {
+             /**
+             * Identifier of the script parsed.
+             */
+            scriptId: string;
+             /**
+             * URL or name of the script parsed (if any).
+             */
+            url: string;
+             /**
+             * Line offset of the script within the resource with given URL (for script tags).
+             */
+            startLine: number;
+             /**
+             * Column offset of the script within the resource with given URL.
+             */
+            startColumn: number;
+             /**
+             * Last line of the script.
+             */
+            endLine: number;
+             /**
+             * Length of the last line of the script.
+             */
+            endColumn: number;
+             /**
+             * Determines whether this script is a user extension script.
+             */
+            isContentScript?: boolean;
+             /**
+             * URL of source map associated with script (if any).
+             */
+            sourceMapURL?: string;
+             /**
+             * True, if this script has sourceURL.
+             */
+            hasSourceURL?: boolean;
+        }
+        export interface IScriptFailedToParseEvent {
+             /**
+             * Identifier of the script parsed.
+             */
+            scriptId: string;
+             /**
+             * URL or name of the script parsed (if any).
+             */
+            url: string;
+             /**
+             * Line offset of the script within the resource with given URL (for script tags).
+             */
+            startLine: number;
+             /**
+             * Column offset of the script within the resource with given URL.
+             */
+            startColumn: number;
+             /**
+             * Last line of the script.
+             */
+            endLine: number;
+             /**
+             * Length of the last line of the script.
+             */
+            endColumn: number;
+             /**
+             * Determines whether this script is a user extension script.
+             */
+            isContentScript?: boolean;
+             /**
+             * URL of source map associated with script (if any).
+             */
+            sourceMapURL?: string;
+             /**
+             * True, if this script has sourceURL.
+             */
+            hasSourceURL?: boolean;
+        }
+        export interface IBreakpointResolvedEvent {
+             /**
+             * Breakpoint unique identifier.
+             */
+            breakpointId: string;
+             /**
+             * Actual breakpoint location.
+             */
+            location: Location;
+        }
+        export interface IPausedEvent {
+             /**
+             * Call stack the virtual machine stopped on.
+             */
+            callFrames: CallFrame[];
+             /**
+             * Pause reason.
+             */
+            reason: string;
+             /**
+             * Object containing break-specific auxiliary properties.
+             */
+            data?: any;
+             /**
+             * Hit breakpoints IDs
+             */
+            hitBreakpoints?: string[];
+             /**
+             * Async stack trace, if any.
+             */
+            asyncStackTrace?: StackTrace;
+        }
+        export interface IResumedEvent {
+        }
     }
     module DOMDebugger {
         export interface ISetDOMBreakpointParams {
@@ -4632,6 +5666,29 @@ declare module "chrome-debug-protocol" {
              */
             ticks: number;
         }
+        export interface IConsoleProfileStartedEvent {
+            id: string;
+             /**
+             * Location of console.profile().
+             */
+            location: Debugger.Location;
+             /**
+             * Profile title passed as argument to console.profile().
+             */
+            title?: string;
+        }
+        export interface IConsoleProfileFinishedEvent {
+            id: string;
+             /**
+             * Location of console.profileEnd().
+             */
+            location: Debugger.Location;
+            profile: CPUProfile;
+             /**
+             * Profile title passed as argunet to console.profile().
+             */
+            title?: string;
+        }
     }
     module HeapProfiler {
         export interface IStartTrackingHeapObjectsParams {
@@ -4662,6 +5719,26 @@ declare module "chrome-debug-protocol" {
              */
             objectId: string;
         }
+        export interface IAddHeapSnapshotChunkEvent {
+            chunk: string;
+        }
+        export interface IResetProfilesEvent {
+        }
+        export interface IReportHeapSnapshotProgressEvent {
+            done: number;
+            total: number;
+            finished?: boolean;
+        }
+        export interface ILastSeenObjectIdEvent {
+            lastSeenObjectId: number;
+            timestamp: any;
+        }
+        export interface IHeapStatsUpdateEvent {
+             /**
+             * An array of triplets. Each triplet describes a fragment. The first integer is the fragment index, the second integer is a total count of objects for the fragment, the third integer is a total size of the objects for the fragment.
+             */
+            statsUpdate: number[];
+        }
     }
     module Worker {
         export interface ISendMessageToWorkerParams {
@@ -4676,6 +5753,20 @@ declare module "chrome-debug-protocol" {
         }
         export interface ISetAutoconnectToWorkersParams {
             value: boolean;
+        }
+        export interface IWorkerCreatedEvent {
+            workerId: number;
+            url: string;
+            inspectorConnected: boolean;
+        }
+        export interface IWorkerTerminatedEvent {
+            workerId: number;
+        }
+        export interface IDispatchMessageFromWorkerEvent {
+            workerId: number;
+            message: any;
+        }
+        export interface IDisconnectedFromWorkerEvent {
         }
     }
     module Canvas {
@@ -4814,6 +5905,22 @@ declare module "chrome-debug-protocol" {
             startOffset: number;
             alive: boolean;
             totalAvailableCalls: any;
+        }
+        export interface IContextCreatedEvent {
+             /**
+             * Identifier of the frame containing a canvas with a context.
+             */
+            frameId: string;
+        }
+        export interface ITraceLogsRemovedEvent {
+             /**
+             * If given, trace logs from the given frame were removed.
+             */
+            frameId?: string;
+             /**
+             * If given, trace log with the given ID was removed.
+             */
+            traceLogId?: string;
         }
     }
     module Input {
@@ -5142,6 +6249,22 @@ declare module "chrome-debug-protocol" {
              */
             scrollRects?: ScrollRect[];
         }
+        export interface ILayerTreeDidChangeEvent {
+             /**
+             * Layer tree, absent if not in the comspositing mode.
+             */
+            layers?: Layer[];
+        }
+        export interface ILayerPaintedEvent {
+             /**
+             * The id of the painted layer.
+             */
+            layerId: string;
+             /**
+             * Clip rectangle.
+             */
+            clip: DOM.Rect;
+        }
     }
     module DeviceOrientation {
         export interface ISetDeviceOrientationOverrideParams {
@@ -5174,6 +6297,25 @@ declare module "chrome-debug-protocol" {
              */
             bufferUsageReportingInterval?: any;
         }
+        export interface IDataCollectedEvent {
+            value: any[];
+        }
+        export interface ITracingCompleteEvent {
+        }
+        export interface IBufferUsageEvent {
+             /**
+             * A number in range [0..1] that indicates the used size of event buffer as a fraction of its total size.
+             */
+            percentFull?: any;
+             /**
+             * An approximate number of events in the trace log.
+             */
+            eventCount?: any;
+             /**
+             * A number in range [0..1] that indicates the used size of event buffer as a fraction of its total size.
+             */
+            value?: any;
+        }
     }
     module Power {
          /**
@@ -5192,6 +6334,12 @@ declare module "chrome-debug-protocol" {
              * Power Event Value.
              */
             value: any;
+        }
+        export interface IDataAvailableEvent {
+             /**
+             * List of power events.
+             */
+            value: PowerEvent[];
         }
     }
     module Animation {
@@ -5346,6 +6494,12 @@ declare module "chrome-debug-protocol" {
              * Keyframe's associated CSS style declaration.
              */
             style: CSS.CSSStyle;
+        }
+        export interface IAnimationPlayerCreatedEvent {
+             /**
+             * AnimationPlayer that was created.
+             */
+            player: AnimationPlayer;
         }
     }
 
