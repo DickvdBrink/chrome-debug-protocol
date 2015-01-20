@@ -36,3 +36,7 @@ obj/
 # TypeScript
 *.map
 *.js
+.tscache/
+
+!Gruntfile.js
+
