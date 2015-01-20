@@ -55,3 +55,12 @@ chrome.getTabs("http://localhost:9444/json",(tabs) => {
     });
 });
 ```
+
+## Building from source
+
+### Using Visual Studio
+
+**Requirements**
+ * Visual Studio 2013
+ * [Node.js Tools for Visual Studio](https://nodejstools.codeplex.com/)
+ * [TypeScript 1.4](http://www.typescriptlang.org/)
