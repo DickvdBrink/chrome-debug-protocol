@@ -1,0 +1,17 @@
+test/
+Gruntfile.js
+
+# Visual Studio
+*.sln
+*.njsproj
+*.suo
+.ntvs_analysis.dat
+bin/
+obj/
+
+# TypeScript
+*.ts
+!Scripts/typings/*/**.ts
+*.map
+.tscache/
+Scripts/*.?s
