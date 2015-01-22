@@ -1,7 +1,7 @@
 ﻿import chrome = require("chrome-debug-protocol");
 import main = require("../main");
 
-main.getTabs("http://localhost:9444/json",(tabs) => {
+main.getTabs("http://localhost:9222/json",(tabs) => {
     var chromeTab: chrome.ChromeDebugger = <any>main.createDebugger(tabs[0]);
     chromeTab.Console.enable(() => {
         console.log("Enabled");
