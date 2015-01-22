@@ -2,11 +2,26 @@
   "name": "chrome-debug-protocol",
   "version": "0.5.0",
   "description": "chrome-debug-protocol",
+  "homepage": "https://github.com/DickvdBrink/chrome-debug-protocol/",
   "main": "main.js",
   "author": {
     "name": "Dick van den Brink",
     "email": "d_vandenbrink@live.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DickvdBrink/chrome-debug-protocol.git"
+  },
+  "bugs": {
+    "url" : "https://github.com/DickvdBrink//chrome-debug-protocol/"
+  },
+  "keywords": [
+    "chrome",
+    "remote",
+    "debug",
+    "TypeScript",
+    "javascript"
+  ],
   "dependencies": {
     "ws": "~0.6.5"
   },
