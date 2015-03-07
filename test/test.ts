@@ -5,16 +5,21 @@
 import chrome = require("chrome-debug-protocol");
 import main = require("../main");
 import assert = require("assert");
-
 import child_process = require("child_process");
-var chromeProcess = child_process.spawn("chrome", ["--remote-debugging-port=9222"]);
 
 describe("chrome", function () {
+    before((done) => {
+        var chromeProcess = child_process.spawn(process.env.CHROME_BIN, ["--no-sandbox", "--remote-debugging-port=9222", "about:blank"]);
+        setTimeout(() => done(), 1500);
+    });
+
     var tab: chrome.ChromeDebugger;
     describe("#getTabs()", function () {
         it("should return an array of tabs", function (done) {
             main.getTabs("http://localhost:9222/json",(tabs) => {
-                assert.equal(1, tabs.length);
+                assert.ok(Array.isArray(tabs), "Tabs is an array");
+                // On startup, chromes show an extra tab for google_now
+                assert.ok(tabs.length >= 1, "Found tabs");
                 tab = <any>main.createDebugger(tabs[0]);
                 done();
             });
