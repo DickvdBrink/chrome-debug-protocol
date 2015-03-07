@@ -4,7 +4,10 @@
 
 import chrome = require("chrome-debug-protocol");
 import main = require("../main");
-import assert = require("assert")
+import assert = require("assert");
+
+import child_process = require("child_process");
+var chromeProcess = child_process.spawn("chrome", ["--remote-debugging-port=9222"]);
 
 describe("chrome", function () {
     var tab: chrome.ChromeDebugger;

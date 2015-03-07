@@ -16,7 +16,7 @@
     "url": "https://github.com/DickvdBrink//chrome-debug-protocol/"
   },
   "scripts": {
-    "test": "grunt"
+    "test": "grunt test"
   },
   "keywords": [
     "chrome",
