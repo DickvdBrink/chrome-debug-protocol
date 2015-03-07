@@ -17,10 +17,21 @@
             generate_definition: {
                 src: ['Scripts/generate-protocol-interfaces.js']
             }
+        },
+        connect: {
+            server: {
+                options: {
+                    base: "test/www/",
+                    port: 9955
+                }
+            }
         }
     });
 
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks("grunt-execute");
+    grunt.loadNpmTasks("grunt-contrib-connect");
+
     grunt.registerTask("default", ["ts", "execute:generate_definition"]);
+    grunt.registerTask('test', ["default", "connect"]);
 };
