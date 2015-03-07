@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/DickvdBrink/chrome-debug-protocol.svg?branch=master)](https://travis-ci.org/DickvdBrink/chrome-debug-protocol)
 [![npm version](https://badge.fury.io/js/chrome-debug-protocol.svg)](http://badge.fury.io/js/chrome-debug-protocol)
 
 # chrome-debug-protocol
