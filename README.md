@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/chrome-debug-protocol.svg)](http://badge.fury.io/js/chrome-debug-protocol)
+
 # chrome-debug-protocol
 
 This module helps executing commands and listening to events emitted by the chrome debugger-protocol.
