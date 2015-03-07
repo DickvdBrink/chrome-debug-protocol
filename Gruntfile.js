@@ -25,13 +25,24 @@
                     port: 9955
                 }
             }
+        },
+        mochacli: {
+            options: {
+                files: "test/*.js"
+            },
+            spec: {
+                options: {
+                    reporter: "spec"
+                }
+            }
         }
     });
 
     grunt.loadNpmTasks("grunt-ts");
-    grunt.loadNpmTasks("grunt-execute");
     grunt.loadNpmTasks("grunt-contrib-connect");
+    grunt.loadNpmTasks("grunt-execute");
+    grunt.loadNpmTasks("grunt-mocha-cli");
 
     grunt.registerTask("default", ["ts", "execute:generate_definition"]);
-    grunt.registerTask('test', ["default", "connect"]);
+    grunt.registerTask('test', ["default", "connect", "mochacli:spec"]);
 };
