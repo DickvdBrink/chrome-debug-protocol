@@ -1,8 +1,9 @@
-﻿import chrome = require("chrome-debug-protocol");
-import main = require("../main");
+﻿/// <reference path="../Scripts/typings/chrome-debug-protocol/chrome-debug-protocol.d.ts" />
 
-main.getTabs("http://localhost:9222/json",(tabs) => {
-    var chromeTab: chrome.ChromeDebugger = <any>main.createDebugger(tabs[0]);
+import chrome = require("chrome-debug-protocol");
+
+chrome.getTabs("http://localhost:9222/json",(tabs) => {
+    var chromeTab: chrome.ChromeDebugger = chrome.createDebugger(tabs[0]);
     chromeTab.Console.enable(() => {
         console.log("Enabled");
     });
