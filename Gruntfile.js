@@ -3,19 +3,19 @@
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         ts: {
-            default: {
-                src: ["**/*.ts", "!node_modules/**/*.ts"],
-                options: {
-                    compiler: "./node_modules/typescript/bin/tsc",
-                    module: "commonjs",
-                    target: "es5",
-                    declaration: true
-                }
+            scripts: {
+                tsconfig: './scripts/tsconfig.json'
+            },
+            src: {
+                tsconfig: './src/tsconfig.json'
+            },
+            test: {
+                tsconfig: './test/tsconfig.json'
             }
         },
         execute: {
             generate_definition: {
-                src: ['Scripts/generate-protocol-interfaces.js']
+                src: ['scripts/generate-protocol-interfaces.js']
             }
         },
         connect: {
@@ -43,6 +43,6 @@
     grunt.loadNpmTasks("grunt-execute");
     grunt.loadNpmTasks("grunt-mocha-cli");
 
-    grunt.registerTask("default", ["ts", "execute:generate_definition"]);
-    grunt.registerTask('test', ["default", "connect", "mochacli:spec"]);
+    grunt.registerTask("default", ["ts:scripts", "ts:src", "execute:generate_definition"]);
+    grunt.registerTask('test', ["default", "ts:test", "connect", "mochacli:spec"]);
 };

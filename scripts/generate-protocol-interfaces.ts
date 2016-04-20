@@ -1,8 +1,11 @@
-﻿import fs = require("fs");
-import path = require("path");
-var protocol = require("../protocol.json");
+﻿/// <reference path="../typings/node/node.d.ts" />
 
-var domains = protocol.domains;
+import * as fs from "fs";
+import * as path from "path";
+
+const protocol = require("../protocol.json");
+
+const domains = protocol.domains;
 
 class Emitter {
     private buffer: string[] = [];
@@ -77,9 +80,8 @@ class Emitter {
 }
 
 // Write "domain" properties for the ChromeDebugger class
-var domainEmitter = new Emitter(2);
-for (var i = 0; i < domains.length; i++) {
-    var domain = domains[i];
+const domainEmitter = new Emitter(2);
+for (const domain of domains) {
     if (domain.description) {
         domainEmitter.writeTypeDescription(domain.description);
     }
@@ -87,27 +89,24 @@ for (var i = 0; i < domains.length; i++) {
 }
 
 // Write a module wit the parameter interfaces
-var moduleEmitter = new Emitter(1);
-for (var i = 0; i < domains.length; i++) {
-    var domain = domains[i];
+const moduleEmitter = new Emitter(1);
+for (const domain of domains) {
     moduleEmitter.writeline(`module ${domain.domain} {`);
     moduleEmitter.indent();
-    var commands: any[] = domain.commands;
+    const commands: any[] = domain.commands;
     if (commands && commands.length > 0) {
-        for (var j = 0; j < commands.length; j++) {
-            var command = commands[j];
-            var parameters: any[] = command.parameters;
+        for (const command of commands) {
+            const parameters: any[] = command.parameters;
             if (parameters && parameters.length > 0) {
-                var optional = containsOptionalParameters(parameters);
-                var commandName = command.name.replace(/(.)/,(val) => val.toUpperCase());
-                var name = `I${commandName}Params`;
+                const optional = containsOptionalParameters(parameters);
+                const commandName = command.name.replace(/(.)/,(val) => val.toUpperCase());
+                const name = `I${commandName}Params`;
                 emitInterface(name, parameters, domain);
             }
         }
     }
     if (domain.types) {
-        for (var j = 0; j < domain.types.length; j++) {
-            var type = domain.types[j];
+        for (const type of domain.types) {
             if (type.type == "object") {
                 if (type.description) {
                     moduleEmitter.writeTypeDescription(type.description);
@@ -118,10 +117,9 @@ for (var i = 0; i < domains.length; i++) {
     }
 
     if (domain.events) {
-        for (var j = 0; j < domain.events.length; j++) {
-            var event = domain.events[j];
-            var commandName = event.name.replace(/(.)/,(val) => val.toUpperCase());
-            var name = `I${commandName}Event`;
+        for (const event of domain.events) {
+            const commandName = event.name.replace(/(.)/,(val) => val.toUpperCase());
+            const name = `I${commandName}Event`;
             emitInterface(name, event.parameters || [], domain);
         }
     }
@@ -133,8 +131,7 @@ for (var i = 0; i < domains.length; i++) {
 function emitInterface(name: string, properties: any[], currentDomain: any) {
     moduleEmitter.writeline(`export interface ${name} {`);
     moduleEmitter.indent();
-    for (var i = 0; i < properties.length; i++) {
-        var p = properties[i];
+    for (const p of properties) {
         if (p.description) {
             moduleEmitter.writeTypeDescription(p.description);
         }
@@ -146,32 +143,30 @@ function emitInterface(name: string, properties: any[], currentDomain: any) {
 }
 
 // Write the actual implementation interfaces with methodes, parameters and callbacks
-var domainInterfaceEmitter = new Emitter(1);
-for (var i = 0; i < domains.length; i++) {
-    var domain = domains[i];
+const domainInterfaceEmitter = new Emitter(1);
+for (const domain of domains) {
     domainInterfaceEmitter.writeline(`interface I${domain.domain} {`);
-    var commands: any[] = domain.commands;
+    const commands: any[] = domain.commands;
     domainInterfaceEmitter.indent();
     if (commands && commands.length > 0) {
-        for (var j = 0; j < commands.length; j++) {
-            var command = commands[j];
-            var parameters: any[] = command.parameters;
+        for (const command of commands) {
+            const parameters: any[] = command.parameters;
             if (command.description) {
                 domainInterfaceEmitter.writeTypeDescription(command.description);
             }
             domainInterfaceEmitter.writeIndent();
             domainInterfaceEmitter.write(`${command.name}(`);
             if (parameters && parameters.length > 0) {
-                var optional = containsOptionalParameters(parameters);
-                var commandName  = command.name.replace(/(.)/,(val) => val.toUpperCase());
-                var name = `I${commandName}Params`;
+                const optional = containsOptionalParameters(parameters);
+                const commandName  = command.name.replace(/(.)/,(val) => val.toUpperCase());
+                const name = `I${commandName}Params`;
                 domainInterfaceEmitter.write(`params${(optional ? "?" : "")}: ${domain.domain}.${name}`);
                 domainInterfaceEmitter.write(", ");
             }
             if (command.returns && command.returns.length > 0) {
-                var returnType: string = "{";
-                for (var k = 0; k < command.returns.length; k++) {
-                    var ret = command.returns[k];
+                let returnType: string = "{";
+                for (let k = 0; k < command.returns.length; k++) {
+                    const ret = command.returns[k];
                     returnType += `${ret.name}: ${getTypeScriptTypeFromParameter(ret, domain, true) };`;
                     if (k < command.returns.length - 1) {
                         returnType += " ";
@@ -187,13 +182,12 @@ for (var i = 0; i < domains.length; i++) {
     }
 
     if (domain.events && domain.events.length > 0) {
-        for (var j = 0; j < domain.events.length; j++) {
-            var event = domain.events[j];
+        for (const event of domain.events) {
             if (event.description) {
                 domainInterfaceEmitter.writeTypeDescription(event.description);
             }
-            var eventName = event.name.replace(/(.)/,(val) => val.toUpperCase());
-            var name = `I${eventName}Event`;
+            const eventName = event.name.replace(/(.)/,(val) => val.toUpperCase());
+            const name = `I${eventName}Event`;
 
             domainInterfaceEmitter.writeline(`on(event: "${event.name}", listener: ChromeCallBack<${domain.domain}.${name}>): NodeJS.EventEmitter;`);
         }
@@ -205,21 +199,21 @@ for (var i = 0; i < domains.length; i++) {
 }
 
 function getTypeScriptTypeFromParameter(parameter: any, currentDomain: any, withModulePrefix: boolean) {
-    var paramType: string;
+    let paramType: string;
 
     if (parameter["$ref"]) {
-        var typeId: string = parameter["$ref"];
-        var splitted = typeId.split(".");
+        const typeId: string = parameter["$ref"];
+        const splitted = typeId.split(".");
 
-        var typeDomain = splitted.length == 1
+        const typeDomain = splitted.length == 1
             ? currentDomain
             : (<any[]>domains).filter((item) => item.domain == splitted[0])[0];
 
-        var typeName: string = splitted.length == 1
+        const typeName: string = splitted.length == 1
             ? typeId
             : splitted[1];
 
-        var customType = (<any[]>typeDomain.types).filter((item) => item.id == typeName)[0];
+        const customType = (<any[]>typeDomain.types).filter((item) => item.id == typeName)[0];
 
         if (customType.type == "object") {
             if (splitted.length == 1 && withModulePrefix) {
@@ -241,7 +235,7 @@ function getTypeScriptTypeFromParameter(parameter: any, currentDomain: any, with
             return "number";
         case "array":
             if (parameter.items) {
-                return getTypeScriptTypeFromParameter(parameter.items, domain, withModulePrefix) + "[]";
+                return getTypeScriptTypeFromParameter(parameter.items, currentDomain, withModulePrefix) + "[]";
             }
             return "any[]";
         default:
@@ -250,7 +244,7 @@ function getTypeScriptTypeFromParameter(parameter: any, currentDomain: any, with
 }
 
 function containsOptionalParameters(params: any[]) {
-    for (var i = 0; i < params.length; i++) {
+    for (let i = 0; i < params.length; i++) {
         if (params[i].optional) {
             return true;
         }
@@ -258,11 +252,11 @@ function containsOptionalParameters(params: any[]) {
     return false;
 }
 
-var maindts = fs.readFileSync(path.join(__dirname, "../main.d.ts"), "utf8");
+let maindts = fs.readFileSync(path.join(__dirname, "../src/main.d.ts"), "utf8");
 
-var importsEmitter = new Emitter(1);
-var importRegex = /import (?:.+;)/g;
-var match: RegExpExecArray;
+const importsEmitter = new Emitter(1);
+const importRegex = /import (?:.+;)/g;
+let match: RegExpExecArray;
 while ((match = importRegex.exec(maindts)) != null) {
     importsEmitter.writeline(match[0]);
 }
@@ -276,10 +270,11 @@ var header = `// Type definitions for chrome-debug-protocol
 `;
 
 maindts = header + maindts.replace(/import (?:.+;)/g, "")
+    .replace(/(<reference path="..\/)typings\//g, "$1")
     .replace(
         /(class ChromeDebugger (?:.+) {)([\s\S]+?)([ ]+)}/g,
         `$1$2${domainEmitter.toString()}$3}\r\n${domainInterfaceEmitter.toString()}${moduleEmitter.toString()}`
     ).replace(/declare module Chrome {/, "declare module \"chrome-debug-protocol\" {\r\n" + importsEmitter .toString())
     .replace("export = Chrome;", "");
 
-fs.writeFileSync(path.join(__dirname, "typings/chrome-debug-protocol/chrome-debug-protocol.d.ts"), maindts);
+fs.writeFileSync(path.join(__dirname, "../typings/chrome-debug-protocol/chrome-debug-protocol.d.ts"), maindts);

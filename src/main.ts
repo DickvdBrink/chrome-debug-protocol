@@ -1,8 +1,12 @@
-﻿import http = require("http");
-import WebSocket = require("ws");
-import util = require("util");
-import event = require("events");
-var protocol = require("./protocol.json");
+﻿/// <reference path="../typings/node/node.d.ts" />
+/// <reference path="../typings/ws/ws.d.ts" />
+
+import * as http from 'http';
+import * as WebSocket from "ws";
+import * as util from "util";
+import * as event from "events";
+
+const protocol = require("../protocol.json");
 
 module Chrome {
     export interface ChromeTab {
@@ -46,7 +50,7 @@ module Chrome {
     }
 
     export class ChromeDebugger extends event.EventEmitter {
-        private ws: WebSocket;
+        private webSocket: WebSocket;
 
         private callbackId: number = 0;
         private callbacks: { [id: string]: Function; } = {};
@@ -54,20 +58,20 @@ module Chrome {
         constructor(websocketUrl: string) {
             super();
             this.addProtocol();
-            var ws = this.ws = new WebSocket(websocketUrl);
-            ws.on("message", this.messageRecieved);
-            ws.on("error", (error) => {
+            var webSocket = this.webSocket = new WebSocket(websocketUrl);
+            webSocket.on("message", this.messageRecieved);
+            webSocket.on("error", (error) => {
                 this.emit("error", error);
             });
         }
 
         public close() {
-            this.ws.close();
+            this.webSocket.close();
         }
 
         public send<T>(method: string, params: any, callback: ChromeCallBack<T>) {
-            if (this.ws.readyState == WebSocket.CONNECTING) {
-                this.ws.on("open",() => {
+            if (this.webSocket.readyState == WebSocket.CONNECTING) {
+                this.webSocket.on("open",() => {
                     this.sendInternal(method, params, callback);
                 });
             } else {
@@ -76,7 +80,7 @@ module Chrome {
         }
 
         private sendInternal<T>(method: string, params: any, callback: ChromeCallBack<T>) {
-            this.ws.send(JSON.stringify({ method, params, id: this.callbackId }));
+            this.webSocket.send(JSON.stringify({ method, params, id: this.callbackId }));
             this.callbacks[this.callbackId] = callback;
             this.callbackId++;
         }
@@ -101,34 +105,32 @@ module Chrome {
         }
 
         private addProtocol() {
-            var domains = protocol.domains;
-            for (var i = 0; i < domains.length; i++) {
-                var domain = domains[i];
-                var domainObject = this[domain.domain] = <any>{};
-                domainObject.on = ((domain: any) => {
-                    return () => {
-                        this.on.call(this, `${domain.domain}.${arguments[0]}`, arguments[1]);
-                    };
-                })(domain);
-                var commands: any[] = domain.commands;
+            const domains = protocol.domains;
+            for (const domain of domains) {
+                const domainObject = this[domain.domain] = <any>{};
+                domainObject.on = (event: string, args: any) => {
+                    this.on.call(this, `${domain.domain}.${event}`, args);
+                };
+                const commands: any[] = domain.commands;
                 if (commands && commands.length > 0) {
-                    for (var j = 0; j < commands.length; j++) {
-                        this.implementCommand(domain, domainObject, commands[j]);
+                    for (const command of commands) {
+                        this.implementCommand(domain, domainObject, command);
                     }
                 }
             }
         }
 
         private implementCommand(domain: any, object: Object, command: any) {
-            object[command.name] = (args: Object) => {
-                var callback: ChromeCallBack<any>;
+            const that = this;
+            object[command.name] = function (args: Object) {
+                let callback: ChromeCallBack<any>;
                 if (arguments.length == 1 && typeof arguments[0] == "function") {
                     callback = arguments[0];
                     args = null;
                 } else {
                     callback = arguments[1];
                 }
-                this.send(`${domain.domain}.${command.name}`, args, callback);
+                that.send(`${domain.domain}.${command.name}`, args, callback);
             };
         }
     }

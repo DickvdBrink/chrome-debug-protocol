@@ -11,7 +11,7 @@ obj/
 
 # TypeScript
 *.ts
-!Scripts/typings/*/**.ts
+!typings/*/**.ts
 *.map
 .tscache/
-Scripts/*.?s
+scripts/*.?s

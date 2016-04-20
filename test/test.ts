@@ -1,11 +1,11 @@
-/// <reference path="../Scripts/typings/chrome-debug-protocol/chrome-debug-protocol.d.ts" />
-/// <reference path="../Scripts/typings/node/node.d.ts" />
+/// <reference path="../typings/chrome-debug-protocol/chrome-debug-protocol.d.ts" />
+/// <reference path="../typings/node/node.d.ts" />
 /// <reference path="mocha.d.ts" />
 
-import chrome = require("chrome-debug-protocol");
-import main = require("../main");
-import assert = require("assert");
-import child_process = require("child_process");
+import * as chrome from "chrome-debug-protocol";
+import * as main from "../src/main";
+import  * as assert from "assert";
+import  * as child_process from "child_process";
 
 describe("chrome", function () {
     before((done) => {

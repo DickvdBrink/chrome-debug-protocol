@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": false,
+        "removeComments": false,
+        "sourceMap": false,
+        "target": "ES5",
+        "declaration": true
+    },
+    "exclude": [
+        "main.d.ts"
+    ]
+}
