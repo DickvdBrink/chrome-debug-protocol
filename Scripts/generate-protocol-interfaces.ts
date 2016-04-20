@@ -1,4 +1,6 @@
-﻿import * as fs from "fs";
+﻿/// <reference path="../typings/node/node.d.ts" />
+
+import * as fs from "fs";
 import * as path from "path";
 
 const protocol = require("../protocol.json");
@@ -274,4 +276,4 @@ maindts = header + maindts.replace(/import (?:.+;)/g, "")
     ).replace(/declare module Chrome {/, "declare module \"chrome-debug-protocol\" {\r\n" + importsEmitter .toString())
     .replace("export = Chrome;", "");
 
-fs.writeFileSync(path.join(__dirname, "../typings/chrome-debug-protocol.d.ts"), maindts);
+fs.writeFileSync(path.join(__dirname, "../typings/chrome-debug-protocol/chrome-debug-protocol.d.ts"), maindts);

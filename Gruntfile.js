@@ -8,6 +8,9 @@
             },
             src: {
                 tsconfig: './src/tsconfig.json'
+            },
+            test: {
+                tsconfig: './test/tsconfig.json'
             }
         },
         execute: {
@@ -40,6 +43,6 @@
     grunt.loadNpmTasks("grunt-execute");
     grunt.loadNpmTasks("grunt-mocha-cli");
 
-    grunt.registerTask("default", ["ts", "execute:generate_definition"]);
-    grunt.registerTask('test', ["default", "connect", "mochacli:spec"]);
+    grunt.registerTask("default", ["ts:scripts", "ts:src", "execute:generate_definition"]);
+    grunt.registerTask('test', ["default", "ts:test", "connect", "mochacli:spec"]);
 };

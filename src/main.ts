@@ -1,9 +1,12 @@
-﻿import * as http from 'http';
+﻿/// <reference path="../typings/node/node.d.ts" />
+/// <reference path="../typings/ws/ws.d.ts" />
+
+import * as http from 'http';
 import * as WebSocket from "ws";
 import * as util from "util";
 import * as event from "events";
 
-const protocol = require("./protocol.json");
+const protocol = require("../protocol.json");
 
 module Chrome {
     export interface ChromeTab {
