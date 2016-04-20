@@ -6,7 +6,7 @@
 /// <reference path="../node/node.d.ts" />
 
 declare module "chrome-debug-protocol" {
-    import event = require("events");
+    import * as event from "events";
 
     interface ChromeTab {
         description: string;
@@ -27,7 +27,7 @@ declare module "chrome-debug-protocol" {
     function createDebugger(tab: string | ChromeTab): ChromeDebugger;
     function getTabs(options: any, callback: (tabs: ChromeTab[]) => void): void;
     class ChromeDebugger extends event.EventEmitter {
-        private ws;
+        private webSocket;
         private callbackId;
         private callbacks;
         constructor(websocketUrl: string);
