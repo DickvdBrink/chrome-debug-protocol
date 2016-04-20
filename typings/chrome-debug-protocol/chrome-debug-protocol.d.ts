@@ -4,8 +4,8 @@
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
 /// <reference path="../node/node.d.ts" />
-/// asdfasdfnode/node.d.ts" />
-/// asdfasdfws/ws.d.ts" />
+/// <reference path="../node/node.d.ts" />
+/// <reference path="../ws/ws.d.ts" />
 
 declare module "chrome-debug-protocol" {
     import * as event from "events";

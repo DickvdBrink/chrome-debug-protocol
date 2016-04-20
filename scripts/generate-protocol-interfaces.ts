@@ -270,6 +270,7 @@ var header = `// Type definitions for chrome-debug-protocol
 `;
 
 maindts = header + maindts.replace(/import (?:.+;)/g, "")
+    .replace(/(<reference path="..\/)typings\//g, "$1")
     .replace(
         /(class ChromeDebugger (?:.+) {)([\s\S]+?)([ ]+)}/g,
         `$1$2${domainEmitter.toString()}$3}\r\n${domainInterfaceEmitter.toString()}${moduleEmitter.toString()}`
