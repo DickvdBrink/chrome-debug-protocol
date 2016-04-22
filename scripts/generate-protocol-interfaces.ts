@@ -266,7 +266,6 @@ var header = `// Type definitions for chrome-debug-protocol
 // Definitions by: Dick van den Brink <https://github.com/DickvdBrink>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
-/// <reference path="../node/node.d.ts" />
 `;
 
 maindts = header + maindts.replace(/import (?:.+;)/g, "")

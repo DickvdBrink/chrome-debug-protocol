@@ -65,14 +65,7 @@ chrome.getTabs("http://localhost:9222/json",(tabs) => {
 
 ## Building from source
 
-### Using Visual Studio
-
-**Requirements**
- * Visual Studio 2013
- * [Node.js Tools for Visual Studio](https://nodejstools.codeplex.com/)
- * [TypeScript 1.4](http://www.typescriptlang.org/)
-
 ### Using Grunt
 
 Install Grunt globally by calling `npm install grunt-cli -g` and run `npm install` to download the dependencies.
-Now execute `grunt` to build chrome-debug-protocol
+Now execute `grunt` to build chrome-debug-protocol.

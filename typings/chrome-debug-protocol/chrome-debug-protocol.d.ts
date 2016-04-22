@@ -4,7 +4,6 @@
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
 /// <reference path="../node/node.d.ts" />
-/// <reference path="../node/node.d.ts" />
 /// <reference path="../ws/ws.d.ts" />
 
 declare module "chrome-debug-protocol" {
